@@ -82,11 +82,29 @@ class PrinterOptionViewTypeCell:UITableViewCell {
 }
 
 
-class PrinterOptionCustomaizingCell : UITableViewCell {
+
+
+
+protocol PrinterOptionCustomaizingCellDelegate:class  {
     
-    var items = ["List View","Detail View"]
-    var items2 = ["List View1","Detail View2"]
+    func pushSelectVC(cell:UITableViewCell?)
+    func updateposition(position:String,inPosition:String)
     
+}
+
+protocol PageCustomizationCellDelegate:class  {
+
+    func updateposition(size:String,orientation:String)
+    
+}
+
+
+class PageCustomizationCell: UITableViewCell{
+    
+    var items = ["Left","Right","Top","Bottom"]
+    var orientationItems = ["Portait","Landscape"]
+    
+    weak var delegate : PageCustomizationCellDelegate?
     lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
@@ -120,7 +138,6 @@ class PrinterOptionCustomaizingCell : UITableViewCell {
     lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
-        
         subValuePickerTwoView.valueTextField.inputView = subValueOnePicker
         
         let toolBar = UIToolbar()
@@ -232,7 +249,7 @@ class PrinterOptionCustomaizingCell : UITableViewCell {
             ])
         
     }
-    
+
     @objc func dismissPickerViewaction(){
           
         self.contentView.endEditing(true)
@@ -242,39 +259,244 @@ class PrinterOptionCustomaizingCell : UITableViewCell {
     
 }
 
-extension PrinterOptionCustomaizingCell: UIPickerViewDelegate, UIPickerViewDataSource{
+extension PageCustomizationCell: UIPickerViewDelegate, UIPickerViewDataSource{
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerView == subValueOnePicker{
+        
+        if pickerView == subValueOnePicker {
             return items.count
         }else{
-            return items2.count
+            return orientationItems.count
         }
+       
+           
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView == subValueOnePicker{
+       
+        if pickerView == subValueOnePicker {
             let row = items[row]
             return row
         }else{
-            let row = items2[row]
+            let row = orientationItems[row]
             return row
         }
+        
+            
+       
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView == subValueOnePicker{
+       
+        if pickerView == subValueOnePicker {
             let row = items[row]
             subValuePickerOneView.valueTextField.text = row
         }else{
-            let row = items2[row]
+            let row = orientationItems[row]
             subValuePickerTwoView.valueTextField.text = row
         }
     }
 }
+
+
+
+
+
+
+
+class ExportOptionCustomaizingCell : UITableViewCell {
+    
+    var items = ["Left","Right","Top","Bottom"]
+    
+    weak var delegate : PrinterOptionCustomaizingCellDelegate?
+    lazy var titleLabel: UILabel = {
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Page"
+        titleLabel.textAlignment = .left
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.backgroundColor = .clear
+        return titleLabel
+    }()
+    
+    lazy var subValuePickerOneView : PickerOptionView = {
+        
+        var subValuePickerOneView = PickerOptionView()
+        
+        subValuePickerOneView.valueTextField.inputView = subValueOnePicker
+        
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+         let button = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissPickerViewaction))
+         toolBar.setItems([button], animated: true)
+        toolBar.isUserInteractionEnabled = true
+        subValuePickerOneView.valueTextField.inputAccessoryView = toolBar
+        
+        subValueOnePicker.delegate = self
+        subValueOnePicker.dataSource = self
+        
+        return subValuePickerOneView
+    }()
+    
+    lazy var subValuePickerTwoView : PickerOptionView = {
+        
+        var subValuePickerTwoView = PickerOptionView()
+        subValuePickerTwoView.valueTextField.isEnabled = false
+        subValuePickerTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(callDelegate)))
+        return subValuePickerTwoView
+    }()
+    
+
+    lazy var subValueOnePicker: UIPickerView = {
+
+        let subValueOnePicker = UIPickerView()
+        subValueOnePicker.delegate = self
+        subValueOnePicker.dataSource = self
+        subValueOnePicker.translatesAutoresizingMaskIntoConstraints = false
+        return subValueOnePicker
+    }()
+    
+    
+    private lazy var separatorLine: UIView = {
+        let separatorLine = UIView()
+        separatorLine.backgroundColor = UIColor.separator
+        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+        return separatorLine
+    }()
+    
+    lazy var verticalStackView:UIStackView = {
+        let vStack = UIStackView()
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.axis = .vertical
+        vStack.alignment = .fill
+        vStack.distribution = .equalSpacing
+        return vStack
+        
+    }()
+    
+    lazy var horizontalStackView:UIStackView = {
+        let vStack = UIStackView()
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.axis = .horizontal
+        vStack.alignment = .fill
+        vStack.distribution = .fillEqually
+        vStack.spacing = 16
+        return vStack
+        
+    }()
+    
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupCellView()
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupCellView(){
+        
+        self.contentView.addSubview(verticalStackView)
+        verticalStackView.addArrangedSubview(titleLabel)
+        verticalStackView.addArrangedSubview(separatorLine)
+        verticalStackView.addArrangedSubview(horizontalStackView)
+        
+        horizontalStackView.addArrangedSubview(subValuePickerOneView)
+        
+        horizontalStackView.addArrangedSubview(subValuePickerTwoView)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            subValuePickerOneView.title.font = .systemFont(ofSize: 16, weight: .bold)
+            subValuePickerTwoView.title.font = .systemFont(ofSize: 16, weight: .bold)
+            titleLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 10).isActive = true
+            verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -10).isActive = true
+        }else{
+            
+            subValuePickerOneView.title.font = .systemFont(ofSize: 17, weight: .bold)
+            subValuePickerTwoView.title.font = .systemFont(ofSize: 17, weight: .bold)
+            NSLayoutConstraint.activate([
+            
+                titleLabel.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
+                titleLabel.topAnchor.constraint(equalTo: self.verticalStackView.topAnchor,constant: 20),
+
+                
+                separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 20),
+                separatorLine.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor),
+                separatorLine.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor),
+                verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -19),
+                separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
+            
+            ])
+            
+            subValuePickerOneView.addBorder(edge:.bottom)
+            subValuePickerTwoView.addBorder(edge: .bottom)
+        }
+        
+        NSLayoutConstraint.activate([
+        
+            verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            
+            horizontalStackView.topAnchor.constraint(equalTo: self.separatorLine.bottomAnchor,constant: 20),
+            horizontalStackView.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
+            horizontalStackView.bottomAnchor.constraint(equalTo: self.verticalStackView.bottomAnchor),
+            horizontalStackView.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor,constant: -20)
+            
+            
+            ])
+        
+    }
+    
+    @objc private func callDelegate(){
+        delegate?.pushSelectVC(cell: self)
+    }
+    
+    @objc func dismissPickerViewaction(){
+          
+        self.contentView.endEditing(true)
+        delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: self.titleLabel.text ?? "")
+    }
+    
+    
+}
+
+extension ExportOptionCustomaizingCell: UIPickerViewDelegate, UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+       return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+       
+            return items.count
+        
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+       
+            let row = items[row]
+            return row
+       
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+       
+            let row = items[row]
+            subValuePickerOneView.valueTextField.text = row
+       
+    }
+}
+
+
+
 
 
 class PickerOptionView: UIView {
@@ -353,13 +575,17 @@ class PickerOptionView: UIView {
 }
 
 
+
+
+
+
 class OptionView: UIView {
     
     enum ButtonType {
         case check
         case radio
     }
-    private var buttonType : ButtonType
+    var buttonType : ButtonType = .radio
     
     lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -371,12 +597,11 @@ class OptionView: UIView {
         return vStack
     }()
     
-    lazy var selectButton : UIButton = {
-        let selectButton = UIButton()
+    lazy var selectButton : UIImageView = {
+        let selectButton = UIImageView()
         selectButton.translatesAutoresizingMaskIntoConstraints = false
-        selectButton.backgroundColor = .blue
         selectButton.layer.cornerRadius = 12
-
+        selectButton.image = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
         selectButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
         selectButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
         return selectButton
@@ -394,9 +619,8 @@ class OptionView: UIView {
     }()
     
     
-    init(type:ButtonType) {
+    init() {
         
-        self.buttonType = type
         super.init(frame: .zero)
         
         self.addSubview(horizontalStackView)
@@ -419,6 +643,10 @@ class OptionView: UIView {
     }
 
 }
+
+
+
+
 
 class OptionSelectorRadioButtonView : UIView {
     
@@ -445,8 +673,11 @@ class OptionSelectorRadioButtonView : UIView {
     }()
     
     
-    lazy var choiceOneView = OptionView(type: .radio)
-    lazy var choiceTwoView = OptionView(type: .radio)
+    lazy var choiceOneView = OptionView()
+    lazy var choiceTwoView = OptionView()
+    
+    private var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)
+    private var intialimg = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
     
     init() {
         
@@ -459,26 +690,40 @@ class OptionSelectorRadioButtonView : UIView {
         verticalStackView.addArrangedSubview(choiceTwoView)
         
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            
+            title.heightAnchor.constraint(equalToConstant: 0).isActive = true
+        }
+        
         NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.topAnchor,constant: 0),
                                      verticalStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 0),
                                      verticalStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor,constant: 0),
                                      verticalStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor,constant: 0)
         ])
         
-        choiceOneView.selectButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-        choiceTwoView.selectButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+        choiceOneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
+        choiceTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
     }
     
     
-    @objc func buttonTapped(_ sender:UIButton){
+    @objc func buttonTapped(_ sender:UITapGestureRecognizer){
         
-        if sender == choiceOneView.selectButton{
+        
+        if sender == choiceOneView.gestureRecognizers?[0]{
             
-            choiceOneView.selectButton.backgroundColor = .black
-            choiceTwoView.selectButton.backgroundColor = .blue
+            choiceOneView.selectButton.image = radio
+            choiceTwoView.selectButton.image = intialimg
+            
+            choiceTwoView.selectButton.tintColor = .lightGray
+            choiceOneView.selectButton.tintColor = .blue
+            
+            
         }else{
-            choiceOneView.selectButton.backgroundColor = .blue
-            choiceTwoView.selectButton.backgroundColor = .black
+            choiceOneView.selectButton.image = intialimg
+            choiceTwoView.selectButton.image = radio
+            
+            choiceOneView.selectButton.tintColor = .lightGray
+            choiceTwoView.selectButton.tintColor = .blue
         }
         
     }
@@ -488,6 +733,10 @@ class OptionSelectorRadioButtonView : UIView {
     }
 
 }
+
+
+
+
 
 
 class PrintOptionSelectorViewCell: UITableViewCell{
@@ -524,6 +773,9 @@ class PrintOptionSelectorViewCell: UITableViewCell{
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
+
 
 
 class MargingInnerView:UIView {
@@ -616,7 +868,7 @@ class MargingInnerView:UIView {
         
         self.layer.cornerRadius = 5
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        self.layer.borderColor = UIColor.separator.cgColor
         
     }
     
@@ -625,6 +877,9 @@ class MargingInnerView:UIView {
     }
     
 }
+
+
+
 
 
 class MarginCell : UITableViewCell {
@@ -786,6 +1041,25 @@ class MarginCell : UITableViewCell {
         
 
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            innerVerticalStackView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.topAnchor.constraint(equalTo: self.innerVerticalStackView.bottomAnchor,constant: 10).isActive = true
+        }else{
+            NSLayoutConstraint.activate([
+            
+                titleLabel.leadingAnchor.constraint(equalTo: self.innerVerticalStackView.leadingAnchor,constant: 19),
+                titleLabel.topAnchor.constraint(equalTo: self.innerVerticalStackView.topAnchor,constant: 20),
+                subTitleLabel.leadingAnchor.constraint(equalTo: self.innerVerticalStackView.leadingAnchor,constant: 19),
+                
+                separatorLine.topAnchor.constraint(equalTo: self.innerVerticalStackView.bottomAnchor,constant: 20),
+                separatorLine.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor),
+                separatorLine.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor),
+                separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
+            
+            ])
+        }
+        
         
         NSLayoutConstraint.activate([
         
@@ -793,16 +1067,7 @@ class MarginCell : UITableViewCell {
             verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -19),
             verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            
-            titleLabel.leadingAnchor.constraint(equalTo: self.innerVerticalStackView.leadingAnchor,constant: 19),
-            titleLabel.topAnchor.constraint(equalTo: self.innerVerticalStackView.topAnchor,constant: 20),
-            subTitleLabel.leadingAnchor.constraint(equalTo: self.innerVerticalStackView.leadingAnchor,constant: 19),
-            
-            separatorLine.topAnchor.constraint(equalTo: self.innerVerticalStackView.bottomAnchor,constant: 20),
-            separatorLine.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor),
-            separatorLine.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
-            
+
             secInnerVerticalStackView.topAnchor.constraint(equalTo: self.separatorLine.bottomAnchor,constant: 20),
             secInnerVerticalStackView.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
             secInnerVerticalStackView.bottomAnchor.constraint(equalTo: self.verticalStackView.bottomAnchor),
@@ -821,6 +1086,10 @@ class MarginCell : UITableViewCell {
             leftTextField.widthAnchor.constraint(equalToConstant: 50)
             
             ])
+        
+        
+        
+        
         
     }
     
