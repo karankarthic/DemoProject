@@ -20,9 +20,14 @@ class ViewController: UIViewController {
     
     @IBAction func buttonfunc(_ sender: Any) {
         
-        let navVc = UINavigationController(rootViewController: PassWordSettingViewController())
-//        navVc.modalPresentationStyle = .formSheet
+        let navVc = UINavigationController(rootViewController: ExportSettingViewController())
+        navVc.modalPresentationStyle = .formSheet
         self.present(navVc, animated: true, completion: nil)
     }
     
+    @IBAction func printView(_ sender: Any) {
+        let navVc = UINavigationController(rootViewController: PrintOptionsViewController())
+        navVc.modalPresentationStyle = .formSheet
+        self.present(navVc, animated: true, completion: nil)
+    }
 }

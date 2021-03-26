@@ -7,7 +7,14 @@
 
 import UIKit
 
-class ExportSettingsFileNameCell:UITableViewCell {
+protocol ExportSettingsFileNameCellDelegate :class{
+    func updateValue(fileName:String)
+}
+
+
+class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
+    
+    weak var delegate: ExportSettingsFileNameCellDelegate?
     
     lazy var fileNameView:PickerOptionView = {
         let fileName = PickerOptionView()
@@ -16,7 +23,7 @@ class ExportSettingsFileNameCell:UITableViewCell {
         fileName.valueTextField.inputAccessoryView = nil
         fileName.valueTextField.rightViewMode = .never
         fileName.valueTextField.text = ""
-        
+        fileName.valueTextField.delegate = self
         fileName.valueTextField.tintColor = .black
         return fileName
     }()
@@ -29,15 +36,44 @@ class ExportSettingsFileNameCell:UITableViewCell {
     func setupView(){
         self.contentView.addSubview(fileNameView)
         
+        let topCons:CGFloat
+        let bottomCons:CGFloat
+        let leftCons:CGFloat
+        let rightCons:CGFloat
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+             topCons = 19
+             bottomCons = -20
+             leftCons = 19
+             rightCons = -19
+            fileNameView.addBorder(edge: .bottom)
+        }else{
+            
+            topCons = 15
+            bottomCons = -15
+            leftCons = 15
+            rightCons = -15
+        }
+        
+        
+        
         NSLayoutConstraint.activate([
         
-            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 19),
-            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 19),
-            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20),
-            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
+            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topCons),
+            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: leftCons),
+            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: bottomCons),
+            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: rightCons)
             ])
         
-        fileNameView.addBorder(edge: .bottom)
+        
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        delegate?.updateValue(fileName: textField.text ?? "")
+        
+        return true
+        
     }
     
     required init?(coder: NSCoder) {
@@ -47,10 +83,14 @@ class ExportSettingsFileNameCell:UITableViewCell {
 }
 
 
-
+protocol SinglePickerViewCellDelegate :class{
+    func updateSinglePickerValue(value:String)
+}
 
 
 class SinglePickerViewCell:UITableViewCell{
+    
+    weak var delegate:SinglePickerViewCellDelegate?
     
     lazy var fileNameView:PickerOptionView = {
         let fileName = PickerOptionView()
@@ -86,19 +126,37 @@ class SinglePickerViewCell:UITableViewCell{
     func setupView(){
         self.contentView.addSubview(fileNameView)
         
+        let topCons:CGFloat
+        let bottomCons:CGFloat
+        let leftCons:CGFloat
+        let rightCons:CGFloat
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+             topCons = 19
+             bottomCons = -20
+             leftCons = 19
+             rightCons = -19
+            fileNameView.addBorder(edge: .bottom)
+        }else{
+            
+            topCons = 15
+            bottomCons = -15
+            leftCons = 15
+            rightCons = -15
+        }
+        
         NSLayoutConstraint.activate([
         
-            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 19),
-            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 19),
-            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20),
-            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
+            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topCons),
+            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: leftCons),
+            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: bottomCons),
+            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: rightCons)
             ])
-        
-        fileNameView.addBorder(edge: .bottom)
     }
     
     @objc func dismissPickerViewaction(){
           
+        delegate?.updateSinglePickerValue(value: fileNameView.valueTextField.text ?? "")
         self.contentView.endEditing(true)
 
     }
@@ -150,6 +208,7 @@ enum SelectCellType {
 
 struct SelectCellModel{
     
+    var title:String
     var cellType:SelectCellType
     var buttonType:OptionView.ButtonType
     var choiceTitleEnabled : TitleValueState = .off
@@ -245,6 +304,8 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
             self.valueTextField.removeFromSuperview()
         }
         
+        choiceView.title.text = model?.title
+        
         buttonTapped()
     }
     
@@ -279,6 +340,10 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
 //                    }
                 }
             }
+        
+        if model?.cellType == .normal && choiceView.buttonType == .radio && model?.isSelected == true {
+            delegate?.valueUpdate(value:choiceView.title.text ?? "")
+        }
       
     }
     
@@ -439,15 +504,33 @@ class SingleNonPickerViewValueCell: UITableViewCell{
         
         self.contentView.addSubview(subValuePickerTwoView)
         
+        let topCons:CGFloat
+        let bottomCons:CGFloat
+        let leftCons:CGFloat
+        let rightCons:CGFloat
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+             topCons = 19
+             bottomCons = -20
+             leftCons = 19
+             rightCons = -19
+            subValuePickerTwoView.addBorder(edge: .bottom)
+        }else{
+            
+            topCons = 15
+            bottomCons = -15
+            leftCons = 15
+            rightCons = -15
+        }
+        
         NSLayoutConstraint.activate([
         
-            subValuePickerTwoView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 19),
-            subValuePickerTwoView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 19),
-            subValuePickerTwoView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -20),
-            subValuePickerTwoView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
+            subValuePickerTwoView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topCons),
+            subValuePickerTwoView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: leftCons),
+            subValuePickerTwoView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: bottomCons),
+            subValuePickerTwoView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: rightCons)
             ])
         
-        subValuePickerTwoView.addBorder(edge: .bottom)
         subValuePickerTwoView.valueTextField.text = value
     }
     

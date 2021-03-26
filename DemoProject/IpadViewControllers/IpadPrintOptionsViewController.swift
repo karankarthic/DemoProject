@@ -1,16 +1,26 @@
 //
-//  PrintOptionsViewController.swift
+//  IpadPrintOptionsViewController.swift
 //  DemoProject
 //
-//  Created by Karan Karthic Neelamegan on 24/03/21.
+//  Created by Karan Karthic Neelamegan on 25/03/21.
 //
 
 import UIKit
 
-class PrintOptionsViewController: CardLayoutTableViewController {
+class IpadPrintOptionsViewController: UITableViewController {
     
-    var pageSize:String = "A4"
-    var pageOrientation:String = "Portrait"
+    
+    var pageSize:String = ""
+    var pageOrientation:String = ""
+
+    
+    init(){
+        super.init(style: .grouped)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +36,7 @@ class PrintOptionsViewController: CardLayoutTableViewController {
         
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         4
     }
     
@@ -36,9 +46,6 @@ class PrintOptionsViewController: CardLayoutTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-//        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as
-//        return cell
-//
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
             return cell
@@ -67,36 +74,33 @@ class PrintOptionsViewController: CardLayoutTableViewController {
         
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0{
+            return "View Type"
+        }
+        else if section == 1{
+            
+            return "Page"
+        }
+        else if section == 2{
+            
+            return "Column Width"
+        }else{
+            return ""
+        }
     }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-       
-        return 12
-    }
-
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-       
-        return 12
-    }
-
     
 }
 
-extension PrintOptionsViewController: PageCustomizationCellDelegate {
+extension IpadPrintOptionsViewController: PageCustomizationCellDelegate {
     func updateposition(size: String, orientation: String) {
         
         self.pageSize = size
@@ -106,16 +110,16 @@ extension PrintOptionsViewController: PageCustomizationCellDelegate {
     
 }
 
-extension PrintOptionsViewController: ExportPassWordAndPageSettingCellDelegate {
+extension IpadPrintOptionsViewController: ExportPassWordAndPageSettingCellDelegate {
     
     func pushToRespectiveVC(type: ExportSettingType) {
         if type == .more{
             
-            let vc = MoreSettingsViewController()
-//            vc.delegate = self
-            let navVC = UINavigationController(rootViewController: vc)
-            
-            self.navigationController?.present(navVC, animated: true, completion: nil)
+//            let vc = IpadMoreSettingsViewController()
+////            vc.delegate = self
+//            let navVC = UINavigationController(rootViewController: vc)
+//
+//            self.navigationController?.present(navVC, animated: true, completion: nil)
             
         }
     }

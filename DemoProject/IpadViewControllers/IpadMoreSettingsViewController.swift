@@ -1,34 +1,14 @@
 //
-//  MoreSettingsViewControllerViewController.swift
+//  IpadMoreSettingsViewController.swift
 //  DemoProject
 //
-//  Created by Karan Karthic Neelamegan on 24/03/21.
+//  Created by Karan Karthic Neelamegan on 25/03/21.
 //
 
 import UIKit
 
-struct Margin {
-    var t :String
-    var l :String
-    var r :String
-    var b :String
-}
-
-struct PagePositionValue {
-    var position :String
-    var value:String
-}
-
-struct MoreSettingsValueModel{
+class IpadMoreSettingsViewController: UITableViewController {
     
-    var margin : Margin
-    var header :PagePositionValue
-    var footer :PagePositionValue
-    
-}
-
-class MoreSettingsViewController: CardLayoutTableViewController {
-
     
     var headerPosition:String = ""
     var footerPosition:String = ""
@@ -37,8 +17,18 @@ class MoreSettingsViewController: CardLayoutTableViewController {
     var marginValues:Margin = Margin(t: "10", l: "10", r: "10", b: "10")
     
     var delegateCalledCell:ExportOptionCustomaizingCell? = nil
-
+    
     var valueForMoreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+
+    
+    init(){
+        super.init(style: .grouped)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,10 +37,10 @@ class MoreSettingsViewController: CardLayoutTableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "More Setting"
-        
+       
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         3
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -90,32 +80,31 @@ class MoreSettingsViewController: CardLayoutTableViewController {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0{
+            return "MARGIN ( ALL VALUES ARE IN MM )"
+        }
+        else if section == 1{
+            
+            return "HEADER"
+        }
+        else if section == 2{
+            
+            return "Footer"
+            
+        }else{
+            return ""
+        }
     }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-       
-        return 12
-    }
-
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-       
-        return 12
-    }
-  
+    
     
     @objc private func done(){
         
@@ -128,10 +117,19 @@ class MoreSettingsViewController: CardLayoutTableViewController {
         self.dismiss(animated: true, completion: nil)
         
     }
+   
+  
+}
+
+extension IpadMoreSettingsViewController:MarginCellDelegate{
+    func updateMargingcell(margin: Margin) {
+        self.marginValues = margin
+    }
+    
     
 }
 
-extension MoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
+extension IpadMoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
     
     func updateposition(position: String, inPosition: String) {
         if inPosition == "Header"{
@@ -150,40 +148,12 @@ extension MoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
         
         let vc = SelectViewController()
         vc.selectionType = .single
-        vc.delegate = self
         vc.items = [selectModel,selectModel1,selectModel2]
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
         
         self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
         
-    }
-    
-    
-}
-
-extension MoreSettingsViewController: SelectViewControllerDelegate {
-    
-    func valueForMulitiSelect(valueForMulitiSelect: [String]) {
-        
-    }
-    
-    
-    func valueForSingleSelect(value: String) {
-        
-        if delegateCalledCell?.titleLabel.text == "Header"{
-            headerValue = value
-        }else{
-            footerValue = value
-        }
-        
-    }
-    
-}
-
-extension MoreSettingsViewController:MarginCellDelegate{
-    func updateMargingcell(margin: Margin) {
-        self.marginValues = margin
     }
     
     

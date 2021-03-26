@@ -10,6 +10,16 @@ import UIKit
 class IpadPrintBatchViewController: UITableViewController {
     
     
+    
+    init(){
+        super.init(style: .grouped)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     var totalRecordCount : Int = 450
     
     var batchs:[PrintBatchModel] = [PrintBatchModel(from: 1, to: 500),PrintBatchModel(from: 1, to: 500)]

@@ -12,7 +12,13 @@ enum ScreenType{
     case iphone
 }
 
-class PrinterOptionViewTypeCell:UITableViewCell {
+protocol PrinterOptionViewTypeCellDelegate:class {
+    func updatePrinterOptionViewTypeValue(viewType:String)
+}
+
+class PrinterOptionViewTypeCell:UITableViewCell{
+    
+    weak var delegate:PrinterOptionViewTypeCellDelegate?
     
     lazy var segmentView: UISegmentedControl = {
         
@@ -22,6 +28,7 @@ class PrinterOptionViewTypeCell:UITableViewCell {
         segmentView.translatesAutoresizingMaskIntoConstraints = false
         segmentView.selectedSegmentIndex = 0
         segmentView.tintColor = UIColor.black
+        segmentView.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .touchUpInside)
         if #available(iOS 13.0, *) {
             segmentView.setTitleTextAttributes([NSAttributedString.Key.backgroundColor: UIColor.white], for: .normal)
             segmentView.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .normal)
@@ -61,7 +68,11 @@ class PrinterOptionViewTypeCell:UITableViewCell {
     private func setupCellView() {
         
         self.contentView.addSubview(verticalStackView)
-        verticalStackView.addArrangedSubview(titleLabel)
+    
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            verticalStackView.addArrangedSubview(titleLabel)
+        }
+        
         verticalStackView.addArrangedSubview(segmentView)
         
         NSLayoutConstraint.activate([
@@ -71,7 +82,15 @@ class PrinterOptionViewTypeCell:UITableViewCell {
             verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -19),
             verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
             ])
+        delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
+    }
     
+    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
+        }else{
+            delegate?.updatePrinterOptionViewTypeValue(viewType: "Detail View")
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -138,7 +157,7 @@ class PageCustomizationCell: UITableViewCell{
     lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
-        subValuePickerTwoView.valueTextField.inputView = subValueOnePicker
+        subValuePickerTwoView.valueTextField.inputView = subValueTwoPicker
         
         let toolBar = UIToolbar()
         toolBar.sizeToFit()
@@ -221,29 +240,46 @@ class PageCustomizationCell: UITableViewCell{
         horizontalStackView.addArrangedSubview(subValuePickerOneView)
         
         horizontalStackView.addArrangedSubview(subValuePickerTwoView)
-        
-        subValuePickerOneView.addBorder(edge:.bottom)
-        subValuePickerTwoView.addBorder(edge: .bottom)
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            subValuePickerOneView.title.font = .systemFont(ofSize: 16, weight: .bold)
+            subValuePickerTwoView.title.font = .systemFont(ofSize: 16, weight: .bold)
+            titleLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 10).isActive = true
+            verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -10).isActive = true
+        }else{
+            
+            subValuePickerOneView.title.font = .systemFont(ofSize: 17, weight: .bold)
+            subValuePickerTwoView.title.font = .systemFont(ofSize: 17, weight: .bold)
+            NSLayoutConstraint.activate([
+            
+                titleLabel.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
+                titleLabel.topAnchor.constraint(equalTo: self.verticalStackView.topAnchor,constant: 20),
+
+                
+                separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 20),
+                separatorLine.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor),
+                separatorLine.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor),
+                verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -19),
+                separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
+            
+            ])
+            
+            subValuePickerOneView.addBorder(edge:.bottom)
+            subValuePickerTwoView.addBorder(edge: .bottom)
+        }
         
         NSLayoutConstraint.activate([
         
             verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -19),
             verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: self.verticalStackView.topAnchor,constant: 19),
-            titleLabel.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
-            
-            separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 20),
-            separatorLine.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor),
-            separatorLine.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor),
-            separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
             
             horizontalStackView.topAnchor.constraint(equalTo: self.separatorLine.bottomAnchor,constant: 20),
             horizontalStackView.leadingAnchor.constraint(equalTo: self.verticalStackView.leadingAnchor,constant: 19),
             horizontalStackView.bottomAnchor.constraint(equalTo: self.verticalStackView.bottomAnchor),
-            horizontalStackView.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor,constant: -19)
+            horizontalStackView.trailingAnchor.constraint(equalTo: self.verticalStackView.trailingAnchor,constant: -20)
             
             
             ])
@@ -562,9 +598,14 @@ class PickerOptionView: UIView {
                                      secondaryVerticalStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                                      secondaryVerticalStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                                      secondaryVerticalStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-                                     valueTextField.bottomAnchor.constraint(equalTo:self.bottomAnchor,constant: -10 )
         
         ])
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            valueTextField.bottomAnchor.constraint(equalTo:self.bottomAnchor,constant: -10 ).isActive = true
+        }
+        
+        
         
     }
     
@@ -602,6 +643,7 @@ class OptionView: UIView {
         selectButton.translatesAutoresizingMaskIntoConstraints = false
         selectButton.layer.cornerRadius = 12
         selectButton.image = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
+        selectButton.tintColor = .lightGray
         selectButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
         selectButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
         return selectButton
@@ -646,9 +688,15 @@ class OptionView: UIView {
 
 
 
-
+protocol PrintOptionSelectorViewCellDelegate:class {
+    
+    func updateOptionSelectorViewValue(title:String,value:String)
+    
+}
 
 class OptionSelectorRadioButtonView : UIView {
+    
+    weak var delegate: PrintOptionSelectorViewCellDelegate?
     
     lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -717,6 +765,7 @@ class OptionSelectorRadioButtonView : UIView {
             choiceTwoView.selectButton.tintColor = .lightGray
             choiceOneView.selectButton.tintColor = .blue
             
+            delegate?.updateOptionSelectorViewValue(title: title.text ?? "", value: choiceOneView.title.text ?? "")
             
         }else{
             choiceOneView.selectButton.image = intialimg
@@ -724,6 +773,7 @@ class OptionSelectorRadioButtonView : UIView {
             
             choiceOneView.selectButton.tintColor = .lightGray
             choiceTwoView.selectButton.tintColor = .blue
+            delegate?.updateOptionSelectorViewValue(title: title.text ?? "", value: choiceTwoView.title.text ?? "")
         }
         
     }
@@ -733,11 +783,6 @@ class OptionSelectorRadioButtonView : UIView {
     }
 
 }
-
-
-
-
-
 
 class PrintOptionSelectorViewCell: UITableViewCell{
     
@@ -879,10 +924,15 @@ class MargingInnerView:UIView {
 }
 
 
+protocol MarginCellDelegate:class {
+    func updateMargingcell(margin:Margin)
+}
 
 
 
-class MarginCell : UITableViewCell {
+class MarginCell : UITableViewCell, UITextFieldDelegate {
+    
+    weak var delegate:MarginCellDelegate?
     
     lazy var titleLabel: UILabel = {
         
@@ -963,6 +1013,7 @@ class MarginCell : UITableViewCell {
         topTextField.backgroundColor = .clear
         topTextField.layer.cornerRadius = 3
         topTextField.layer.borderWidth = 1
+        topTextField.delegate = self
         topTextField.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
         return topTextField
     }()
@@ -976,6 +1027,7 @@ class MarginCell : UITableViewCell {
         rightTextField.backgroundColor = .clear
         rightTextField.layer.cornerRadius = 3
         rightTextField.layer.borderWidth = 1
+        rightTextField.delegate = self
         rightTextField.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
         return rightTextField
     }()
@@ -989,6 +1041,7 @@ class MarginCell : UITableViewCell {
         leftTextField.backgroundColor = .clear
         leftTextField.layer.cornerRadius = 3
         leftTextField.layer.borderWidth = 1
+        leftTextField.delegate = self
         leftTextField.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
         return leftTextField
     }()
@@ -1002,6 +1055,7 @@ class MarginCell : UITableViewCell {
         bottomTextField.backgroundColor = .clear
         bottomTextField.layer.cornerRadius = 3
         bottomTextField.layer.borderWidth = 1
+        bottomTextField.delegate = self
         bottomTextField.layer.borderColor = UIColor.black.withAlphaComponent(0.5).cgColor
         return bottomTextField
     }()
@@ -1087,10 +1141,13 @@ class MarginCell : UITableViewCell {
             
             ])
         
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        delegate?.updateMargingcell(margin: .init(t: topTextField.text ?? "", l: leftTextField.text ?? "", r: rightTextField.text ?? "", b: bottomTextField.text ?? ""))
         
-        
-        
+        return true
     }
     
     required init?(coder: NSCoder) {

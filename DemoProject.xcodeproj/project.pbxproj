@@ -15,7 +15,7 @@
 		13D6FD1026020D7200F4BF75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13D6FD0E26020D7200F4BF75 /* LaunchScreen.storyboard */; };
 		13D6FD1926020EF300F4BF75 /* HelperFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD1826020EF300F4BF75 /* HelperFile.swift */; };
 		13D6FD1C260610D600F4BF75 /* CellViewsFileOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD1B260610D500F4BF75 /* CellViewsFileOne.swift */; };
-		13D6FD1F2608807100F4BF75 /* cellViewsFileTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD1E2608807000F4BF75 /* cellViewsFileTwo.swift */; };
+		13D6FD1F2608807100F4BF75 /* CellViewsFileTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD1E2608807000F4BF75 /* CellViewsFileTwo.swift */; };
 		13D6FD222609E97800F4BF75 /* PassWordSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD212609E97700F4BF75 /* PassWordSettingViewController.swift */; };
 		13D6FD262609ECED00F4BF75 /* PageSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD252609ECED00F4BF75 /* PageSettingViewController.swift */; };
 		13D6FD29260A0E9100F4BF75 /* ExportSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD28260A0E9100F4BF75 /* ExportSettingViewController.swift */; };
@@ -26,6 +26,9 @@
 		13FA8E10260C1F5A00BCCD47 /* PrintBatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E0F260C1F5A00BCCD47 /* PrintBatchViewController.swift */; };
 		13FA8E13260C30D100BCCD47 /* IpadPrintBatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E12260C30D100BCCD47 /* IpadPrintBatchViewController.swift */; };
 		13FA8E16260C329C00BCCD47 /* IpadPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E15260C329C00BCCD47 /* IpadPasswordViewController.swift */; };
+		13FA8E19260C659F00BCCD47 /* IpadPrintOptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E18260C659F00BCCD47 /* IpadPrintOptionsViewController.swift */; };
+		13FA8E1C260C6E3000BCCD47 /* IpadMoreSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E1B260C6E3000BCCD47 /* IpadMoreSettingsViewController.swift */; };
+		13FA8E1F260C711F00BCCD47 /* IpadExportSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8E1E260C711F00BCCD47 /* IpadExportSettingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +42,7 @@
 		13D6FD1126020D7200F4BF75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13D6FD1826020EF300F4BF75 /* HelperFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperFile.swift; sourceTree = "<group>"; };
 		13D6FD1B260610D500F4BF75 /* CellViewsFileOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewsFileOne.swift; sourceTree = "<group>"; };
-		13D6FD1E2608807000F4BF75 /* cellViewsFileTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cellViewsFileTwo.swift; sourceTree = "<group>"; };
+		13D6FD1E2608807000F4BF75 /* CellViewsFileTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewsFileTwo.swift; sourceTree = "<group>"; };
 		13D6FD212609E97700F4BF75 /* PassWordSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassWordSettingViewController.swift; sourceTree = "<group>"; };
 		13D6FD252609ECED00F4BF75 /* PageSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSettingViewController.swift; sourceTree = "<group>"; };
 		13D6FD28260A0E9100F4BF75 /* ExportSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSettingViewController.swift; sourceTree = "<group>"; };
@@ -50,6 +53,9 @@
 		13FA8E0F260C1F5A00BCCD47 /* PrintBatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintBatchViewController.swift; sourceTree = "<group>"; };
 		13FA8E12260C30D100BCCD47 /* IpadPrintBatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpadPrintBatchViewController.swift; sourceTree = "<group>"; };
 		13FA8E15260C329C00BCCD47 /* IpadPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpadPasswordViewController.swift; sourceTree = "<group>"; };
+		13FA8E18260C659F00BCCD47 /* IpadPrintOptionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpadPrintOptionsViewController.swift; sourceTree = "<group>"; };
+		13FA8E1B260C6E3000BCCD47 /* IpadMoreSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpadMoreSettingsViewController.swift; sourceTree = "<group>"; };
+		13FA8E1E260C711F00BCCD47 /* IpadExportSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IpadExportSettingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +92,7 @@
 				13D6FD0526020D6F00F4BF75 /* SceneDelegate.swift */,
 				13D6FD0726020D6F00F4BF75 /* ViewController.swift */,
 				13D6FD1B260610D500F4BF75 /* CellViewsFileOne.swift */,
-				13D6FD1E2608807000F4BF75 /* cellViewsFileTwo.swift */,
+				13D6FD1E2608807000F4BF75 /* CellViewsFileTwo.swift */,
 				13FA8E0A260B93EA00BCCD47 /* IpadViewControllers */,
 				13FA8E08260B939E00BCCD47 /* ViewControllers */,
 				13D6FD1826020EF300F4BF75 /* HelperFile.swift */,
@@ -118,6 +124,9 @@
 				13FA8E0B260B944100BCCD47 /* IpadPageSettingViewController.swift */,
 				13FA8E12260C30D100BCCD47 /* IpadPrintBatchViewController.swift */,
 				13FA8E15260C329C00BCCD47 /* IpadPasswordViewController.swift */,
+				13FA8E18260C659F00BCCD47 /* IpadPrintOptionsViewController.swift */,
+				13FA8E1B260C6E3000BCCD47 /* IpadMoreSettingsViewController.swift */,
+				13FA8E1E260C711F00BCCD47 /* IpadExportSettingViewController.swift */,
 			);
 			path = IpadViewControllers;
 			sourceTree = "<group>";
@@ -194,7 +203,9 @@
 			files = (
 				13FA8DFF260B052200BCCD47 /* SelectViewController.swift in Sources */,
 				13D6FD0826020D6F00F4BF75 /* ViewController.swift in Sources */,
+				13FA8E19260C659F00BCCD47 /* IpadPrintOptionsViewController.swift in Sources */,
 				13FA8E13260C30D100BCCD47 /* IpadPrintBatchViewController.swift in Sources */,
+				13FA8E1F260C711F00BCCD47 /* IpadExportSettingViewController.swift in Sources */,
 				13D6FD222609E97800F4BF75 /* PassWordSettingViewController.swift in Sources */,
 				13FA8E10260C1F5A00BCCD47 /* PrintBatchViewController.swift in Sources */,
 				13FA8E05260B481200BCCD47 /* MoreSettingsViewController.swift in Sources */,
@@ -205,7 +216,8 @@
 				13D6FD262609ECED00F4BF75 /* PageSettingViewController.swift in Sources */,
 				13D6FD1C260610D600F4BF75 /* CellViewsFileOne.swift in Sources */,
 				13D6FD1926020EF300F4BF75 /* HelperFile.swift in Sources */,
-				13D6FD1F2608807100F4BF75 /* cellViewsFileTwo.swift in Sources */,
+				13FA8E1C260C6E3000BCCD47 /* IpadMoreSettingsViewController.swift in Sources */,
+				13D6FD1F2608807100F4BF75 /* CellViewsFileTwo.swift in Sources */,
 				13FA8E0C260B944100BCCD47 /* IpadPageSettingViewController.swift in Sources */,
 				13FA8E02260B404000BCCD47 /* PrintOptionsViewController.swift in Sources */,
 			);

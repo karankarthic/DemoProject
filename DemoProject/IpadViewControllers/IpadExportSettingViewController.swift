@@ -1,20 +1,28 @@
 //
-//  ExportSettingViewController.swift
+//  IpadExportSettingViewController.swift
 //  DemoProject
 //
-//  Created by Karan Karthic Neelamegan on 23/03/21.
+//  Created by Karan Karthic Neelamegan on 25/03/21.
 //
 
 import UIKit
 
-class ExportSettingViewController: CardLayoutTableViewController {
+class IpadExportSettingViewController: UITableViewController {
     
+    init(){
+        super.init(style: .grouped)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     
     var fileName:String = ""
     var fileType:String = "A4"
     var selecteColumns:[String] = []
     var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,7 +36,7 @@ class ExportSettingViewController: CardLayoutTableViewController {
         
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         5
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,7 +59,6 @@ class ExportSettingViewController: CardLayoutTableViewController {
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
-            
             cell.contentView.addBorder(edge: .bottom)
             return cell
         }else if indexPath.section == 3{
@@ -69,69 +76,38 @@ class ExportSettingViewController: CardLayoutTableViewController {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 78
     }
     
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
-
-    public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-
-    public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 0 || section == 2{
-            return 0
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 2{
+            return "VIEW TYPE"
         }
-        return 12
-    }
-
-    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 || section == 3{
-            return .leastNonzeroMagnitude
+        else{
+            return ""
         }
-        return 12
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let viewConstructor = CornerViewConstructor.init(contentView: cell.contentView)
-        
-        if indexPath.section == 0 || indexPath.section == 2{
-            viewConstructor.constructLayout(for: .topCorner)
-        }
-        else if indexPath.section == 1 || indexPath.section == 3{
-            viewConstructor.constructLayout(for: .bottomCorner)
-        }else{
-            viewConstructor.constructLayout(for: .allCorner)
-        }
-        
-        
-    }
-
 }
 
-extension ExportSettingViewController: SingleNonPickerViewValueCellDelegate{
+extension IpadExportSettingViewController: SingleNonPickerViewValueCellDelegate{
     
     func pushSelectVC() {
         
-        let selectModel = SelectCellModel(title: "colum1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel1 = SelectCellModel(title: "colum2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel2 = SelectCellModel(title: "colum3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel3 = SelectCellModel(title: "colum4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel = SelectCellModel(title: "column1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel1 = SelectCellModel(title: "column2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel2 = SelectCellModel(title: "column3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel3 = SelectCellModel(title: "column4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
         
         
         let vc = SelectViewController()
         vc.selectionType = .multi
-        vc.delegate = self
-        vc.valueForMulitiSelect = selecteColumns
         vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
-        vc.mulitSelectReview(valueForMulitiSelect:selecteColumns)
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
     }
@@ -139,7 +115,7 @@ extension ExportSettingViewController: SingleNonPickerViewValueCellDelegate{
     
 }
 
-extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate {
+extension IpadExportSettingViewController: ExportPassWordAndPageSettingCellDelegate {
     
     func pushToRespectiveVC(type: ExportSettingType) {
         
@@ -148,13 +124,13 @@ extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate 
         
         if type == .page{
             
-            let vc = PageSettingViewController()
+            let vc = IpadPageSettingViewController()
             vc.delegate = self
             navVC = UINavigationController(rootViewController: vc)
             
         }else{
             
-            let vc = PassWordSettingViewController()
+            let vc = IpadPasswordViewController()
 //            vc.delegate = self
             navVC = UINavigationController(rootViewController: vc)
         }
@@ -166,7 +142,7 @@ extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate 
   
 }
 
-extension ExportSettingViewController : SelectViewControllerDelegate {
+extension IpadExportSettingViewController : SelectViewControllerDelegate {
     
     func valueForMulitiSelect(valueForMulitiSelect: [String]) {
         selecteColumns = valueForMulitiSelect
@@ -178,20 +154,23 @@ extension ExportSettingViewController : SelectViewControllerDelegate {
 
 }
 
-
-extension ExportSettingViewController :ExportSettingsFileNameCellDelegate{
+extension IpadExportSettingViewController :ExportSettingsFileNameCellDelegate{
     func updateValue(fileName: String) {
         self.fileName = fileName
     }
+    
+    
+    
+    
 }
 
-extension ExportSettingViewController : SinglePickerViewCellDelegate{
+extension IpadExportSettingViewController : SinglePickerViewCellDelegate{
     func updateSinglePickerValue(value: String) {
         self.fileType = value
     }
 }
 
-extension ExportSettingViewController : PageSettingViewControllerDelegate{
+extension IpadExportSettingViewController : PageSettingViewControllerDelegate{
     func updatePageSettings(pageSettings: PageSettingValue) {
         self.pageSettings = pageSettings
     }
