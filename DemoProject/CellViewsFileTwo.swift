@@ -349,11 +349,15 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
+        DispatchQueue.main.async {
+            self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
+        }
         
-        delegate?.valueUpdate(value:valueTextField.text ?? "")
         
         return true
     }
+    
+    
     
     
     required init?(coder: NSCoder) {
@@ -366,8 +370,13 @@ enum PasswardViewType {
     case confirmPassword
 }
 
+protocol PasswordSettingCellDelegate:class{
+    func updatePasswordValue(type:PasswardViewType,value:String?)
+}
+
 class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
     
+    weak var delegate:PasswordSettingCellDelegate?
     lazy var passwordView: PickerOptionView = {
         var passwordView = PickerOptionView()
         passwordView.valueTextField.inputView = nil
@@ -436,6 +445,12 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        delegate?.updatePasswordValue(type: self.type, value: passwordView.valueTextField.text)
+        return true
     }
     
     

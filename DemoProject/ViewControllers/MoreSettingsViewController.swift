@@ -7,14 +7,20 @@
 
 import UIKit
 
+enum Position{
+    case header
+    case footer
+}
+
 struct Margin {
-    var t :String
-    var l :String
-    var r :String
-    var b :String
+    var top :Int
+    var left :Int
+    var right :Int
+    var bottom :Int
 }
 
 struct PagePositionValue {
+
     var position :String
     var value:String
 }
@@ -27,18 +33,18 @@ struct MoreSettingsValueModel{
     
 }
 
+protocol MoreSettingsViewControllerDelegate:class {
+    func updateMoreSettingValue(value:MoreSettingsValueModel)
+}
+
 class MoreSettingsViewController: CardLayoutTableViewController {
 
     
-    var headerPosition:String = ""
-    var footerPosition:String = ""
-    var headerValue:String = ""
-    var footerValue:String = ""
-    var marginValues:Margin = Margin(t: "10", l: "10", r: "10", b: "10")
-    
     var delegateCalledCell:ExportOptionCustomaizingCell? = nil
+    
+    weak var delegate:MoreSettingsViewControllerDelegate?
 
-    var valueForMoreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var valueForMoreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +53,9 @@ class MoreSettingsViewController: CardLayoutTableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "More Setting"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+
         
     }
     
@@ -60,16 +69,17 @@ class MoreSettingsViewController: CardLayoutTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
-            cell.topTextField.text = valueForMoreSetting.margin.t
-            cell.leftTextField.text = valueForMoreSetting.margin.l
-            cell.rightTextField.text = valueForMoreSetting.margin.r
-            cell.bottomTextField.text = valueForMoreSetting.margin.b
+            cell.topTextField.text = "\(valueForMoreSetting.margin.top)"
+            cell.leftTextField.text = "\(valueForMoreSetting.margin.left)"
+            cell.rightTextField.text = "\(valueForMoreSetting.margin.right)"
+            cell.bottomTextField.text = "\(valueForMoreSetting.margin.bottom)"
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Header"
+            cell.position = .header
             cell.subValuePickerOneView.title.text = "Position"
             cell.subValuePickerOneView.valueTextField.text =  valueForMoreSetting.header.position
             
@@ -80,8 +90,9 @@ class MoreSettingsViewController: CardLayoutTableViewController {
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Footer"
+            cell.position = .footer
             cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text = valueForMoreSetting.footer.value
+            cell.subValuePickerOneView.valueTextField.text = valueForMoreSetting.footer.position
             
             cell.subValuePickerTwoView.title.text = "Value"
             cell.subValuePickerTwoView.valueTextField.text = valueForMoreSetting.footer.value
@@ -119,11 +130,17 @@ class MoreSettingsViewController: CardLayoutTableViewController {
     
     @objc private func done(){
         
-        valueForMoreSetting = MoreSettingsValueModel(margin: self.marginValues, header: PagePositionValue(position: self.headerPosition, value: self.headerValue), footer: PagePositionValue(position: self.footerPosition, value: self.footerValue))
+//        valueForMoreSetting = MoreSettingsValueModel(margin: self.marginValues, header: PagePositionValue(position: self.headerPosition, value: self.headerValue), footer: PagePositionValue(position: self.footerPosition, value: self.footerValue))
         
 //         send back the moresettingvalues to the printSetting to be done here
         
+        delegate?.updateMoreSettingValue(value:valueForMoreSetting)
         
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    @objc private func cancel(){
         
         self.dismiss(animated: true, completion: nil)
         
@@ -133,11 +150,11 @@ class MoreSettingsViewController: CardLayoutTableViewController {
 
 extension MoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
     
-    func updateposition(position: String, inPosition: String) {
-        if inPosition == "Header"{
-            headerPosition = position
+    func updateposition(position: String, inPosition: Position) {
+        if inPosition == .header{
+            valueForMoreSetting.header.position = position
         }else{
-            footerPosition = position
+            valueForMoreSetting.footer.position = position
         }
     }
     
@@ -159,8 +176,9 @@ extension MoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
         
     }
     
-    
 }
+
+
 
 extension MoreSettingsViewController: SelectViewControllerDelegate {
     
@@ -171,19 +189,19 @@ extension MoreSettingsViewController: SelectViewControllerDelegate {
     
     func valueForSingleSelect(value: String) {
         
-        if delegateCalledCell?.titleLabel.text == "Header"{
-            headerValue = value
+        if delegateCalledCell?.position == .header{
+            valueForMoreSetting.header.value = value
         }else{
-            footerValue = value
+            valueForMoreSetting.footer.value = value
         }
-        
+        self.tableView.reloadData()
     }
     
 }
 
 extension MoreSettingsViewController:MarginCellDelegate{
     func updateMargingcell(margin: Margin) {
-        self.marginValues = margin
+        self.valueForMoreSetting.margin = margin
     }
     
     

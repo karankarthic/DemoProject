@@ -18,10 +18,7 @@ class IpadExportSettingViewController: UITableViewController {
     }
 
     
-    var fileName:String = ""
-    var fileType:String = "A4"
-    var selecteColumns:[String] = []
-    var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var viewModel:ExportViewModel = ExportViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +30,8 @@ class IpadExportSettingViewController: UITableViewController {
         tableView.registerReusableCell(ExportPassWordAndPageSettingCell.self)
         
         tableView.allowsSelection = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+
         
     }
     
@@ -48,17 +47,18 @@ class IpadExportSettingViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportSettingsFileNameCell
             cell.fileNameView.title.text = "File Name"
             cell.delegate = self
-            cell.fileNameView.valueTextField.text = fileName
+            cell.fileNameView.valueTextField.text = viewModel.fileName
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
             cell.fileNameView.title.text = "File Type"
             cell.items = ["PDF"]
-            cell.fileNameView.valueTextField.text = fileType
+            cell.fileNameView.valueTextField.text = viewModel.fileType
             cell.delegate = self
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
+            
             cell.contentView.addBorder(edge: .bottom)
             return cell
         }else if indexPath.section == 3{
@@ -93,21 +93,30 @@ class IpadExportSettingViewController: UITableViewController {
         }
     }
     
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
 }
 
 extension IpadExportSettingViewController: SingleNonPickerViewValueCellDelegate{
     
     func pushSelectVC() {
         
-        let selectModel = SelectCellModel(title: "column1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel1 = SelectCellModel(title: "column2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel2 = SelectCellModel(title: "column3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel3 = SelectCellModel(title: "column4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel = SelectCellModel(title: "colum1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel1 = SelectCellModel(title: "colum2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel2 = SelectCellModel(title: "colum3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+        let selectModel3 = SelectCellModel(title: "colum4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
         
         
         let vc = SelectViewController()
         vc.selectionType = .multi
+        vc.delegate = self
+        vc.valueForMulitiSelect = viewModel.selecteColumns
         vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
+        vc.mulitSelectReview()
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
     }
@@ -124,14 +133,14 @@ extension IpadExportSettingViewController: ExportPassWordAndPageSettingCellDeleg
         
         if type == .page{
             
-            let vc = IpadPageSettingViewController()
+            let vc = PageSettingViewController()
             vc.delegate = self
             navVC = UINavigationController(rootViewController: vc)
             
         }else{
             
-            let vc = IpadPasswordViewController()
-//            vc.delegate = self
+            let vc = PassWordSettingViewController()
+            vc.delegate = self
             navVC = UINavigationController(rootViewController: vc)
         }
     
@@ -145,7 +154,7 @@ extension IpadExportSettingViewController: ExportPassWordAndPageSettingCellDeleg
 extension IpadExportSettingViewController : SelectViewControllerDelegate {
     
     func valueForMulitiSelect(valueForMulitiSelect: [String]) {
-        selecteColumns = valueForMulitiSelect
+        viewModel.selecteColumns = valueForMulitiSelect
     }
     
     func valueForSingleSelect(value: String) {
@@ -154,25 +163,30 @@ extension IpadExportSettingViewController : SelectViewControllerDelegate {
 
 }
 
+
 extension IpadExportSettingViewController :ExportSettingsFileNameCellDelegate{
     func updateValue(fileName: String) {
-        self.fileName = fileName
+        self.viewModel.fileName = fileName
     }
-    
-    
-    
-    
 }
 
 extension IpadExportSettingViewController : SinglePickerViewCellDelegate{
     func updateSinglePickerValue(value: String) {
-        self.fileType = value
+        self.viewModel.fileType = value
     }
 }
 
 extension IpadExportSettingViewController : PageSettingViewControllerDelegate{
     func updatePageSettings(pageSettings: PageSettingValue) {
-        self.pageSettings = pageSettings
+        self.viewModel.pageSettings = pageSettings
+    }
+    
+    
+}
+
+extension IpadExportSettingViewController : PassWordSettingViewControllerDelegate{
+    func updatePasswordValue(passwordValue: Passwords) {
+        self.viewModel.passwordSetting = passwordValue
     }
     
     

@@ -52,7 +52,9 @@ class SelectViewController: UITableViewController {
 //        tableView.separatorStyle = .none
         
         self.navigationItem.title = "List Of Columns"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+
         // Do any additional setup after loading the view.
         
         tableView.tableFooterView = UIView()
@@ -117,7 +119,7 @@ class SelectViewController: UITableViewController {
         
     }
     
-    func mulitSelectReview(valueForMulitiSelect:[String]){
+    func mulitSelectReview(){
      
         for value in valueForMulitiSelect{
             for (index,item) in items.enumerated(){
@@ -127,10 +129,16 @@ class SelectViewController: UITableViewController {
                 }
             }
         }
-        
-//        tableView.reloadData()
     }
     
+    func singleSelecteReview(value:String){
+        for (index,item) in items.enumerated(){
+            if value == item.title {
+                items[index].isSelected = true
+                break
+            }
+        }
+    }
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -176,6 +184,11 @@ class SelectViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
 
 }
 

@@ -16,13 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRD-7L-J4t">
-                                <rect key="frame" x="184.5" y="433" width="45" height="30"/>
-                                <state key="normal" title="export"/>
-                                <connections>
-                                    <action selector="buttonfunc:" destination="BYZ-38-t0r" eventType="touchUpInside" id="xdx-F4-Yfs"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kF7-m2-ffx">
                                 <rect key="frame" x="130" y="332" width="161" height="30"/>
                                 <constraints>
@@ -34,14 +27,24 @@
                                     <action selector="printView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hs8-yv-J0o"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kdh-hi-yBI">
+                                <rect key="frame" x="108" y="617" width="204" height="66"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="204" id="EAB-k0-Qyt"/>
+                                    <constraint firstAttribute="height" constant="66" id="chF-F9-0QX"/>
+                                </constraints>
+                                <state key="normal" title="export"/>
+                                <connections>
+                                    <action selector="exportView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IfF-1V-SrG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="kF7-m2-ffx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="130" id="3f7-To-DsU"/>
-                            <constraint firstItem="jRD-7L-J4t" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Fci-ox-zMx"/>
-                            <constraint firstItem="jRD-7L-J4t" firstAttribute="top" secondItem="kF7-m2-ffx" secondAttribute="bottom" constant="71" id="Nyw-hh-Lcw"/>
-                            <constraint firstItem="jRD-7L-J4t" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="XJV-ve-n6G"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Kdh-hi-yBI" secondAttribute="bottom" constant="179" id="OKU-Vh-AsK"/>
+                            <constraint firstItem="Kdh-hi-yBI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="108" id="sfM-pT-dhU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kF7-m2-ffx" secondAttribute="trailing" constant="123" id="wIG-NJ-lv0"/>
                             <constraint firstItem="kF7-m2-ffx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="288" id="xfx-C8-j0l"/>
                         </constraints>

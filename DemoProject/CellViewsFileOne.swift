@@ -107,7 +107,7 @@ class PrinterOptionViewTypeCell:UITableViewCell{
 protocol PrinterOptionCustomaizingCellDelegate:class  {
     
     func pushSelectVC(cell:UITableViewCell?)
-    func updateposition(position:String,inPosition:String)
+    func updateposition(position:String,inPosition:Position)
     
 }
 
@@ -288,6 +288,7 @@ class PageCustomizationCell: UITableViewCell{
 
     @objc func dismissPickerViewaction(){
           
+        delegate?.updateposition(size: subValuePickerOneView.valueTextField.text ?? "", orientation: subValuePickerTwoView.valueTextField.text ?? "")
         self.contentView.endEditing(true)
 
     }
@@ -349,6 +350,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     var items = ["Left","Right","Top","Bottom"]
     
     weak var delegate : PrinterOptionCustomaizingCellDelegate?
+    var position:Position = .header
     lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
@@ -499,7 +501,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     @objc func dismissPickerViewaction(){
           
         self.contentView.endEditing(true)
-        delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: self.titleLabel.text ?? "")
+        delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: position)
     }
     
     
@@ -686,17 +688,28 @@ class OptionView: UIView {
 
 }
 
-
+enum Configure{
+    case orientation
+    case columnWidth
+}
 
 protocol PrintOptionSelectorViewCellDelegate:class {
     
-    func updateOptionSelectorViewValue(title:String,value:String)
+    func updateOptionSelectorViewValue(configure:Configure,value:String)
     
+}
+enum ChoiceSelected{
+    case choiceOne
+    case choiceTwo
 }
 
 class OptionSelectorRadioButtonView : UIView {
     
+    
+    
+    var configure:Configure = .orientation
     weak var delegate: PrintOptionSelectorViewCellDelegate?
+    var selectedChoice:ChoiceSelected = .choiceOne
     
     lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -751,6 +764,13 @@ class OptionSelectorRadioButtonView : UIView {
         
         choiceOneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
         choiceTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
+        
+        if selectedChoice == .choiceOne{
+            choiceOneSelected()
+        }else{
+            choiceTwoSelected()
+        }
+        
     }
     
     
@@ -758,24 +778,32 @@ class OptionSelectorRadioButtonView : UIView {
         
         
         if sender == choiceOneView.gestureRecognizers?[0]{
-            
-            choiceOneView.selectButton.image = radio
-            choiceTwoView.selectButton.image = intialimg
-            
-            choiceTwoView.selectButton.tintColor = .lightGray
-            choiceOneView.selectButton.tintColor = .blue
-            
-            delegate?.updateOptionSelectorViewValue(title: title.text ?? "", value: choiceOneView.title.text ?? "")
+            choiceOneSelected()
+            selectedChoice = .choiceOne
             
         }else{
-            choiceOneView.selectButton.image = intialimg
-            choiceTwoView.selectButton.image = radio
-            
-            choiceOneView.selectButton.tintColor = .lightGray
-            choiceTwoView.selectButton.tintColor = .blue
-            delegate?.updateOptionSelectorViewValue(title: title.text ?? "", value: choiceTwoView.title.text ?? "")
+            choiceTwoSelected()
+            selectedChoice = .choiceTwo
         }
         
+    }
+    
+    private func choiceOneSelected(){
+        choiceOneView.selectButton.image = radio
+        choiceTwoView.selectButton.image = intialimg
+        
+        choiceTwoView.selectButton.tintColor = .lightGray
+        choiceOneView.selectButton.tintColor = .blue
+        
+        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceOneView.title.text ?? "")
+    }
+    private func choiceTwoSelected(){
+        choiceOneView.selectButton.image = intialimg
+        choiceTwoView.selectButton.image = radio
+        
+        choiceOneView.selectButton.tintColor = .lightGray
+        choiceTwoView.selectButton.tintColor = .blue
+        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceTwoView.title.text ?? "")
     }
     
     required init?(coder: NSCoder) {
@@ -785,6 +813,7 @@ class OptionSelectorRadioButtonView : UIView {
 }
 
 class PrintOptionSelectorViewCell: UITableViewCell{
+    
     
     lazy var optionView : OptionSelectorRadioButtonView = {
         
@@ -1011,6 +1040,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         topTextField.translatesAutoresizingMaskIntoConstraints = false
         topTextField.font = .systemFont(ofSize: 13, weight: .regular)
         topTextField.backgroundColor = .clear
+        topTextField.keyboardType = .numberPad
         topTextField.layer.cornerRadius = 3
         topTextField.layer.borderWidth = 1
         topTextField.delegate = self
@@ -1025,6 +1055,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         rightTextField.translatesAutoresizingMaskIntoConstraints = false
         rightTextField.font = .systemFont(ofSize: 13, weight: .regular)
         rightTextField.backgroundColor = .clear
+        rightTextField.keyboardType = .numberPad
         rightTextField.layer.cornerRadius = 3
         rightTextField.layer.borderWidth = 1
         rightTextField.delegate = self
@@ -1039,6 +1070,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         leftTextField.translatesAutoresizingMaskIntoConstraints = false
         leftTextField.font = .systemFont(ofSize: 13, weight: .regular)
         leftTextField.backgroundColor = .clear
+        leftTextField.keyboardType = .numberPad
         leftTextField.layer.cornerRadius = 3
         leftTextField.layer.borderWidth = 1
         leftTextField.delegate = self
@@ -1053,6 +1085,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         bottomTextField.translatesAutoresizingMaskIntoConstraints = false
         bottomTextField.font = .systemFont(ofSize: 13, weight: .regular)
         bottomTextField.backgroundColor = .clear
+        bottomTextField.keyboardType = .numberPad
         bottomTextField.layer.cornerRadius = 3
         bottomTextField.layer.borderWidth = 1
         bottomTextField.delegate = self
@@ -1143,9 +1176,28 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
     }
     
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        delegate?.updateMargingcell(margin: .init(t: topTextField.text ?? "", l: leftTextField.text ?? "", r: rightTextField.text ?? "", b: bottomTextField.text ?? ""))
+        var top:Int = Int(topTextField.text ?? "") ?? 10
+        var left:Int = Int(leftTextField.text ?? "") ?? 10
+        var right:Int = Int(rightTextField.text ?? "") ?? 10
+        var bottom:Int = Int(bottomTextField.text ?? "") ?? 10
+        
+        if textField == topTextField{
+            top = Int(textField.text ?? "") ?? 10
+        }
+        if textField == leftTextField{
+            left = Int(textField.text ?? "") ?? 10
+        }
+        if textField == rightTextField{
+            right = Int(textField.text ?? "") ?? 10
+        }
+        if textField == bottomTextField{
+            bottom = Int(textField.text ?? "") ?? 10
+        }
+        
+        delegate?.updateMargingcell(margin: .init(top: top, left: left, right: right, bottom: bottom))
         
         return true
     }

@@ -18,16 +18,16 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func buttonfunc(_ sender: Any) {
+    @IBAction func printView(_ sender: Any) {
+        let vc = PrintOptionsViewController()
+        let navVc = UINavigationController(rootViewController: vc)
         
-        let navVc = UINavigationController(rootViewController: ExportSettingViewController())
-        navVc.modalPresentationStyle = .formSheet
+//        navVc.modalPresentationStyle = .formSheet
         self.present(navVc, animated: true, completion: nil)
     }
-    
-    @IBAction func printView(_ sender: Any) {
-        let navVc = UINavigationController(rootViewController: PrintOptionsViewController())
-        navVc.modalPresentationStyle = .formSheet
+    @IBAction func exportView(_ sender: Any) {
+        let navVc = UINavigationController(rootViewController: ExportSettingViewController())
+//        navVc.modalPresentationStyle = .formSheet
         self.present(navVc, animated: true, completion: nil)
     }
 }

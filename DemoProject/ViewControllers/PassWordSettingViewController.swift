@@ -7,9 +7,21 @@
 
 import UIKit
 
+struct Passwords{
+    
+    var password:String? = nil
+    var conforimPassword:String? = nil
+    
+}
+
+protocol PassWordSettingViewControllerDelegate:class{
+    func updatePasswordValue(passwordValue:Passwords)
+}
+
 class PassWordSettingViewController: CardLayoutTableViewController {
     
-    
+    var value:Passwords = Passwords()
+    weak var delegate:PassWordSettingViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +29,9 @@ class PassWordSettingViewController: CardLayoutTableViewController {
         tableView.registerReusableCell(PasswordSettingCell.self)
         tableView.allowsSelection = false
         self.navigationItem.title = "Password Setting"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -30,6 +45,14 @@ class PassWordSettingViewController: CardLayoutTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PasswordSettingCell
+        if indexPath.section == 0{
+            cell.passwordView.valueTextField.text = self.value.password
+            cell.type = .password
+        }else{
+            cell.passwordView.valueTextField.text = self.value.conforimPassword
+            cell.type = .confirmPassword
+        }
+        cell.delegate = self
         return cell
         
     }
@@ -70,5 +93,38 @@ class PassWordSettingViewController: CardLayoutTableViewController {
         
         
     }
+    
+    @objc private func done(){
+        
+        if checkIsPasswordsEqual(){
+            
+            delegate?.updatePasswordValue(passwordValue:value)
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        
+    }
+    
+    private func checkIsPasswordsEqual() -> Bool{
+        return self.value.password == self.value.conforimPassword
+    }
+    
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
 
+}
+
+extension PassWordSettingViewController:PasswordSettingCellDelegate{
+    func updatePasswordValue(type: PasswardViewType, value: String?) {
+        if type == .password{
+            self.value.password = value
+        }else{
+            self.value.conforimPassword = value
+        }
+    }
+    
+    
 }

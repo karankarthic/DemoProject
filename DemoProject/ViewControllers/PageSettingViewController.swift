@@ -11,7 +11,7 @@ protocol PageSettingViewControllerDelegate:class {
     func updatePageSettings(pageSettings:PageSettingValue)
 }
 
-struct PageSettingValue{
+struct PageSettingValue {
     
     var pageSize:String
     var pageOrientation:String
@@ -23,21 +23,12 @@ struct PageSettingValue{
 }
 
 class PageSettingViewController: CardLayoutTableViewController {
-
-    var headerPosition:String = "Left"
-    var headerValue:String = "Date"
-    var footerPosition:String = "Left"
-    var footerValue:String = "Date"
-    var pageSize:String = "A4"
-    var pageOrientation:String = "Portrait"
-    var columnWidth:String = "Actual"
-    var marginValues:Margin = Margin(t: "10", l: "10", r: "10", b: "10")
     
     var delegateCalledCell:ExportOptionCustomaizingCell? = nil
     
     weak var delegate :PageSettingViewControllerDelegate?
     
-    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +39,9 @@ class PageSettingViewController: CardLayoutTableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "Page Setting"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+
        
     }
     
@@ -63,12 +57,13 @@ class PageSettingViewController: CardLayoutTableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
             cell.fileNameView.title.text = "Page Size"
             cell.items = ["A4","A9"]
-            cell.fileNameView.valueTextField.text = pageSize
+            cell.fileNameView.valueTextField.text = valueForPageSetting.pageSize
             cell.delegate = self
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Page Orientation"
+            cell.optionView.configure = .orientation
             cell.optionView.choiceOneView.title.text = "Portrait"
             cell.optionView.choiceTwoView.title.text = "Landscape"
             cell.optionView.delegate = self
@@ -76,37 +71,40 @@ class PageSettingViewController: CardLayoutTableViewController {
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
+            cell.optionView.configure = .columnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
             cell.optionView.delegate = self
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
-            cell.topTextField.text = valueForPageSetting.margin.t
-            cell.leftTextField.text = valueForPageSetting.margin.l
-            cell.rightTextField.text = valueForPageSetting.margin.r
-            cell.bottomTextField.text = valueForPageSetting.margin.b
+            cell.topTextField.text = "\(valueForPageSetting.margin.top)"
+            cell.leftTextField.text = "\(valueForPageSetting.margin.left)"
+            cell.rightTextField.text = "\(valueForPageSetting.margin.right)"
+            cell.bottomTextField.text = "\(valueForPageSetting.margin.bottom)"
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 4{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Header"
+            cell.position = .header
             cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text =  headerPosition
+            cell.subValuePickerOneView.valueTextField.text =  valueForPageSetting.header.position
             
             cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = headerValue
+            cell.subValuePickerTwoView.valueTextField.text = valueForPageSetting.header.value
             cell.delegate = self
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Footer"
+            cell.position = .footer
             cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text = footerPosition
+            cell.subValuePickerOneView.valueTextField.text = valueForPageSetting.footer.position
             
             cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = footerValue
+            cell.subValuePickerTwoView.valueTextField.text = valueForPageSetting.footer.value
             cell.delegate = self
             return cell
         }
@@ -162,12 +160,16 @@ class PageSettingViewController: CardLayoutTableViewController {
     
     @objc private func done(){
         
-        valueForPageSetting = PageSettingValue(pageSize: self.pageSize, pageOrientation: self.pageOrientation, columnWidth: self.columnWidth, margin: self.marginValues, header: PagePositionValue(position: self.headerPosition, value: self.headerValue), footer: PagePositionValue(position: self.footerPosition, value: self.footerValue))
-
         
 //         send back the moresettingvalues to the pageSetting done here
         delegate?.updatePageSettings(pageSettings:valueForPageSetting)
         
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
+    @objc private func cancel(){
         
         self.dismiss(animated: true, completion: nil)
         
@@ -178,12 +180,14 @@ class PageSettingViewController: CardLayoutTableViewController {
 
 extension PageSettingViewController: PrinterOptionCustomaizingCellDelegate {
   
-    func updateposition(position: String, inPosition: String) {
+    func updateposition(position: String, inPosition: Position) {
         
-        if inPosition == "Header"{
-            headerPosition = position
+        if inPosition == .header{
+           
+            valueForPageSetting.header.position = position
         }else{
-            footerPosition = position
+          
+            valueForPageSetting.footer.position = position
         }
     }
     
@@ -217,13 +221,14 @@ extension PageSettingViewController: SelectViewControllerDelegate {
     
     func valueForSingleSelect(value: String) {
         
-        if delegateCalledCell?.titleLabel.text == "Header"{
-            headerValue = value
+        if delegateCalledCell?.position == .header{
+            
+            valueForPageSetting.header.value = value
         }else{
-            footerValue = value
+            
+            valueForPageSetting.footer.value = value
         }
-        
-        tableView.reloadData()
+        self.tableView.reloadData()
         
     }
     
@@ -231,18 +236,20 @@ extension PageSettingViewController: SelectViewControllerDelegate {
 
 extension PageSettingViewController: SinglePickerViewCellDelegate {
     func updateSinglePickerValue(value: String) {
-        self.pageSize = value
+        self.valueForPageSetting.pageSize = value
+
     }
 
 }
 
 extension PageSettingViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(title: String, value: String) {
+    func updateOptionSelectorViewValue(configure: Configure, value: String) {
         
-        if title == "Page Orientation"{
-            self.pageOrientation = value
+        if configure == .orientation{
+            valueForPageSetting.pageOrientation = value
         }else{
-            self.columnWidth = value
+
+            valueForPageSetting.columnWidth = value
         }
         
     }
@@ -253,7 +260,7 @@ extension PageSettingViewController: PrintOptionSelectorViewCellDelegate {
 extension PageSettingViewController: MarginCellDelegate {
     
     func updateMargingcell(margin: Margin) {
-        self.marginValues = margin
+        self.valueForPageSetting.margin = margin
     }
     
 

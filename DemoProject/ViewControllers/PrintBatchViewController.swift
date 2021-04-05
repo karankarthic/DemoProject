@@ -22,6 +22,8 @@ class PrintBatchViewController: CardLayoutTableViewController {
     
     var totalRecordCount : Int = 450
     
+    var printSettings:PrintOptionModel = PrintOptionModel()
+    
     var batchs:[PrintBatchModel] = [PrintBatchModel(from: 1, to: 500)]
 
     override func viewDidLoad() {
@@ -29,6 +31,8 @@ class PrintBatchViewController: CardLayoutTableViewController {
         tableView.registerReusableCell(PrintBatchCell.self)
         tableView.allowsSelection = false
         self.navigationItem.title = "Print"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
+
       
     }
     
@@ -90,6 +94,12 @@ class PrintBatchViewController: CardLayoutTableViewController {
         ])
         
         return returnedView
+    }
+    
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
     }
 
 }

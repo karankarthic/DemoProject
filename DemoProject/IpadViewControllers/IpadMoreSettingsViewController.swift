@@ -10,15 +10,11 @@ import UIKit
 class IpadMoreSettingsViewController: UITableViewController {
     
     
-    var headerPosition:String = ""
-    var footerPosition:String = ""
-    var headerValue:String = ""
-    var footerValue:String = ""
-    var marginValues:Margin = Margin(t: "10", l: "10", r: "10", b: "10")
-    
     var delegateCalledCell:ExportOptionCustomaizingCell? = nil
     
-    var valueForMoreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    weak var delegate:MoreSettingsViewControllerDelegate?
+    
+    var valueForMoreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
 
     
     init(){
@@ -37,7 +33,10 @@ class IpadMoreSettingsViewController: UITableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "More Setting"
-       
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+
+        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -50,16 +49,17 @@ class IpadMoreSettingsViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
-            cell.topTextField.text = valueForMoreSetting.margin.t
-            cell.leftTextField.text = valueForMoreSetting.margin.l
-            cell.rightTextField.text = valueForMoreSetting.margin.r
-            cell.bottomTextField.text = valueForMoreSetting.margin.b
+            cell.topTextField.text = "\(valueForMoreSetting.margin.top)"
+            cell.leftTextField.text = "\(valueForMoreSetting.margin.left)"
+            cell.rightTextField.text = "\(valueForMoreSetting.margin.right)"
+            cell.bottomTextField.text = "\(valueForMoreSetting.margin.bottom)"
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Header"
+            cell.position = .header
             cell.subValuePickerOneView.title.text = "Position"
             cell.subValuePickerOneView.valueTextField.text =  valueForMoreSetting.header.position
             
@@ -70,8 +70,9 @@ class IpadMoreSettingsViewController: UITableViewController {
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             cell.titleLabel.text = "Footer"
+            cell.position = .footer
             cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text = valueForMoreSetting.footer.value
+            cell.subValuePickerOneView.valueTextField.text = valueForMoreSetting.footer.position
             
             cell.subValuePickerTwoView.title.text = "Value"
             cell.subValuePickerTwoView.valueTextField.text = valueForMoreSetting.footer.value
@@ -108,34 +109,29 @@ class IpadMoreSettingsViewController: UITableViewController {
     
     @objc private func done(){
         
-        valueForMoreSetting = MoreSettingsValueModel(margin: self.marginValues, header: PagePositionValue(position: self.headerPosition, value: self.headerValue), footer: PagePositionValue(position: self.footerPosition, value: self.footerValue))
-        
 //         send back the moresettingvalues to the printSetting to be done here
         
-        
+        delegate?.updateMoreSettingValue(value:valueForMoreSetting)
         
         self.dismiss(animated: true, completion: nil)
         
     }
-   
-  
-}
-
-extension IpadMoreSettingsViewController:MarginCellDelegate{
-    func updateMargingcell(margin: Margin) {
-        self.marginValues = margin
-    }
     
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
     
 }
 
 extension IpadMoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
     
-    func updateposition(position: String, inPosition: String) {
-        if inPosition == "Header"{
-            headerPosition = position
+    func updateposition(position: String, inPosition: Position) {
+        if inPosition == .header{
+            valueForMoreSetting.header.position = position
         }else{
-            footerPosition = position
+            valueForMoreSetting.footer.position = position
         }
     }
     
@@ -148,12 +144,41 @@ extension IpadMoreSettingsViewController: PrinterOptionCustomaizingCellDelegate 
         
         let vc = SelectViewController()
         vc.selectionType = .single
+        vc.delegate = self
         vc.items = [selectModel,selectModel1,selectModel2]
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
         
         self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
         
+    }
+    
+}
+
+
+
+extension IpadMoreSettingsViewController: SelectViewControllerDelegate {
+    
+    func valueForMulitiSelect(valueForMulitiSelect: [String]) {
+        
+    }
+    
+    
+    func valueForSingleSelect(value: String) {
+        
+        if delegateCalledCell?.position == .header{
+            valueForMoreSetting.header.value = value
+        }else{
+            valueForMoreSetting.footer.value = value
+        }
+        
+    }
+    
+}
+
+extension IpadMoreSettingsViewController:MarginCellDelegate{
+    func updateMargingcell(margin: Margin) {
+        self.valueForMoreSetting.margin = margin
     }
     
     

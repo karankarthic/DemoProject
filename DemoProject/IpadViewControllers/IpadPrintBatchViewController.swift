@@ -22,6 +22,8 @@ class IpadPrintBatchViewController: UITableViewController {
     
     var totalRecordCount : Int = 450
     
+    var printSettings:PrintOptionModel = PrintOptionModel()
+    
     var batchs:[PrintBatchModel] = [PrintBatchModel(from: 1, to: 500),PrintBatchModel(from: 1, to: 500)]
 
     override func viewDidLoad() {
@@ -29,7 +31,8 @@ class IpadPrintBatchViewController: UITableViewController {
         tableView.registerReusableCell(PrintBatchCell.self)
         tableView.allowsSelection = false
         self.navigationItem.title = "Print"
-      
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -90,6 +93,12 @@ class IpadPrintBatchViewController: UITableViewController {
         ])
         
         return returnedView
+    }
+    
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
     }
 
 }

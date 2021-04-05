@@ -10,8 +10,7 @@ import UIKit
 class IpadPrintOptionsViewController: UITableViewController {
     
     
-    var pageSize:String = ""
-    var pageOrientation:String = ""
+    var viewModel:PrintOptionModel = PrintOptionModel()
 
     
     init(){
@@ -24,7 +23,7 @@ class IpadPrintOptionsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         tableView.registerReusableCell(PrinterOptionViewTypeCell.self)
         tableView.registerReusableCell(PageCustomizationCell.self)
         tableView.registerReusableCell(PrintOptionSelectorViewCell.self)
@@ -33,6 +32,10 @@ class IpadPrintOptionsViewController: UITableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "Print Options"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: #selector(nextfunc))
+        
+        
         
     }
     
@@ -53,17 +56,19 @@ class IpadPrintOptionsViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PageCustomizationCell
             cell.titleLabel.text = "Page"
             cell.subValuePickerOneView.title.text = "Size"
-            cell.subValuePickerOneView.valueTextField.text = pageSize
+            cell.subValuePickerOneView.valueTextField.text = viewModel.pageSize
             
             cell.subValuePickerTwoView.title.text = "Orientation"
-            cell.subValuePickerTwoView.valueTextField.text = pageOrientation
+            cell.subValuePickerTwoView.valueTextField.text = viewModel.pageOrientation
             cell.delegate = self
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
+            cell.optionView.configure = .columnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
+            cell.optionView.delegate = self
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
@@ -98,29 +103,65 @@ class IpadPrintOptionsViewController: UITableViewController {
         }
     }
     
+    @objc private func nextfunc(){
+        
+        
+        let vc = PrintBatchViewController()
+        vc.printSettings = self.viewModel
+        
+        let navVC = UINavigationController(rootViewController: vc)
+        
+        self.navigationController?.present(navVC, animated: true, completion: nil)
+        
+        
+    }
+    
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
+    
 }
 
 extension IpadPrintOptionsViewController: PageCustomizationCellDelegate {
     func updateposition(size: String, orientation: String) {
         
-        self.pageSize = size
-        self.pageOrientation = orientation
+        self.viewModel.pageSize = size
+        self.viewModel.pageOrientation = orientation
     }
     
     
 }
+
+
 
 extension IpadPrintOptionsViewController: ExportPassWordAndPageSettingCellDelegate {
     
     func pushToRespectiveVC(type: ExportSettingType) {
         if type == .more{
             
-//            let vc = IpadMoreSettingsViewController()
-////            vc.delegate = self
-//            let navVC = UINavigationController(rootViewController: vc)
-//
-//            self.navigationController?.present(navVC, animated: true, completion: nil)
+            let vc = MoreSettingsViewController()
+            vc.delegate = self
+            let navVC = UINavigationController(rootViewController: vc)
             
+            self.navigationController?.present(navVC, animated: true, completion: nil)
+            
+        }
+    }
+    
+}
+
+extension IpadPrintOptionsViewController:MoreSettingsViewControllerDelegate{
+    func updateMoreSettingValue(value: MoreSettingsValueModel) {
+        self.viewModel.moreSetting = value
+    }
+}
+
+extension IpadPrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
+    func updateOptionSelectorViewValue(configure: Configure, value: String) {
+        if configure == .columnWidth{
+            self.viewModel.columnWidth = value
         }
     }
     

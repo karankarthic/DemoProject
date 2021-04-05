@@ -7,13 +7,18 @@
 
 import UIKit
 
+struct ExportViewModel {
+    var fileName:String = ""
+    var fileType:String = "PDF"
+    var selecteColumns:[String] = []
+    var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var passwordSetting:Passwords = Passwords()
+}
+
+
 class ExportSettingViewController: CardLayoutTableViewController {
     
-    
-    var fileName:String = ""
-    var fileType:String = "A4"
-    var selecteColumns:[String] = []
-    var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(t: "10", l: "10", r: "10", b: "10"), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var viewModel:ExportViewModel = ExportViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +30,8 @@ class ExportSettingViewController: CardLayoutTableViewController {
         tableView.registerReusableCell(ExportPassWordAndPageSettingCell.self)
         
         tableView.allowsSelection = false
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+
         
     }
     
@@ -40,13 +47,13 @@ class ExportSettingViewController: CardLayoutTableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportSettingsFileNameCell
             cell.fileNameView.title.text = "File Name"
             cell.delegate = self
-            cell.fileNameView.valueTextField.text = fileName
+            cell.fileNameView.valueTextField.text = viewModel.fileName
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
             cell.fileNameView.title.text = "File Type"
             cell.items = ["PDF"]
-            cell.fileNameView.valueTextField.text = fileType
+            cell.fileNameView.valueTextField.text = viewModel.fileType
             cell.delegate = self
             return cell
         }else if indexPath.section == 2{
@@ -113,6 +120,12 @@ class ExportSettingViewController: CardLayoutTableViewController {
         
         
     }
+    
+    @objc private func cancel(){
+        
+        self.dismiss(animated: true, completion: nil)
+        
+    }
 
 }
 
@@ -129,9 +142,9 @@ extension ExportSettingViewController: SingleNonPickerViewValueCellDelegate{
         let vc = SelectViewController()
         vc.selectionType = .multi
         vc.delegate = self
-        vc.valueForMulitiSelect = selecteColumns
+        vc.valueForMulitiSelect = viewModel.selecteColumns
         vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
-        vc.mulitSelectReview(valueForMulitiSelect:selecteColumns)
+        vc.mulitSelectReview()
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
     }
@@ -155,7 +168,7 @@ extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate 
         }else{
             
             let vc = PassWordSettingViewController()
-//            vc.delegate = self
+            vc.delegate = self
             navVC = UINavigationController(rootViewController: vc)
         }
     
@@ -169,7 +182,7 @@ extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate 
 extension ExportSettingViewController : SelectViewControllerDelegate {
     
     func valueForMulitiSelect(valueForMulitiSelect: [String]) {
-        selecteColumns = valueForMulitiSelect
+        viewModel.selecteColumns = valueForMulitiSelect
     }
     
     func valueForSingleSelect(value: String) {
@@ -181,19 +194,27 @@ extension ExportSettingViewController : SelectViewControllerDelegate {
 
 extension ExportSettingViewController :ExportSettingsFileNameCellDelegate{
     func updateValue(fileName: String) {
-        self.fileName = fileName
+        self.viewModel.fileName = fileName
     }
 }
 
 extension ExportSettingViewController : SinglePickerViewCellDelegate{
     func updateSinglePickerValue(value: String) {
-        self.fileType = value
+        self.viewModel.fileType = value
     }
 }
 
 extension ExportSettingViewController : PageSettingViewControllerDelegate{
     func updatePageSettings(pageSettings: PageSettingValue) {
-        self.pageSettings = pageSettings
+        self.viewModel.pageSettings = pageSettings
+    }
+    
+    
+}
+
+extension ExportSettingViewController : PassWordSettingViewControllerDelegate{
+    func updatePasswordValue(passwordValue: Passwords) {
+        self.viewModel.passwordSetting = passwordValue
     }
     
     
