@@ -1176,8 +1176,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
     }
     
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         
         var top:Int = Int(topTextField.text ?? "") ?? 10
         var left:Int = Int(leftTextField.text ?? "") ?? 10
@@ -1199,8 +1198,13 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
         delegate?.updateMargingcell(margin: .init(top: top, left: left, right: right, bottom: bottom))
         
-        return true
     }
+    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        
+//        
+//        return true
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

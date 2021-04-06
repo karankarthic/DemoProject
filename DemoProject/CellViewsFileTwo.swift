@@ -347,15 +347,19 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
       
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
-    {
-        DispatchQueue.main.async {
-            self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
-        }
-        
-        
-        return true
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
     }
+    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+//    {
+//        DispatchQueue.main.async {
+//            
+//        }
+//        
+//        
+//        return true
+//    }
     
     
     

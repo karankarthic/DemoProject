@@ -130,8 +130,6 @@ class MoreSettingsViewController: CardLayoutTableViewController {
     
     @objc private func done(){
         
-//        valueForMoreSetting = MoreSettingsValueModel(margin: self.marginValues, header: PagePositionValue(position: self.headerPosition, value: self.headerValue), footer: PagePositionValue(position: self.footerPosition, value: self.footerValue))
-        
 //         send back the moresettingvalues to the printSetting to be done here
         
         delegate?.updateMoreSettingValue(value:valueForMoreSetting)

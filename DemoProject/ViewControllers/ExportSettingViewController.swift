@@ -163,12 +163,14 @@ extension ExportSettingViewController: ExportPassWordAndPageSettingCellDelegate 
             
             let vc = PageSettingViewController()
             vc.delegate = self
+            vc.valueForPageSetting = viewModel.pageSettings
             navVC = UINavigationController(rootViewController: vc)
             
         }else{
             
             let vc = PassWordSettingViewController()
             vc.delegate = self
+            vc.value = viewModel.passwordSetting
             navVC = UINavigationController(rootViewController: vc)
         }
     

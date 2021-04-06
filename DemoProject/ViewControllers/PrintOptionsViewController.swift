@@ -144,6 +144,7 @@ extension PrintOptionsViewController: ExportPassWordAndPageSettingCellDelegate {
             
             let vc = MoreSettingsViewController()
             vc.delegate = self
+            vc.valueForMoreSetting = self.viewModel.moreSetting
             let navVC = UINavigationController(rootViewController: vc)
             
             self.navigationController?.present(navVC, animated: true, completion: nil)
