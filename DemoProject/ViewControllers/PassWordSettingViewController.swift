@@ -46,9 +46,11 @@ class PassWordSettingViewController: CardLayoutTableViewController {
         
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PasswordSettingCell
         if indexPath.section == 0{
+            cell.passwordView.title.text = "Password"
             cell.passwordView.valueTextField.text = self.value.password
             cell.type = .password
         }else{
+            cell.passwordView.title.text = "Confirm Password"
             cell.passwordView.valueTextField.text = self.value.conforimPassword
             cell.type = .confirmPassword
         }
