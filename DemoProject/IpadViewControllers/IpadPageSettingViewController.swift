@@ -34,8 +34,8 @@ class IpadPageSettingViewController: UITableViewController {
         tableView.allowsSelection = false
         
         self.navigationItem.title = "Page Setting"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(cancel))
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .plain, target: self, action: <#T##Selector?#>)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -57,17 +57,21 @@ class IpadPageSettingViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Page Orientation"
             cell.optionView.configure = .orientation
+            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForOrientation
             cell.optionView.choiceOneView.title.text = "Portrait"
             cell.optionView.choiceTwoView.title.text = "Landscape"
             cell.optionView.delegate = self
+            cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
             cell.optionView.configure = .columnWidth
+            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForColumnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
             cell.optionView.delegate = self
+            cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
@@ -216,17 +220,15 @@ extension IpadPageSettingViewController: SinglePickerViewCellDelegate {
 }
 
 extension IpadPageSettingViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String) {
-        
+    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
         if configure == .orientation{
             valueForPageSetting.pageOrientation = value
+            valueForPageSetting.optionSelectedForOrientation = selected
         }else{
-
             valueForPageSetting.columnWidth = value
+            valueForPageSetting.optionSelectedForColumnWidth = selected
         }
-        
     }
-    
     
 }
 

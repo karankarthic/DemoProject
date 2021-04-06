@@ -13,6 +13,7 @@ struct PrintOptionModel{
     var pageOrientation:String = "Portrait"
     var columnWidth:String = "Actual"
     var moreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var optionSelectedForColumnWidth:ChoiceSelected = .choiceOne
     
 }
 
@@ -65,9 +66,11 @@ class PrintOptionsViewController: CardLayoutTableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
             cell.optionView.configure = .columnWidth
+            cell.optionView.selectedChoice = viewModel.optionSelectedForColumnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
             cell.optionView.delegate = self
+            cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
@@ -161,11 +164,11 @@ extension PrintOptionsViewController:MoreSettingsViewControllerDelegate{
 }
 
 extension PrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String) {
+    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
         if configure == .columnWidth{
             self.viewModel.columnWidth = value
+            viewModel.optionSelectedForColumnWidth = selected
         }
     }
-    
     
 }

@@ -695,7 +695,7 @@ enum Configure{
 
 protocol PrintOptionSelectorViewCellDelegate:class {
     
-    func updateOptionSelectorViewValue(configure:Configure,value:String)
+    func updateOptionSelectorViewValue(configure:Configure,value:String,selected:ChoiceSelected)
     
 }
 enum ChoiceSelected{
@@ -764,15 +764,16 @@ class OptionSelectorRadioButtonView : UIView {
         
         choiceOneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
         choiceTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
-        
+         
+    }
+    
+    func changeSelectionAsPerChoice(){
         if selectedChoice == .choiceOne{
             choiceOneSelected()
         }else{
             choiceTwoSelected()
         }
-        
     }
-    
     
     @objc func buttonTapped(_ sender:UITapGestureRecognizer){
         
@@ -795,7 +796,7 @@ class OptionSelectorRadioButtonView : UIView {
         choiceTwoView.selectButton.tintColor = .lightGray
         choiceOneView.selectButton.tintColor = .blue
         
-        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceOneView.title.text ?? "")
+        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceOneView.title.text ?? "", selected: .choiceOne)
     }
     private func choiceTwoSelected(){
         choiceOneView.selectButton.image = intialimg
@@ -803,7 +804,7 @@ class OptionSelectorRadioButtonView : UIView {
         
         choiceOneView.selectButton.tintColor = .lightGray
         choiceTwoView.selectButton.tintColor = .blue
-        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceTwoView.title.text ?? "")
+        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceTwoView.title.text ?? "", selected: .choiceTwo)
     }
     
     required init?(coder: NSCoder) {

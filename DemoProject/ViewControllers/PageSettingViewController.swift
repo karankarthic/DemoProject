@@ -20,6 +20,9 @@ struct PageSettingValue {
     var header :PagePositionValue
     var footer :PagePositionValue
     
+    var optionSelectedForOrientation:ChoiceSelected = .choiceOne
+    var optionSelectedForColumnWidth:ChoiceSelected = .choiceOne
+    
 }
 
 class PageSettingViewController: CardLayoutTableViewController {
@@ -64,16 +67,20 @@ class PageSettingViewController: CardLayoutTableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Page Orientation"
             cell.optionView.configure = .orientation
+            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForOrientation
             cell.optionView.choiceOneView.title.text = "Portrait"
             cell.optionView.choiceTwoView.title.text = "Landscape"
             cell.optionView.delegate = self
+            cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
             cell.optionView.configure = .columnWidth
+            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForColumnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
+            cell.optionView.changeSelectionAsPerChoice()
             cell.optionView.delegate = self
             return cell
         }else if indexPath.section == 3{
@@ -243,18 +250,16 @@ extension PageSettingViewController: SinglePickerViewCellDelegate {
 }
 
 extension PageSettingViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String) {
-        
+    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
         if configure == .orientation{
             valueForPageSetting.pageOrientation = value
+            valueForPageSetting.optionSelectedForOrientation = selected
         }else{
-
             valueForPageSetting.columnWidth = value
+            valueForPageSetting.optionSelectedForColumnWidth = selected
         }
-        
     }
-    
-    
+
 }
 
 extension PageSettingViewController: MarginCellDelegate {

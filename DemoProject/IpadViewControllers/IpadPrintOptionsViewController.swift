@@ -66,9 +66,11 @@ class IpadPrintOptionsViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
             cell.optionView.title.text = "Column Width"
             cell.optionView.configure = .columnWidth
+            cell.optionView.selectedChoice = viewModel.optionSelectedForColumnWidth
             cell.optionView.choiceOneView.title.text = "Actual"
             cell.optionView.choiceTwoView.title.text = "Content based"
             cell.optionView.delegate = self
+            cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
@@ -160,9 +162,11 @@ extension IpadPrintOptionsViewController:MoreSettingsViewControllerDelegate{
 }
 
 extension IpadPrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String) {
+    
+    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
         if configure == .columnWidth{
             self.viewModel.columnWidth = value
+            viewModel.optionSelectedForColumnWidth = selected
         }
     }
     
