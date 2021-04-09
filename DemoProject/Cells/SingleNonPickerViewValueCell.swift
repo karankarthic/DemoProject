@@ -17,6 +17,18 @@ class SingleNonPickerViewValueCell: UITableViewCell{
     
     weak var delegate: SingleNonPickerViewValueCellDelegate?
     
+    private var pickerviewEdges:UIEdgeInsets {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            
+            return UIEdgeInsets(top: 19, left: 19, bottom: -20, right: -19)
+        }
+        return UIEdgeInsets(top: 15, left: 15, bottom: -15, right: -15)
+    }
+    
+    private var shouldShowBottomBorder:Bool{
+        return UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
     lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
@@ -30,34 +42,23 @@ class SingleNonPickerViewValueCell: UITableViewCell{
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setUpView()
         
+    }
+    
+    private func setUpView(){
         self.contentView.addSubview(subValuePickerTwoView)
         
-        let topCons:CGFloat
-        let bottomCons:CGFloat
-        let leftCons:CGFloat
-        let rightCons:CGFloat
-        
-        if UIDevice.current.userInterfaceIdiom == .phone {
-             topCons = 19
-             bottomCons = -20
-             leftCons = 19
-             rightCons = -19
+        if shouldShowBottomBorder{
             subValuePickerTwoView.addBorder(edge: .bottom)
-        }else{
-            
-            topCons = 15
-            bottomCons = -15
-            leftCons = 15
-            rightCons = -15
         }
         
         NSLayoutConstraint.activate([
         
-            subValuePickerTwoView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topCons),
-            subValuePickerTwoView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: leftCons),
-            subValuePickerTwoView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: bottomCons),
-            subValuePickerTwoView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: rightCons)
+            subValuePickerTwoView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: pickerviewEdges.top),
+            subValuePickerTwoView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: pickerviewEdges.left),
+            subValuePickerTwoView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: pickerviewEdges.bottom),
+            subValuePickerTwoView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: pickerviewEdges.right)
             ])
         
         subValuePickerTwoView.valueTextField.text = value

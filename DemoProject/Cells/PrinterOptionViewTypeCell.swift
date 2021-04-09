@@ -15,7 +15,7 @@ class PrinterOptionViewTypeCell:UITableViewCell{
     
     weak var delegate:PrinterOptionViewTypeCellDelegate?
     
-    lazy var segmentView: UISegmentedControl = {
+    private lazy var segmentView: UISegmentedControl = {
         
         var items = ["List View","Detail View"]
         
@@ -31,7 +31,7 @@ class PrinterOptionViewTypeCell:UITableViewCell{
         return segmentView
     }()
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
         titleLabel.text = "View Type"
@@ -42,7 +42,7 @@ class PrinterOptionViewTypeCell:UITableViewCell{
         return titleLabel
     }()
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -80,7 +80,7 @@ class PrinterOptionViewTypeCell:UITableViewCell{
         delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
     }
     
-    @objc func segmentedControlValueChanged(_ sender: UISegmentedControl) {
+    @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
         }else{

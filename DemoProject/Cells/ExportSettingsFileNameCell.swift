@@ -33,7 +33,7 @@ class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
         setupView()
     }
     
-    func setupView(){
+    private func setupView(){
         self.contentView.addSubview(fileNameView)
         
         let topCons:CGFloat

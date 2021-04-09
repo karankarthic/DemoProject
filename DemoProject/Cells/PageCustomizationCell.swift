@@ -16,10 +16,11 @@ protocol PageCustomizationCellDelegate:class  {
 
 class PageCustomizationCell: UITableViewCell{
     
-    var items = ["Left","Right","Top","Bottom"]
-    var orientationItems = ["Portait","Landscape"]
+    private var items = ["Left","Right","Top","Bottom"]
+    private var orientationItems = ["Portait","Landscape"]
     
     weak var delegate : PageCustomizationCellDelegate?
+    
     lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
@@ -126,7 +127,7 @@ class PageCustomizationCell: UITableViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupCellView(){
+    private func setupCellView(){
         
         self.contentView.addSubview(verticalStackView)
         verticalStackView.addArrangedSubview(titleLabel)
@@ -182,7 +183,7 @@ class PageCustomizationCell: UITableViewCell{
         
     }
 
-    @objc func dismissPickerViewaction(){
+    @objc private func dismissPickerViewaction(){
           
         delegate?.updateposition(size: subValuePickerOneView.valueTextField.text ?? "", orientation: subValuePickerTwoView.valueTextField.text ?? "")
         self.contentView.endEditing(true)

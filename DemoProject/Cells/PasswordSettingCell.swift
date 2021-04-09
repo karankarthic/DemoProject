@@ -34,7 +34,7 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
     }()
     
 
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -52,7 +52,7 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         setupView()
     }
     
-    func setupView(){
+    private func setupView(){
 
         self.contentView.addSubview(verticalStackView)
         verticalStackView.addArrangedSubview(passwordView)

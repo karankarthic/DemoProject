@@ -35,9 +35,9 @@ protocol SelectCellDelegate:class{
 
 class SelectCell : UITableViewCell, UITextFieldDelegate {
     
-    lazy var choiceView = OptionView()
+    private lazy var choiceView = OptionView()
     
-    lazy var valueTextField: UITextField = {
+    private lazy var valueTextField: UITextField = {
         
         let titleLabel = UITextField()
         titleLabel.text = ""
@@ -49,7 +49,7 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
         return titleLabel
     }()
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -121,7 +121,7 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
         buttonTapped()
     }
     
-     func buttonTapped(){
+    private func buttonTapped(){
         
             if choiceView.buttonType == .radio{
             

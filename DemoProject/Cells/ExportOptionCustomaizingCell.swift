@@ -16,7 +16,7 @@ protocol PrinterOptionCustomaizingCellDelegate:class  {
 
 class ExportOptionCustomaizingCell : UITableViewCell {
     
-    var items = ["Left","Right","Top","Bottom"]
+    private var items = ["Left","Right","Top","Bottom"]
     
     weak var delegate : PrinterOptionCustomaizingCellDelegate?
     var position:Position = .header
@@ -107,7 +107,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupCellView(){
+    private func setupCellView(){
         
         self.contentView.addSubview(verticalStackView)
         verticalStackView.addArrangedSubview(titleLabel)
@@ -167,7 +167,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         delegate?.pushSelectVC(cell: self)
     }
     
-    @objc func dismissPickerViewaction(){
+    @objc private func dismissPickerViewaction(){
           
         self.contentView.endEditing(true)
         delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: position)

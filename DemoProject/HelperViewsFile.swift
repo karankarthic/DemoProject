@@ -287,7 +287,7 @@ class OptionSelectorRadioButtonView : UIView {
 
 class MargingInnerView:UIView {
     
-    lazy var horizontalStackView:UIStackView = {
+    private lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .horizontal
@@ -297,7 +297,7 @@ class MargingInnerView:UIView {
         return vStack
     }()
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical

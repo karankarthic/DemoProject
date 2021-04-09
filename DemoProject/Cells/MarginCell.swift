@@ -48,7 +48,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
     }()
     
-    lazy var innerVerticalStackView:UIStackView = {
+    private lazy var innerVerticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -59,7 +59,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
     }()
     
-    lazy var secInnerVerticalStackView:UIStackView = {
+    private lazy var secInnerVerticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -77,7 +77,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return separatorLine
     }()
     
-    lazy var horizontalStackView:UIStackView = {
+    private lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .horizontal
@@ -147,7 +147,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return bottomTextField
     }()
     
-    lazy var marginInnerView = MargingInnerView()
+    private lazy var marginInnerView = MargingInnerView()
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -157,7 +157,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
     }
     
-    func setupCellView(){
+    private func setupCellView(){
         
         self.contentView.addSubview(verticalStackView)
         

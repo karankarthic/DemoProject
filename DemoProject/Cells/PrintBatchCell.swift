@@ -9,7 +9,7 @@ import UIKit
 
 class PrintBatchCell:UITableViewCell {
     
-    lazy var horizontalStackView:UIStackView = {
+    private lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .horizontal
@@ -40,7 +40,7 @@ class PrintBatchCell:UITableViewCell {
         titleLabel.backgroundColor = .clear
         return titleLabel
     }()
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -51,7 +51,7 @@ class PrintBatchCell:UITableViewCell {
         
     }()
     
-    lazy var iconView1 : UIImageView = {
+    private lazy var iconView1 : UIImageView = {
         var iconView = UIImageView(image: UIImage(named: "angel"))
         iconView.translatesAutoresizingMaskIntoConstraints = false
         iconView.sizeToFit()
@@ -70,7 +70,7 @@ class PrintBatchCell:UITableViewCell {
         
     }
     
-    func setupCellView(){
+    private func setupCellView(){
         
         self.contentView.addSubview(horizontalStackView)
         

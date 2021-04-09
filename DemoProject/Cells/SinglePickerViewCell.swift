@@ -31,7 +31,7 @@ class SinglePickerViewCell:UITableViewCell{
         return fileName
     }()
     
-    lazy var subValueOnePicker: UIPickerView = {
+    private lazy var subValueOnePicker: UIPickerView = {
 
         let subValueOnePicker = UIPickerView()
         subValueOnePicker.delegate = self
@@ -40,6 +40,18 @@ class SinglePickerViewCell:UITableViewCell{
         return subValueOnePicker
     }()
     
+    private var fileNameViewEdges:UIEdgeInsets {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            
+            return UIEdgeInsets(top: 19, left: 19, bottom: -20, right: -19)
+        }
+        return UIEdgeInsets(top: 15, left: 15, bottom: -15, right: -15)
+    }
+    
+    private var shouldShowBottomBorder:Bool{
+        return UIDevice.current.userInterfaceIdiom == .phone
+    }
+    
     var items:[String] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -47,38 +59,23 @@ class SinglePickerViewCell:UITableViewCell{
         setupView()
     }
     
-    func setupView(){
+    private func setupView(){
         self.contentView.addSubview(fileNameView)
         
-        let topCons:CGFloat
-        let bottomCons:CGFloat
-        let leftCons:CGFloat
-        let rightCons:CGFloat
-        
-        if UIDevice.current.userInterfaceIdiom == .phone {
-             topCons = 19
-             bottomCons = -20
-             leftCons = 19
-             rightCons = -19
+        if shouldShowBottomBorder{
             fileNameView.addBorder(edge: .bottom)
-        }else{
-            
-            topCons = 15
-            bottomCons = -15
-            leftCons = 15
-            rightCons = -15
         }
         
         NSLayoutConstraint.activate([
         
-            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: topCons),
-            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: leftCons),
-            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: bottomCons),
-            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: rightCons)
+            fileNameView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: fileNameViewEdges.top),
+            fileNameView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: fileNameViewEdges.left),
+            fileNameView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: fileNameViewEdges.bottom),
+            fileNameView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: fileNameViewEdges.right)
             ])
     }
     
-    @objc func dismissPickerViewaction(){
+    @objc private func dismissPickerViewaction(){
           
         delegate?.updateSinglePickerValue(value: fileNameView.valueTextField.text ?? "")
         self.contentView.endEditing(true)
