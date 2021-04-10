@@ -49,10 +49,8 @@ class PrintBatchViewController: CardLayoutTableViewController {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintBatchCell
         
         let batchItem = batchs[indexPath.row]
-        
-        cell.titleLabel.text = "Batch \((indexPath.row + 1))"
-        cell.subTitleLabel.text = "\(batchItem.from) to \(batchItem.to) records"
-
+        let model = PrintBatchCellModel(title: "Batch \((indexPath.row + 1))", subTitle: "\(batchItem.from) to \(batchItem.to) records")
+        cell.configure(model:model)
         return cell
         
     }

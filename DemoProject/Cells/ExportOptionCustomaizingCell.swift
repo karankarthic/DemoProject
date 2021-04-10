@@ -14,13 +14,25 @@ protocol PrinterOptionCustomaizingCellDelegate:class  {
     
 }
 
+struct ExportOptionCustomaizingCellModel{
+    var titleLabel :String
+    var position :Position
+    var subValuePickerOneViewtitle :String
+    var subValuePickerOneViewvalue :String
+    
+    var subValuePickerTwoViewtitle :String
+    var subValuePickerTwoViewvalue :String
+}
+
 class ExportOptionCustomaizingCell : UITableViewCell {
     
-    private var items = ["Left","Right","Top","Bottom"]
+    private var items:[PositionItems] = [.left,.right,.top,.bottom]
     
     weak var delegate : PrinterOptionCustomaizingCellDelegate?
+    
     var position:Position = .header
-    lazy var titleLabel: UILabel = {
+    
+    private lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
         titleLabel.text = "Page"
@@ -30,7 +42,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         return titleLabel
     }()
     
-    lazy var subValuePickerOneView : PickerOptionView = {
+    private lazy var subValuePickerOneView : PickerOptionView = {
         
         var subValuePickerOneView = PickerOptionView()
         
@@ -49,7 +61,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         return subValuePickerOneView
     }()
     
-    lazy var subValuePickerTwoView : PickerOptionView = {
+    private lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
         subValuePickerTwoView.valueTextField.isEnabled = false
@@ -58,7 +70,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     }()
     
 
-    lazy var subValueOnePicker: UIPickerView = {
+    private lazy var subValueOnePicker: UIPickerView = {
 
         let subValueOnePicker = UIPickerView()
         subValueOnePicker.delegate = self
@@ -75,7 +87,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         return separatorLine
     }()
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -85,7 +97,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         
     }()
     
-    lazy var horizontalStackView:UIStackView = {
+    private lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .horizontal
@@ -106,6 +118,26 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configure(model:ExportOptionCustomaizingCellModel){
+//        var titleLabel :String
+//        var position :Position
+//        var subValuePickerOneViewtitle :String
+//        var subValuePickerOneViewvalue :String
+//
+//        var subValuePickerTwoViewtitle :String
+//        var subValuePickerTwoViewvalue :String
+        
+        titleLabel.text = model.titleLabel
+        position = model.position
+        subValuePickerOneView.title.text = model.subValuePickerOneViewtitle
+        subValuePickerOneView.valueTextField.text =  model.subValuePickerOneViewvalue
+        
+        subValuePickerTwoView.title.text = model.subValuePickerTwoViewtitle
+        subValuePickerTwoView.valueTextField.text = model.subValuePickerTwoViewvalue
+    }
+    
+    
     
     private func setupCellView(){
         
@@ -189,14 +221,14 @@ extension ExportOptionCustomaizingCell: UIPickerViewDelegate, UIPickerViewDataSo
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
        
-            let row = items[row]
+        let row = items[row].rawValue
             return row
        
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
        
-            let row = items[row]
+            let row = items[row].rawValue
             subValuePickerOneView.valueTextField.text = row
        
     }

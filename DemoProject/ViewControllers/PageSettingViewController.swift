@@ -58,60 +58,51 @@ class PageSettingViewController: CardLayoutTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
-            cell.fileNameView.title.text = "Page Size"
-            cell.items = ["A4","A9"]
-            cell.fileNameView.valueTextField.text = valueForPageSetting.pageSize
+           
+            let model = SinglePickerViewCellModel(fileNameViewtitle: "Page Size", items: ["A4","A9"], fileNameViewvalue: valueForPageSetting.pageSize)
+            cell.configure(model:model)
             cell.delegate = self
+
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
-            cell.optionView.title.text = "Page Orientation"
-            cell.optionView.configure = .orientation
-            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForOrientation
-            cell.optionView.choiceOneView.title.text = "Portrait"
-            cell.optionView.choiceTwoView.title.text = "Landscape"
+            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Page Orientation", optionViewConfigure: .orientation, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
+        
+            cell.configure(model: model)
             cell.optionView.delegate = self
             cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
-            cell.optionView.title.text = "Column Width"
-            cell.optionView.configure = .columnWidth
-            cell.optionView.selectedChoice = valueForPageSetting.optionSelectedForColumnWidth
-            cell.optionView.choiceOneView.title.text = "Actual"
-            cell.optionView.choiceTwoView.title.text = "Content based"
+            
+            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Column Width", optionViewConfigure: .columnWidth, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
+        
+            cell.configure(model: model)
             cell.optionView.changeSelectionAsPerChoice()
             cell.optionView.delegate = self
+            
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
-            cell.topTextField.text = "\(valueForPageSetting.margin.top)"
-            cell.leftTextField.text = "\(valueForPageSetting.margin.left)"
-            cell.rightTextField.text = "\(valueForPageSetting.margin.right)"
-            cell.bottomTextField.text = "\(valueForPageSetting.margin.bottom)"
+
+            cell.configure(model:valueForPageSetting.margin)
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 4{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
-            cell.titleLabel.text = "Header"
-            cell.position = .header
-            cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text =  valueForPageSetting.header.position
-            
-            cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = valueForPageSetting.header.value
+            let model = ExportOptionCustomaizingCellModel(titleLabel: "Header", position: .header, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForPageSetting.header.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForPageSetting.header.value)
+            cell.configure(model:model)
             cell.delegate = self
+            
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
-            cell.titleLabel.text = "Footer"
-            cell.position = .footer
-            cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text = valueForPageSetting.footer.position
             
-            cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = valueForPageSetting.footer.value
+            let model = ExportOptionCustomaizingCellModel(titleLabel: "Footer", position: .footer, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForPageSetting.footer.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForPageSetting.footer.value)
+            
+            cell.configure(model:model)
+            
             cell.delegate = self
             return cell
         }
@@ -203,16 +194,24 @@ extension PageSettingViewController: PrinterOptionCustomaizingCellDelegate {
         let selectModel1 = SelectCellModel(title: "Page Number", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         let selectModel2 = SelectCellModel(title: "Title", cellType: .title, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         
-        
+        self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
+    
         
         let vc = SelectViewController()
         vc.selectionType = .single
         vc.delegate = self
         vc.items = [selectModel,selectModel1,selectModel2]
+        let valueForselectCell:String
+        if delegateCalledCell?.position == .header{
+            valueForselectCell = valueForPageSetting.header.value
+        }else{
+            valueForselectCell = valueForPageSetting.footer.value
+        }
+        vc.singleSelecteReview(value:valueForselectCell)
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
         
-        self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
+        
     }
     
     

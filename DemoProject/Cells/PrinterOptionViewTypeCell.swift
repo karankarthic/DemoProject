@@ -8,7 +8,7 @@
 import UIKit
 
 protocol PrinterOptionViewTypeCellDelegate:class {
-    func updatePrinterOptionViewTypeValue(viewType:String)
+    func updatePrinterOptionViewTypeValue(viewType:Int)
 }
 
 class PrinterOptionViewTypeCell:UITableViewCell{
@@ -77,14 +77,14 @@ class PrinterOptionViewTypeCell:UITableViewCell{
             verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -19),
             verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
             ])
-        delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
+        delegate?.updatePrinterOptionViewTypeValue(viewType: 1)
     }
     
     @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            delegate?.updatePrinterOptionViewTypeValue(viewType: "List View")
+            delegate?.updatePrinterOptionViewTypeValue(viewType: 1)
         }else{
-            delegate?.updatePrinterOptionViewTypeValue(viewType: "Detail View")
+            delegate?.updatePrinterOptionViewTypeValue(viewType: 2)
         }
     }
     

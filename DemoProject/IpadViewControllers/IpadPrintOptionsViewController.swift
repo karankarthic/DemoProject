@@ -51,30 +51,24 @@ class IpadPrintOptionsViewController: UITableViewController {
         
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
+            cell.delegate = self
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PageCustomizationCell
-            cell.titleLabel.text = "Page"
-            cell.subValuePickerOneView.title.text = "Size"
-            cell.subValuePickerOneView.valueTextField.text = viewModel.pageSize
-            
-            cell.subValuePickerTwoView.title.text = "Orientation"
-            cell.subValuePickerTwoView.valueTextField.text = viewModel.pageOrientation
+            let model = PageCustomizationCellModel(titleLabel: "Page", subValuePickerOneViewTitle: "Size", subValuePickerOneViewvalue: viewModel.pageSize, subValuePickerTwoViewTitle: "Orientation", subValuePickerTwoViewvalue: viewModel.pageOrientation)
+            cell.configure(model:model)
             cell.delegate = self
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
-            cell.optionView.title.text = "Column Width"
-            cell.optionView.configure = .columnWidth
-            cell.optionView.selectedChoice = viewModel.optionSelectedForColumnWidth
-            cell.optionView.choiceOneView.title.text = "Actual"
-            cell.optionView.choiceTwoView.title.text = "Content based"
+            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Column Width", optionViewConfigure: .columnWidth, optionViewSelectedChoice: viewModel.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
+        
+            cell.configure(model: model)
             cell.optionView.delegate = self
             cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
-            cell.moreSetting.titleLabel.text = "More Setting"
             cell.delegate = self
             return cell
         }
@@ -133,6 +127,13 @@ extension IpadPrintOptionsViewController: PageCustomizationCellDelegate {
         self.viewModel.pageOrientation = orientation
     }
     
+    
+}
+
+extension IpadPrintOptionsViewController:PrinterOptionViewTypeCellDelegate{
+    func updatePrinterOptionViewTypeValue(viewType: Int) {
+        self.viewModel.viewType = viewType
+    }
     
 }
 

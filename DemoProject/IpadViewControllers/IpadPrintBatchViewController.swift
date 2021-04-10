@@ -11,6 +11,12 @@ class IpadPrintBatchViewController: UITableViewController {
     
     
     
+    var totalRecordCount : Int = 450
+    
+    var printSettings:PrintOptionModel = PrintOptionModel()
+    
+    var batchs:[PrintBatchModel] = [PrintBatchModel(from: 1, to: 500),PrintBatchModel(from: 1, to: 500)]
+    
     init(){
         super.init(style: .grouped)
     }
@@ -18,13 +24,6 @@ class IpadPrintBatchViewController: UITableViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    var totalRecordCount : Int = 450
-    
-    var printSettings:PrintOptionModel = PrintOptionModel()
-    
-    var batchs:[PrintBatchModel] = [PrintBatchModel(from: 1, to: 500),PrintBatchModel(from: 1, to: 500)]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +48,8 @@ class IpadPrintBatchViewController: UITableViewController {
         
         let batchItem = batchs[indexPath.row]
         
-        cell.titleLabel.text = "Batch \((indexPath.row + 1))"
-        cell.subTitleLabel.text = "\(batchItem.from) to \(batchItem.to) records"
+        let model = PrintBatchCellModel(title: "Batch \((indexPath.row + 1))", subTitle: "\(batchItem.from) to \(batchItem.to) records")
+        cell.configure(model:model)
 
         return cell
         

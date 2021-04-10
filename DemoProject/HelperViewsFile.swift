@@ -215,6 +215,11 @@ class OptionSelectorRadioButtonView : UIView {
         
         super.init(frame: .zero)
         
+        setUpViews()
+         
+    }
+    
+    private func setUpViews(){
         self.addSubview(verticalStackView)
         
         verticalStackView.addArrangedSubview(title)
@@ -235,7 +240,6 @@ class OptionSelectorRadioButtonView : UIView {
         
         choiceOneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
         choiceTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped(_:))))
-         
     }
     
     func changeSelectionAsPerChoice(){

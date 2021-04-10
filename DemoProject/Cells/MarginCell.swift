@@ -17,7 +17,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
     
     weak var delegate:MarginCellDelegate?
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
         titleLabel.text = "Margin"
@@ -28,7 +28,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return titleLabel
     }()
     
-    lazy var subTitleLabel: UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         
         let titleLabel = UILabel()
         titleLabel.text = "All values are in mm"
@@ -38,7 +38,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         titleLabel.backgroundColor = .clear
         return titleLabel
     }()
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -87,7 +87,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return vStack
     }()
     
-    lazy var topTextField: UITextField = {
+    private lazy var topTextField: UITextField = {
         
         let topTextField = UITextField()
         topTextField.textAlignment = .center
@@ -102,7 +102,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return topTextField
     }()
     
-    lazy var rightTextField: UITextField = {
+    private lazy var rightTextField: UITextField = {
         
         let rightTextField = UITextField()
         rightTextField.textAlignment = .center
@@ -117,7 +117,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return rightTextField
     }()
     
-    lazy var leftTextField: UITextField = {
+    private lazy var leftTextField: UITextField = {
         
         let leftTextField = UITextField()
         leftTextField.textAlignment = .center
@@ -132,7 +132,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         return leftTextField
     }()
     
-    lazy var bottomTextField: UITextField = {
+    private lazy var bottomTextField: UITextField = {
         
         let bottomTextField = UITextField()
         bottomTextField.textAlignment = .center
@@ -155,6 +155,13 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
         self.setupCellView()
         
+    }
+    
+    func configure(model:Margin){
+        topTextField.text = "\(model.top)"
+        leftTextField.text = "\(model.left)"
+        rightTextField.text = "\(model.right)"
+        bottomTextField.text = "\(model.bottom)"
     }
     
     private func setupCellView(){

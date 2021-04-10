@@ -21,13 +21,11 @@ protocol ExportPassWordAndPageSettingCellDelegate:class {
     func pushToRespectiveVC(type:ExportSettingType)
 }
 
-
-
 class ExportPassWordAndPageSettingCell :UITableViewCell {
     
     weak var delegate:ExportPassWordAndPageSettingCellDelegate?
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -45,16 +43,16 @@ class ExportPassWordAndPageSettingCell :UITableViewCell {
         return separatorLine
     }()
 
-    lazy var pageSetting = SingleLableView()
+    private lazy var pageSetting = SingleLableView()
     
-    lazy var passwordSetting = SingleLableView()
+    private lazy var passwordSetting = SingleLableView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
     
-    func setupView(){
+    private func setupView(){
         
         
         self.contentView.addSubview(verticalStackView)
@@ -72,6 +70,9 @@ class ExportPassWordAndPageSettingCell :UITableViewCell {
                         
         
         ])
+        
+        pageSetting.titleLabel.text = "Page Setting"
+        passwordSetting.titleLabel.text = "Password Setting"
         
         pageSetting.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
         passwordSetting.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))

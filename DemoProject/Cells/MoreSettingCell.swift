@@ -11,7 +11,7 @@ class MoreSettingCell :UITableViewCell {
     
     weak var delegate:ExportPassWordAndPageSettingCellDelegate?
     
-    lazy var moreSetting = SingleLableView()
+    private lazy var moreSetting = SingleLableView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,11 +20,10 @@ class MoreSettingCell :UITableViewCell {
         setupView()
     }
     
-    func setupView(){
+    private func setupView(){
 
         self.contentView.addSubview(moreSetting)
-//        verticalStackView.addArrangedSubview(pageSetting)
-        
+
         NSLayoutConstraint.activate([moreSetting.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 0),
                                      moreSetting.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: 0),
                                      moreSetting.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: 0),
@@ -32,6 +31,7 @@ class MoreSettingCell :UITableViewCell {
         
         ])
         
+        moreSetting.titleLabel.text = "More Setting"
         moreSetting.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
 
     }

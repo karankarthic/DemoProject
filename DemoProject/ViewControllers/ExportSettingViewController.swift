@@ -10,6 +10,7 @@ import UIKit
 struct ExportViewModel {
     var fileName:String = ""
     var fileType:String = "PDF"
+    var viewType:Int = 1
     var selecteColumns:[String] = []
     var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
     var passwordSetting:Passwords = Passwords()
@@ -45,33 +46,29 @@ class ExportSettingViewController: CardLayoutTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportSettingsFileNameCell
-            cell.fileNameView.title.text = "File Name"
+            let model = ExportSettingsFileNameCellModel(title: "File Name", value: viewModel.fileName)
+            cell.configure(model:model)
             cell.delegate = self
-            cell.fileNameView.valueTextField.text = viewModel.fileName
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
-            cell.fileNameView.title.text = "File Type"
-            cell.items = ["PDF"]
-            cell.fileNameView.valueTextField.text = viewModel.fileType
+            let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: ["PDF"], fileNameViewvalue: viewModel.fileType)
+            cell.configure(model:model)
             cell.delegate = self
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
-            
+            cell.delegate = self
             cell.contentView.addBorder(edge: .bottom)
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SingleNonPickerViewValueCell
-            cell.subValuePickerTwoView.title.text = "Colums Selection"
             cell.delegate = self
             return cell
         }
         else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportPassWordAndPageSettingCell
             cell.delegate = self
-            cell.pageSetting.titleLabel.text = "Page Setting"
-            cell.passwordSetting.titleLabel.text = "Password Setting"
             return cell
         }
     }
@@ -129,6 +126,14 @@ class ExportSettingViewController: CardLayoutTableViewController {
 
 }
 
+extension ExportSettingViewController:PrinterOptionViewTypeCellDelegate{
+    func updatePrinterOptionViewTypeValue(viewType: Int) {
+        self.viewModel.viewType = viewType
+    }
+    
+    
+}
+
 extension ExportSettingViewController: SingleNonPickerViewValueCellDelegate{
     
     func pushSelectVC() {
@@ -144,7 +149,7 @@ extension ExportSettingViewController: SingleNonPickerViewValueCellDelegate{
         vc.delegate = self
         vc.valueForMulitiSelect = viewModel.selecteColumns
         vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
-        vc.mulitSelectReview()
+    
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
     }

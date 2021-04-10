@@ -29,9 +29,10 @@ class SingleNonPickerViewValueCell: UITableViewCell{
         return UIDevice.current.userInterfaceIdiom == .phone
     }
     
-    lazy var subValuePickerTwoView : PickerOptionView = {
+    private lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
+        subValuePickerTwoView.title.text = "Colums Selection"
         subValuePickerTwoView.translatesAutoresizingMaskIntoConstraints = false
         subValuePickerTwoView.valueTextField.isEnabled = false
         subValuePickerTwoView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(callDelegate)))

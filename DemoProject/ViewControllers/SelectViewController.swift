@@ -58,6 +58,12 @@ class SelectViewController: UITableViewController {
         // Do any additional setup after loading the view.
         
         tableView.tableFooterView = UIView()
+        
+        if selectionType == .multi{
+            mulitSelectReview()
+        }
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -119,18 +125,6 @@ class SelectViewController: UITableViewController {
         
     }
     
-    func mulitSelectReview(){
-     
-        for value in valueForMulitiSelect{
-            for (index,item) in items.enumerated(){
-                if value == item.title {
-                    items[index].isSelected = true
-                    break
-                }
-            }
-        }
-    }
-    
     func singleSelecteReview(value:String){
         for (index,item) in items.enumerated(){
             if value == item.title {
@@ -189,6 +183,19 @@ class SelectViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
         
     }
+    
+    private func mulitSelectReview(){
+     
+        for value in valueForMulitiSelect{
+            for (index,item) in items.enumerated(){
+                if value == item.title {
+                    items[index].isSelected = true
+                    break
+                }
+            }
+        }
+    }
+    
 
 }
 

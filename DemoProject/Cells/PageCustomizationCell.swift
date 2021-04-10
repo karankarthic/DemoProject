@@ -13,15 +13,33 @@ protocol PageCustomizationCellDelegate:class  {
     
 }
 
+enum PositionItems:String {
+    case left = "Left"
+    case right = "Right"
+    case top = "Top"
+    case bottom = "Bottom"
+}
+enum OrientationItems:String {
+    case portait = "Portait"
+    case landscape = "Landscape"
+}
+
+struct PageCustomizationCellModel{
+    var titleLabel:String
+    var subValuePickerOneViewTitle :String
+    var subValuePickerOneViewvalue :String
+    var subValuePickerTwoViewTitle :String
+    var subValuePickerTwoViewvalue :String
+}
 
 class PageCustomizationCell: UITableViewCell{
     
-    private var items = ["Left","Right","Top","Bottom"]
-    private var orientationItems = ["Portait","Landscape"]
+    private var items:[PositionItems] = [.left,.right,.top,.bottom]
+    private var orientationItems:[OrientationItems] = [.portait,.landscape]
     
     weak var delegate : PageCustomizationCellDelegate?
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
         titleLabel.text = "Page"
@@ -32,7 +50,7 @@ class PageCustomizationCell: UITableViewCell{
         return titleLabel
     }()
     
-    lazy var subValuePickerOneView : PickerOptionView = {
+    private lazy var subValuePickerOneView : PickerOptionView = {
         
         var subValuePickerOneView = PickerOptionView()
         
@@ -51,7 +69,7 @@ class PageCustomizationCell: UITableViewCell{
         return subValuePickerOneView
     }()
     
-    lazy var subValuePickerTwoView : PickerOptionView = {
+    private lazy var subValuePickerTwoView : PickerOptionView = {
         
         var subValuePickerTwoView = PickerOptionView()
         subValuePickerTwoView.valueTextField.inputView = subValueTwoPicker
@@ -70,7 +88,7 @@ class PageCustomizationCell: UITableViewCell{
     }()
     
 
-    lazy var subValueOnePicker: UIPickerView = {
+    private lazy var subValueOnePicker: UIPickerView = {
 
         let subValueOnePicker = UIPickerView()
         subValueOnePicker.delegate = self
@@ -79,7 +97,7 @@ class PageCustomizationCell: UITableViewCell{
         return subValueOnePicker
     }()
     
-    lazy var subValueTwoPicker: UIPickerView = {
+    private lazy var subValueTwoPicker: UIPickerView = {
 
         let subValueOnePicker = UIPickerView()
         subValueOnePicker.delegate = self
@@ -95,7 +113,7 @@ class PageCustomizationCell: UITableViewCell{
         return separatorLine
     }()
     
-    lazy var verticalStackView:UIStackView = {
+    private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
@@ -105,7 +123,7 @@ class PageCustomizationCell: UITableViewCell{
         
     }()
     
-    lazy var horizontalStackView:UIStackView = {
+    private lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .horizontal
@@ -125,6 +143,17 @@ class PageCustomizationCell: UITableViewCell{
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(model:PageCustomizationCellModel){
+        
+        titleLabel.text = model.titleLabel
+        subValuePickerOneView.title.text = model.subValuePickerOneViewTitle
+        subValuePickerOneView.valueTextField.text = model.subValuePickerOneViewvalue
+        
+        subValuePickerTwoView.title.text = model.subValuePickerTwoViewTitle
+        subValuePickerTwoView.valueTextField.text = model.subValuePickerTwoViewvalue
+        
     }
     
     private func setupCellView(){
@@ -213,10 +242,10 @@ extension PageCustomizationCell: UIPickerViewDelegate, UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
        
         if pickerView == subValueOnePicker {
-            let row = items[row]
+            let row = items[row].rawValue
             return row
         }else{
-            let row = orientationItems[row]
+            let row = orientationItems[row].rawValue
             return row
         }
         
@@ -227,10 +256,10 @@ extension PageCustomizationCell: UIPickerViewDelegate, UIPickerViewDataSource{
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
        
         if pickerView == subValueOnePicker {
-            let row = items[row]
+            let row = items[row].rawValue
             subValuePickerOneView.valueTextField.text = row
         }else{
-            let row = orientationItems[row]
+            let row = orientationItems[row].rawValue
             subValuePickerTwoView.valueTextField.text = row
         }
     }

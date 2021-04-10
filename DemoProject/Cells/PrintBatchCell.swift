@@ -7,6 +7,11 @@
 
 import UIKit
 
+struct PrintBatchCellModel{
+    var title:String
+    var subTitle:String
+}
+
 class PrintBatchCell:UITableViewCell {
     
     private lazy var horizontalStackView:UIStackView = {
@@ -19,10 +24,10 @@ class PrintBatchCell:UITableViewCell {
         return vStack
     }()
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         
         let titleLabel = UILabel()
-        titleLabel.text = "Margin"
+        titleLabel.text = ""
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .systemFont(ofSize: 15, weight: .bold)
@@ -30,10 +35,10 @@ class PrintBatchCell:UITableViewCell {
         return titleLabel
     }()
     
-    lazy var subTitleLabel: UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         
         let titleLabel = UILabel()
-        titleLabel.text = "All values are in mm"
+        titleLabel.text = ""
         titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .systemFont(ofSize: 15, weight: .light)
@@ -68,6 +73,11 @@ class PrintBatchCell:UITableViewCell {
         
         self.setupCellView()
         
+    }
+    
+    func configure(model:PrintBatchCellModel){
+        titleLabel.text = model.title
+        subTitleLabel.text = model.subTitle
     }
     
     private func setupCellView(){

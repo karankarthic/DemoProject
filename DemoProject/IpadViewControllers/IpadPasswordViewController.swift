@@ -43,13 +43,13 @@ class IpadPasswordViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PasswordSettingCell
+        let model:PasswordSettingCellModel
         if indexPath.section == 0{
-            cell.passwordView.valueTextField.text = self.value.password
-            cell.type = .password
+            model = PasswordSettingCellModel(value:self.value.password ,type: .password)
         }else{
-            cell.passwordView.valueTextField.text = self.value.conforimPassword
-            cell.type = .confirmPassword
+            model = PasswordSettingCellModel(value: self.value.conforimPassword, type: .confirmPassword)
         }
+        cell.configure(model:model)
         cell.delegate = self
         return cell
         

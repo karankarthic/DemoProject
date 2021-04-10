@@ -11,12 +11,19 @@ protocol SinglePickerViewCellDelegate :class{
     func updateSinglePickerValue(value:String)
 }
 
+struct SinglePickerViewCellModel{
+    var fileNameViewtitle:String
+    var items:[String]
+    var fileNameViewvalue:String
+}
+
 
 class SinglePickerViewCell:UITableViewCell{
     
     weak var delegate:SinglePickerViewCellDelegate?
     
-    lazy var fileNameView:PickerOptionView = {
+    
+    private lazy var fileNameView:PickerOptionView = {
         let fileName = PickerOptionView()
         fileName.translatesAutoresizingMaskIntoConstraints = false
         fileName.valueTextField.inputView = subValueOnePicker
@@ -52,12 +59,19 @@ class SinglePickerViewCell:UITableViewCell{
         return UIDevice.current.userInterfaceIdiom == .phone
     }
     
-    var items:[String] = []
+    private var items:[String] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
     }
+    
+    func configure(model:SinglePickerViewCellModel){
+        fileNameView.title.text = model.fileNameViewtitle
+        items = model.items
+        fileNameView.valueTextField.text = model.fileNameViewvalue
+    }
+    
     
     private func setupView(){
         self.contentView.addSubview(fileNameView)

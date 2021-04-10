@@ -17,10 +17,16 @@ protocol PasswordSettingCellDelegate:class{
     func updatePasswordValue(type:PasswardViewType,value:String?)
 }
 
+struct PasswordSettingCellModel{
+    var title:String? = nil
+    var value:String?
+    var type:PasswardViewType
+}
+
 class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
     
     weak var delegate:PasswordSettingCellDelegate?
-    lazy var passwordView: PickerOptionView = {
+    private lazy var passwordView: PickerOptionView = {
         var passwordView = PickerOptionView()
         passwordView.valueTextField.inputView = nil
         passwordView.valueTextField.inputAccessoryView = nil
@@ -45,11 +51,29 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         
     }()
     
-    var type : PasswardViewType = .password
+    private var verticalStackViewEdges:UIEdgeInsets {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            
+            return UIEdgeInsets(top: 19, left: 19, bottom: -19, right: -19)
+        }
+        return UIEdgeInsets(top: 15, left: 20, bottom: -15, right: -15)
+    }
+    
+    private var type : PasswardViewType = .password
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
+    }
+    
+    func configure(model:PasswordSettingCellModel){
+        
+        if model.title != nil{
+            passwordView.title.text = model.title
+        }
+        
+        passwordView.valueTextField.text = model.value
+        type = model.type
     }
     
     private func setupView(){
@@ -61,28 +85,19 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         if UIDevice.current.userInterfaceIdiom == .pad {
             
             passwordView.title.removeFromSuperview()
-            
-            NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 15),
-                                         verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: 20),
-                                         verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -15),
-                                         verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,constant: -15),
-                                         
-            
-            ])
-
         }else{
             
-            NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 19),
-                                         verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: 19),
-                                         verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -19),
-                                         verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,constant: -19),
-                                         
-            
-            ])
-
             passwordView.addBorder(edge: .bottom)
         }
         
+        NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: verticalStackViewEdges.top),
+                                     verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: verticalStackViewEdges.left),
+                                     verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: verticalStackViewEdges.bottom),
+                                     verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,constant: verticalStackViewEdges.right),
+                                     
+        
+        ])
+
         
     }
     

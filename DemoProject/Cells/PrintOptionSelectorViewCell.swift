@@ -7,6 +7,16 @@
 
 import UIKit
 
+struct PrintOptionSelectorViewCellModel{
+    let optionViewTitle:String
+    let optionViewConfigure :Configure
+    let optionViewSelectedChoice:ChoiceSelected
+    let optionViewChoiceOneViewTitle:String
+    let optionViewChoiceTwoViewTitle:String
+    
+}
+
+
 class PrintOptionSelectorViewCell: UITableViewCell{
     
     
@@ -22,6 +32,16 @@ class PrintOptionSelectorViewCell: UITableViewCell{
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.setupCellView()
+    }
+    
+    func configure(model:PrintOptionSelectorViewCellModel){
+        
+        optionView.title.text = model.optionViewTitle
+        optionView.configure = model.optionViewConfigure
+        optionView.selectedChoice = model.optionViewSelectedChoice
+        optionView.choiceOneView.title.text = model.optionViewChoiceOneViewTitle
+        optionView.choiceTwoView.title.text = model.optionViewChoiceTwoViewTitle
+        
     }
     
     private func setupCellView(){

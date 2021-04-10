@@ -69,33 +69,24 @@ class MoreSettingsViewController: CardLayoutTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
-            cell.topTextField.text = "\(valueForMoreSetting.margin.top)"
-            cell.leftTextField.text = "\(valueForMoreSetting.margin.left)"
-            cell.rightTextField.text = "\(valueForMoreSetting.margin.right)"
-            cell.bottomTextField.text = "\(valueForMoreSetting.margin.bottom)"
+            cell.configure(model:valueForMoreSetting.margin)
             cell.delegate = self
             return cell
         }
         else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
-            cell.titleLabel.text = "Header"
-            cell.position = .header
-            cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text =  valueForMoreSetting.header.position
-            
-            cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = valueForMoreSetting.header.value
+            let model = ExportOptionCustomaizingCellModel(titleLabel: "Header", position: .header, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForMoreSetting.header.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForMoreSetting.header.value)
+            cell.configure(model:model)
             cell.delegate = self
+            
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
-            cell.titleLabel.text = "Footer"
-            cell.position = .footer
-            cell.subValuePickerOneView.title.text = "Position"
-            cell.subValuePickerOneView.valueTextField.text = valueForMoreSetting.footer.position
             
-            cell.subValuePickerTwoView.title.text = "Value"
-            cell.subValuePickerTwoView.valueTextField.text = valueForMoreSetting.footer.value
+            let model = ExportOptionCustomaizingCellModel(titleLabel: "Footer", position: .footer, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForMoreSetting.footer.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForMoreSetting.footer.value)
+            
+            cell.configure(model:model)
+            
             cell.delegate = self
             return cell
         }
