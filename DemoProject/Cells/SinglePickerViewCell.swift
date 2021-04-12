@@ -7,21 +7,22 @@
 
 import UIKit
 
-protocol SinglePickerViewCellDelegate :class{
-    func updateSinglePickerValue(value:String)
-}
+//protocol SinglePickerViewCellDelegate :class{
+//    func updateSinglePickerValue(value:String)
+//}
 
 struct SinglePickerViewCellModel{
-    var fileNameViewtitle:String
-    var items:[String]
-    var fileNameViewvalue:String
+    let fileNameViewtitle:String
+    let items:[String]
+    let fileNameViewvalue:String
 }
 
 
 class SinglePickerViewCell:UITableViewCell{
     
-    weak var delegate:SinglePickerViewCellDelegate?
+//    weak var delegate:SinglePickerViewCellDelegate?
     
+    var onUpdateValue:(String) -> Void = {_ in }
     
     private lazy var fileNameView:PickerOptionView = {
         let fileName = PickerOptionView()
@@ -91,7 +92,8 @@ class SinglePickerViewCell:UITableViewCell{
     
     @objc private func dismissPickerViewaction(){
           
-        delegate?.updateSinglePickerValue(value: fileNameView.valueTextField.text ?? "")
+//        delegate?.updateSinglePickerValue(value: fileNameView.valueTextField.text ?? "")
+        onUpdateValue(fileNameView.valueTextField.text ?? "")
         self.contentView.endEditing(true)
 
     }

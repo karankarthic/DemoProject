@@ -129,6 +129,7 @@ class SelectViewController: UITableViewController {
         for (index,item) in items.enumerated(){
             if value == item.title {
                 items[index].isSelected = true
+                valueForSingleSelect = items[index].title
                 break
             }
         }

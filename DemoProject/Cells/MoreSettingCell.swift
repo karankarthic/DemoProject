@@ -9,7 +9,9 @@ import UIKit
 
 class MoreSettingCell :UITableViewCell {
     
-    weak var delegate:ExportPassWordAndPageSettingCellDelegate?
+//    weak var delegate:ExportPassWordAndPageSettingCellDelegate?
+    
+    var pushToMoreVc:() -> Void = {}
     
     private lazy var moreSetting = SingleLableView()
     
@@ -39,8 +41,7 @@ class MoreSettingCell :UITableViewCell {
     @objc private func viewTapped(_ sender:UITapGestureRecognizer){
         
        
-        delegate?.pushToRespectiveVC(type: .more)
-        
+        pushToMoreVc()
     }
     
     required init?(coder: NSCoder) {

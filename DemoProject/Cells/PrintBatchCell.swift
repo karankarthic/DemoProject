@@ -8,8 +8,8 @@
 import UIKit
 
 struct PrintBatchCellModel{
-    var title:String
-    var subTitle:String
+    let title:String
+    let subTitle:String
 }
 
 class PrintBatchCell:UITableViewCell {

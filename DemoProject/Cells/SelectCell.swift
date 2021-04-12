@@ -20,9 +20,9 @@ enum SelectCellType {
 
 struct SelectCellModel{
     
-    var title:String
-    var cellType:SelectCellType
-    var buttonType:OptionView.ButtonType
+    let title:String
+    let cellType:SelectCellType
+    let buttonType:OptionView.ButtonType
     var choiceTitleEnabled : TitleValueState = .off
     var isSelected:Bool = false
 }

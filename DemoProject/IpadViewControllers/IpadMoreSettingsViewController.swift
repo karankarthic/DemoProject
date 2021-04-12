@@ -51,15 +51,21 @@ class IpadMoreSettingsViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
             
             cell.configure(model:valueForMoreSetting.margin)
-            cell.delegate = self
+            cell.onUpdateValue = { margin in
+                self.valueForMoreSetting.margin = margin
+            }
             return cell
         }
         else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             let model = ExportOptionCustomaizingCellModel(titleLabel: "Header", position: .header, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForMoreSetting.header.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForMoreSetting.header.value)
             cell.configure(model:model)
-            cell.delegate = self
-            
+            cell.onUpdateValue = { text in
+                self.valueForMoreSetting.header.position = text
+            }
+            cell.toPushSelectVC = { cell in
+                self.pushSelectVC(cell: cell)
+            }
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
@@ -68,7 +74,14 @@ class IpadMoreSettingsViewController: UITableViewController {
             
             cell.configure(model:model)
             
-            cell.delegate = self
+            cell.onUpdateValue = { text in
+                self.valueForMoreSetting.footer.position = text
+            }
+            
+            cell.toPushSelectVC = { cell in
+                self.pushSelectVC(cell: cell)
+            }
+            
             return cell
         }
     }
@@ -117,32 +130,32 @@ class IpadMoreSettingsViewController: UITableViewController {
     
 }
 
-extension IpadMoreSettingsViewController: PrinterOptionCustomaizingCellDelegate {
-    
-    func updateposition(position: String, inPosition: Position) {
-        if inPosition == .header{
-            valueForMoreSetting.header.position = position
-        }else{
-            valueForMoreSetting.footer.position = position
-        }
-    }
+extension IpadMoreSettingsViewController {
+//
+//    func updateposition(position: String, inPosition: Position) {
+//        if inPosition == .header{
+//            valueForMoreSetting.header.position = position
+//        }else{
+//            valueForMoreSetting.footer.position = position
+//        }
+//    }
     
     func pushSelectVC(cell:UITableViewCell?) {
         let selectModel = SelectCellModel(title: "Date", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         let selectModel1 = SelectCellModel(title: "Page Number", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         let selectModel2 = SelectCellModel(title: "Title", cellType: .title, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
-        
-        
-        
+
+
+
         let vc = SelectViewController()
         vc.selectionType = .single
         vc.delegate = self
         vc.items = [selectModel,selectModel1,selectModel2]
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
-        
+
         self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
-        
+
     }
     
 }
@@ -168,11 +181,11 @@ extension IpadMoreSettingsViewController: SelectViewControllerDelegate {
     
 }
 
-extension IpadMoreSettingsViewController:MarginCellDelegate{
-    func updateMargingcell(margin: Margin) {
-        self.valueForMoreSetting.margin = margin
-    }
-    
-    
-}
-
+//extension IpadMoreSettingsViewController:MarginCellDelegate{
+//    func updateMargingcell(margin: Margin) {
+//        self.valueForMoreSetting.margin = margin
+//    }
+//
+//
+//}
+//

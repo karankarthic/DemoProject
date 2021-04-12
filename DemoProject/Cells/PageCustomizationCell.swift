@@ -7,37 +7,44 @@
 
 import UIKit
 
-protocol PageCustomizationCellDelegate:class  {
-
-    func updateposition(size:String,orientation:String)
+//protocol PageCustomizationCellDelegate:class  {
+//
+//    func updateposition(size:String,orientation:String)
+//
+//}
+enum Size:String,CaseIterable{
+    case A4 = "A4"
+    case A9 = "A9"
+    case A3 = "A3"
+    
     
 }
-
-enum PositionItems:String {
+enum PositionItems:String,CaseIterable {
     case left = "Left"
     case right = "Right"
     case top = "Top"
     case bottom = "Bottom"
 }
-enum OrientationItems:String {
+enum OrientationItems:String,CaseIterable {
     case portait = "Portait"
     case landscape = "Landscape"
 }
 
 struct PageCustomizationCellModel{
-    var titleLabel:String
-    var subValuePickerOneViewTitle :String
-    var subValuePickerOneViewvalue :String
-    var subValuePickerTwoViewTitle :String
-    var subValuePickerTwoViewvalue :String
+    let titleLabel:String
+    let subValuePickerOneViewTitle :String
+    let subValuePickerOneViewvalue :String
+    let subValuePickerTwoViewTitle :String
+    let subValuePickerTwoViewvalue :String
 }
 
 class PageCustomizationCell: UITableViewCell{
     
-    private var items:[PositionItems] = [.left,.right,.top,.bottom]
-    private var orientationItems:[OrientationItems] = [.portait,.landscape]
+    private var items:[Size] = Size.allCases
+    private var orientationItems:[OrientationItems] = OrientationItems.allCases
     
-    weak var delegate : PageCustomizationCellDelegate?
+//    weak var delegate : PageCustomizationCellDelegate?
+    var onUpdateValue:(String,String) -> Void = {_,_ in }
     
     private lazy var titleLabel: UILabel = {
         
@@ -214,7 +221,8 @@ class PageCustomizationCell: UITableViewCell{
 
     @objc private func dismissPickerViewaction(){
           
-        delegate?.updateposition(size: subValuePickerOneView.valueTextField.text ?? "", orientation: subValuePickerTwoView.valueTextField.text ?? "")
+//        delegate?.updateposition(size: subValuePickerOneView.valueTextField.text ?? "", orientation: subValuePickerTwoView.valueTextField.text ?? "")
+        onUpdateValue(subValuePickerOneView.valueTextField.text ?? "", subValuePickerTwoView.valueTextField.text ?? "")
         self.contentView.endEditing(true)
 
     }

@@ -7,13 +7,15 @@
 
 import UIKit
 
-protocol PrinterOptionViewTypeCellDelegate:class {
-    func updatePrinterOptionViewTypeValue(viewType:Int)
-}
+//protocol PrinterOptionViewTypeCellDelegate:class {
+//    func updatePrinterOptionViewTypeValue(viewType:Int)
+//}
 
 class PrinterOptionViewTypeCell:UITableViewCell{
     
-    weak var delegate:PrinterOptionViewTypeCellDelegate?
+//    weak var delegate:PrinterOptionViewTypeCellDelegate?
+    
+    var onUpdateValue:(Int) -> Void = {_ in }
     
     private lazy var segmentView: UISegmentedControl = {
         
@@ -77,14 +79,14 @@ class PrinterOptionViewTypeCell:UITableViewCell{
             verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -19),
             verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -19)
             ])
-        delegate?.updatePrinterOptionViewTypeValue(viewType: 1)
+        onUpdateValue(1)
     }
     
     @objc private func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            delegate?.updatePrinterOptionViewTypeValue(viewType: 1)
+            onUpdateValue(1)
         }else{
-            delegate?.updatePrinterOptionViewTypeValue(viewType: 2)
+            onUpdateValue(2)
         }
     }
     

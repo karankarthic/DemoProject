@@ -7,19 +7,21 @@
 
 import UIKit
 
-protocol ExportSettingsFileNameCellDelegate :class{
-    func updateValue(fileName:String)
-}
+//protocol ExportSettingsFileNameCellDelegate :class{
+//    func updateValue(fileName:String)
+//}
 
 struct ExportSettingsFileNameCellModel{
-    var title:String
-    var value:String
+    let title:String
+    let value:String
 }
 
 
 class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
     
-    weak var delegate: ExportSettingsFileNameCellDelegate?
+//    weak var delegate: ExportSettingsFileNameCellDelegate?
+    
+    var onUpdateValue:(String) -> Void = {_ in }
     
     private lazy var fileNameView:PickerOptionView = {
         let fileName = PickerOptionView()
@@ -78,7 +80,9 @@ class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        delegate?.updateValue(fileName: textField.text ?? "")
+//        delegate?.updateValue(fileName: textField.text ?? "")
+        
+        onUpdateValue(textField.text ?? "")
         
         return true
         

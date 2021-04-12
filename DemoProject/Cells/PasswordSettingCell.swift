@@ -19,8 +19,8 @@ protocol PasswordSettingCellDelegate:class{
 
 struct PasswordSettingCellModel{
     var title:String? = nil
-    var value:String?
-    var type:PasswardViewType
+    let value:String?
+    let type:PasswardViewType
 }
 
 class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{

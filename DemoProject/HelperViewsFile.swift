@@ -164,11 +164,11 @@ enum Configure{
     case columnWidth
 }
 
-protocol PrintOptionSelectorViewCellDelegate:class {
-    
-    func updateOptionSelectorViewValue(configure:Configure,value:String,selected:ChoiceSelected)
-    
-}
+//protocol PrintOptionSelectorViewCellDelegate:class {
+//
+//    func updateOptionSelectorViewValue(configure:Configure,value:String,selected:ChoiceSelected)
+//
+//}
 enum ChoiceSelected{
     case choiceOne
     case choiceTwo
@@ -176,10 +176,10 @@ enum ChoiceSelected{
 
 class OptionSelectorRadioButtonView : UIView {
     
-    
+    var onUpdateValue:(String,ChoiceSelected) -> Void = {_,_ in }
     
     var configure:Configure = .orientation
-    weak var delegate: PrintOptionSelectorViewCellDelegate?
+//    weak var delegate: PrintOptionSelectorViewCellDelegate?
     var selectedChoice:ChoiceSelected = .choiceOne
     
     lazy var verticalStackView:UIStackView = {
@@ -271,7 +271,8 @@ class OptionSelectorRadioButtonView : UIView {
         choiceTwoView.selectButton.tintColor = .lightGray
         choiceOneView.selectButton.tintColor = .blue
         
-        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceOneView.title.text ?? "", selected: .choiceOne)
+//        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceOneView.title.text ?? "", selected: .choiceOne)
+        onUpdateValue(choiceOneView.title.text ?? "",.choiceOne)
     }
     private func choiceTwoSelected(){
         choiceOneView.selectButton.image = intialimg
@@ -279,7 +280,8 @@ class OptionSelectorRadioButtonView : UIView {
         
         choiceOneView.selectButton.tintColor = .lightGray
         choiceTwoView.selectButton.tintColor = .blue
-        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceTwoView.title.text ?? "", selected: .choiceTwo)
+//        delegate?.updateOptionSelectorViewValue(configure: configure, value: choiceTwoView.title.text ?? "", selected: .choiceTwo)
+        onUpdateValue(choiceTwoView.title.text ?? "",.choiceTwo)
     }
     
     required init?(coder: NSCoder) {

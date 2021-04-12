@@ -9,7 +9,7 @@ import UIKit
 
 struct PrintOptionSelectorViewCellModel{
     let optionViewTitle:String
-    let optionViewConfigure :Configure
+    var optionViewConfigure :Configure
     let optionViewSelectedChoice:ChoiceSelected
     let optionViewChoiceOneViewTitle:String
     let optionViewChoiceTwoViewTitle:String

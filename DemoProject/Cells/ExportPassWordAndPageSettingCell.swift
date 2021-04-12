@@ -17,13 +17,16 @@ enum ExportSettingType{
 
 
 
-protocol ExportPassWordAndPageSettingCellDelegate:class {
-    func pushToRespectiveVC(type:ExportSettingType)
-}
+//protocol ExportPassWordAndPageSettingCellDelegate:class {
+//    func pushToRespectiveVC(type:ExportSettingType)
+//}
 
 class ExportPassWordAndPageSettingCell :UITableViewCell {
     
-    weak var delegate:ExportPassWordAndPageSettingCellDelegate?
+//    weak var delegate:ExportPassWordAndPageSettingCellDelegate?
+    
+    var pushToPageVc:() -> Void = {}
+    var pushToPasswordVc:() -> Void = {}
     
     private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -82,12 +85,13 @@ class ExportPassWordAndPageSettingCell :UITableViewCell {
         
         if pageSetting.gestureRecognizers?[0] == sender{
             
-            delegate?.pushToRespectiveVC(type: .page)
+//            delegate?.pushToRespectiveVC(type: .page)
+            pushToPageVc()
             
         }else{
             
-            delegate?.pushToRespectiveVC(type: .password)
-            
+//            delegate?.pushToRespectiveVC(type: .password)
+            pushToPasswordVc()
         }
         
         

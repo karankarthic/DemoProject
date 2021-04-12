@@ -50,7 +50,11 @@ class IpadPageSettingViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
             let model = SinglePickerViewCellModel(fileNameViewtitle: "Page Size", items: ["A4","A9"], fileNameViewvalue: valueForPageSetting.pageSize)
             cell.configure(model:model)
-            cell.delegate = self
+//            cell.delegate = self
+            cell.onUpdateValue = { text in
+                
+                self.valueForPageSetting.pageSize = text
+            }
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
@@ -58,7 +62,11 @@ class IpadPageSettingViewController: UITableViewController {
             let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Page Orientation", optionViewConfigure: .orientation, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
         
             cell.configure(model: model)
-            cell.optionView.delegate = self
+            cell.optionView.onUpdateValue = { (value,selectedOption) in
+                
+                self.valueForPageSetting.pageOrientation = value
+                self.valueForPageSetting.optionSelectedForOrientation = selectedOption
+            }
             cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 2{
@@ -68,20 +76,31 @@ class IpadPageSettingViewController: UITableViewController {
         
             cell.configure(model: model)
             cell.optionView.changeSelectionAsPerChoice()
-            cell.optionView.delegate = self
+            cell.optionView.onUpdateValue = { (value,selectedOption) in
+                
+                self.valueForPageSetting.columnWidth = value
+                self.valueForPageSetting.optionSelectedForColumnWidth = selectedOption
+            }
             
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
             cell.configure(model:valueForPageSetting.margin)
-            cell.delegate = self
+            cell.onUpdateValue = { margin in
+                self.valueForPageSetting.margin = margin
+            }
             return cell
         }
         else if indexPath.section == 4{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
             let model = ExportOptionCustomaizingCellModel(titleLabel: "Header", position: .header, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForPageSetting.header.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForPageSetting.header.value)
             cell.configure(model:model)
-            cell.delegate = self
+            cell.onUpdateValue = { text in
+                self.valueForPageSetting.header.position = text
+            }
+            cell.toPushSelectVC = { cell in
+                self.pushSelectVC(cell: cell)
+            }
             
             return cell
         }else{
@@ -91,7 +110,13 @@ class IpadPageSettingViewController: UITableViewController {
             
             cell.configure(model:model)
             
-            cell.delegate = self
+            cell.onUpdateValue = { text in
+                self.valueForPageSetting.footer.position = text
+            }
+            cell.toPushSelectVC = { cell in
+                self.pushSelectVC(cell: cell)
+            }
+            
             return cell
         }
     }
@@ -144,37 +169,37 @@ class IpadPageSettingViewController: UITableViewController {
 }
 
 
-extension IpadPageSettingViewController: PrinterOptionCustomaizingCellDelegate {
-  
-    func updateposition(position: String, inPosition: Position) {
-        
-        if inPosition == .header{
-           
-            valueForPageSetting.header.position = position
-        }else{
-          
-            valueForPageSetting.footer.position = position
-        }
-    }
-    
-    func pushSelectVC(cell: UITableViewCell?) {
+extension IpadPageSettingViewController {
+//
+//    func updateposition(position: String, inPosition: Position) {
+//
+//        if inPosition == .header{
+//
+//            valueForPageSetting.header.position = position
+//        }else{
+//
+//            valueForPageSetting.footer.position = position
+//        }
+//    }
+//
+    private func pushSelectVC(cell: UITableViewCell?) {
         let selectModel = SelectCellModel(title: "Date", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         let selectModel1 = SelectCellModel(title: "Page Number", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
         let selectModel2 = SelectCellModel(title: "Title", cellType: .title, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
-        
-        
-        
+
+
+
         let vc = SelectViewController()
         vc.selectionType = .single
         vc.delegate = self
         vc.items = [selectModel,selectModel1,selectModel2]
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
-        
+
         self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
     }
-    
-    
+
+
 }
 
 
@@ -200,32 +225,32 @@ extension IpadPageSettingViewController: SelectViewControllerDelegate {
     
 }
 
-extension IpadPageSettingViewController: SinglePickerViewCellDelegate {
-    func updateSinglePickerValue(value: String) {
-        self.valueForPageSetting.pageSize = value
+//extension IpadPageSettingViewController: SinglePickerViewCellDelegate {
+//    func updateSinglePickerValue(value: String) {
+//        self.valueForPageSetting.pageSize = value
+//
+//    }
+//
+//}
 
-    }
+//extension IpadPageSettingViewController: PrintOptionSelectorViewCellDelegate {
+//    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
+//        if configure == .orientation{
+//            valueForPageSetting.pageOrientation = value
+//            valueForPageSetting.optionSelectedForOrientation = selected
+//        }else{
+//            valueForPageSetting.columnWidth = value
+//            valueForPageSetting.optionSelectedForColumnWidth = selected
+//        }
+//    }
+//
+//}
 
-}
-
-extension IpadPageSettingViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
-        if configure == .orientation{
-            valueForPageSetting.pageOrientation = value
-            valueForPageSetting.optionSelectedForOrientation = selected
-        }else{
-            valueForPageSetting.columnWidth = value
-            valueForPageSetting.optionSelectedForColumnWidth = selected
-        }
-    }
-    
-}
-
-extension IpadPageSettingViewController: MarginCellDelegate {
-    
-    func updateMargingcell(margin: Margin) {
-        self.valueForPageSetting.margin = margin
-    }
-    
-
-}
+//extension IpadPageSettingViewController: MarginCellDelegate {
+//
+//    func updateMargingcell(margin: Margin) {
+//        self.valueForPageSetting.margin = margin
+//    }
+//
+//
+//}

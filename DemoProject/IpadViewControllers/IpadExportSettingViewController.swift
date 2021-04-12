@@ -48,27 +48,52 @@ class IpadExportSettingViewController: UITableViewController {
             
             let model = ExportSettingsFileNameCellModel(title: "File Name", value: viewModel.fileName)
             cell.configure(model:model)
-            cell.delegate = self
+//            cell.delegate = self
+            cell.onUpdateValue = { text in
+                
+                self.viewModel.fileName = text
+                
+            }
+            
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
             let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: ["PDF"], fileNameViewvalue: viewModel.fileType)
             cell.configure(model:model)
-            cell.delegate = self
+//            cell.delegate = self
+            cell.onUpdateValue = { text in
+                
+                self.viewModel.fileType = text
+                
+            }
             return cell
         }else if indexPath.section == 2{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
-            cell.delegate = self
+//            cell.delegate = self
+            cell.onUpdateValue = { type in
+                
+                self.viewModel.viewType = type
+                
+            }
             cell.contentView.addBorder(edge: .bottom)
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SingleNonPickerViewValueCell
-            cell.delegate = self
+//            cell.delegate = self
+            cell.toPushSelectVC = {
+                self.pushSelectVC()
+            }
             return cell
         }
         else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportPassWordAndPageSettingCell
-            cell.delegate = self
+            cell.pushToPageVc = {
+                self.pushToPageVc()
+            }
+            
+            cell.pushToPasswordVc = {
+                self.pushToPassword()
+            }
             return cell
         }
     }
@@ -98,9 +123,9 @@ class IpadExportSettingViewController: UITableViewController {
     
 }
 
-extension IpadExportSettingViewController: SingleNonPickerViewValueCellDelegate{
+extension IpadExportSettingViewController{
     
-    func pushSelectVC() {
+   private func pushSelectVC() {
         
         let selectModel = SelectCellModel(title: "colum1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
         let selectModel1 = SelectCellModel(title: "colum2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
@@ -120,37 +145,30 @@ extension IpadExportSettingViewController: SingleNonPickerViewValueCellDelegate{
     
 }
 
-extension IpadExportSettingViewController:PrinterOptionViewTypeCellDelegate{
-    func updatePrinterOptionViewTypeValue(viewType: Int) {
-        self.viewModel.viewType = viewType
+//extension IpadExportSettingViewController:PrinterOptionViewTypeCellDelegate{
+//    func updatePrinterOptionViewTypeValue(viewType: Int) {
+//        self.viewModel.viewType = viewType
+//    }
+//
+//
+//}
+
+extension IpadExportSettingViewController{
+    
+    func pushToPageVc(){
+        let vc = PageSettingViewController()
+        vc.delegate = self
+        vc.valueForPageSetting = viewModel.pageSettings
+        let navVC = UINavigationController(rootViewController: vc)
+        self.navigationController?.present(navVC, animated: true, completion: nil)
+        
     }
     
-    
-}
-
-extension IpadExportSettingViewController: ExportPassWordAndPageSettingCellDelegate {
-    
-    func pushToRespectiveVC(type: ExportSettingType) {
-        
-        
-        let navVC : UINavigationController
-        
-        if type == .page{
-            
-            let vc = PageSettingViewController()
-            vc.delegate = self
-            vc.valueForPageSetting = viewModel.pageSettings
-            navVC = UINavigationController(rootViewController: vc)
-            
-        }else{
-            
-            let vc = PassWordSettingViewController()
-            vc.delegate = self
-            vc.value = viewModel.passwordSetting
-            navVC = UINavigationController(rootViewController: vc)
-        }
-    
-        
+    func pushToPassword(){
+        let vc = PassWordSettingViewController()
+        vc.delegate = self
+        vc.value = viewModel.passwordSetting
+        let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
         
     }
@@ -170,17 +188,17 @@ extension IpadExportSettingViewController : SelectViewControllerDelegate {
 }
 
 
-extension IpadExportSettingViewController :ExportSettingsFileNameCellDelegate{
-    func updateValue(fileName: String) {
-        self.viewModel.fileName = fileName
-    }
-}
+//extension IpadExportSettingViewController :ExportSettingsFileNameCellDelegate{
+//    func updateValue(fileName: String) {
+//        self.viewModel.fileName = fileName
+//    }
+//}
 
-extension IpadExportSettingViewController : SinglePickerViewCellDelegate{
-    func updateSinglePickerValue(value: String) {
-        self.viewModel.fileType = value
-    }
-}
+//extension IpadExportSettingViewController : SinglePickerViewCellDelegate{
+//    func updateSinglePickerValue(value: String) {
+//        self.viewModel.fileType = value
+//    }
+//}
 
 extension IpadExportSettingViewController : PageSettingViewControllerDelegate{
     func updatePageSettings(pageSettings: PageSettingValue) {

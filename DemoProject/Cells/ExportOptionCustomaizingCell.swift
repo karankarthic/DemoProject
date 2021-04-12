@@ -7,28 +7,32 @@
 
 import UIKit
 
-protocol PrinterOptionCustomaizingCellDelegate:class  {
-    
-    func pushSelectVC(cell:UITableViewCell?)
-    func updateposition(position:String,inPosition:Position)
-    
-}
+//protocol PrinterOptionCustomaizingCellDelegate:class  {
+//
+//    func pushSelectVC(cell:UITableViewCell?)
+//    func updateposition(position:String,inPosition:Position)
+//
+//}
 
 struct ExportOptionCustomaizingCellModel{
-    var titleLabel :String
-    var position :Position
-    var subValuePickerOneViewtitle :String
-    var subValuePickerOneViewvalue :String
+    let titleLabel :String
+    let position :Position
+    let subValuePickerOneViewtitle :String
+    let subValuePickerOneViewvalue :String
     
-    var subValuePickerTwoViewtitle :String
-    var subValuePickerTwoViewvalue :String
+    let subValuePickerTwoViewtitle :String
+    let subValuePickerTwoViewvalue :String
 }
 
 class ExportOptionCustomaizingCell : UITableViewCell {
     
-    private var items:[PositionItems] = [.left,.right,.top,.bottom]
+    private var items:[PositionItems] = PositionItems.allCases
     
-    weak var delegate : PrinterOptionCustomaizingCellDelegate?
+    var toPushSelectVC:(UITableViewCell?) -> Void = {_ in }
+    
+    var onUpdateValue:(String)->Void = {_ in}
+    
+//    weak var delegate : PrinterOptionCustomaizingCellDelegate?
     
     var position:Position = .header
     
@@ -120,14 +124,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     }
     
     func configure(model:ExportOptionCustomaizingCellModel){
-//        var titleLabel :String
-//        var position :Position
-//        var subValuePickerOneViewtitle :String
-//        var subValuePickerOneViewvalue :String
-//
-//        var subValuePickerTwoViewtitle :String
-//        var subValuePickerTwoViewvalue :String
-        
+
         titleLabel.text = model.titleLabel
         position = model.position
         subValuePickerOneView.title.text = model.subValuePickerOneViewtitle
@@ -196,13 +193,15 @@ class ExportOptionCustomaizingCell : UITableViewCell {
     }
     
     @objc private func callDelegate(){
-        delegate?.pushSelectVC(cell: self)
+//        delegate?.pushSelectVC(cell: self)
+        toPushSelectVC(self)
     }
     
     @objc private func dismissPickerViewaction(){
           
         self.contentView.endEditing(true)
-        delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: position)
+//        delegate?.updateposition(position:subValuePickerOneView.valueTextField.text ?? "", inPosition: position)
+        onUpdateValue(subValuePickerOneView.valueTextField.text ?? "")
     }
     
     

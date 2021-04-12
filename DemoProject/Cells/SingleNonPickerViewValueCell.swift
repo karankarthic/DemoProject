@@ -7,15 +7,17 @@
 
 import UIKit
 
-protocol SingleNonPickerViewValueCellDelegate:class  {
-    
-    func pushSelectVC()
-    
-}
+//protocol SingleNonPickerViewValueCellDelegate:class  {
+//
+//    func pushSelectVC()
+//
+//}
 
 class SingleNonPickerViewValueCell: UITableViewCell{
     
-    weak var delegate: SingleNonPickerViewValueCellDelegate?
+//    weak var delegate: SingleNonPickerViewValueCellDelegate?
+    
+    var toPushSelectVC:() -> Void = { }
     
     private var pickerviewEdges:UIEdgeInsets {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -70,7 +72,7 @@ class SingleNonPickerViewValueCell: UITableViewCell{
     }
     
     @objc private func callDelegate(){
-        delegate?.pushSelectVC()
+        toPushSelectVC()
     }
     
     required init?(coder: NSCoder) {

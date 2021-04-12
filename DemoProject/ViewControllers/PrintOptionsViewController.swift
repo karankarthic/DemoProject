@@ -52,14 +52,22 @@ class PrintOptionsViewController: CardLayoutTableViewController {
         
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrinterOptionViewTypeCell
-            cell.delegate = self
+            cell.onUpdateValue = { type in
+                
+                self.viewModel.viewType = type
+                
+            }
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PageCustomizationCell
             
             let model = PageCustomizationCellModel(titleLabel: "Page", subValuePickerOneViewTitle: "Size", subValuePickerOneViewvalue: viewModel.pageSize, subValuePickerTwoViewTitle: "Orientation", subValuePickerTwoViewvalue: viewModel.pageOrientation)
             cell.configure(model:model)
-            cell.delegate = self
+            cell.onUpdateValue = { (size,orientation) in
+                
+                self.viewModel.pageSize = size
+                self.viewModel.pageOrientation = orientation
+            }
             
             return cell
         }else if indexPath.section == 2{
@@ -67,12 +75,18 @@ class PrintOptionsViewController: CardLayoutTableViewController {
             let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Column Width", optionViewConfigure: .columnWidth, optionViewSelectedChoice: viewModel.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
         
             cell.configure(model: model)
-            cell.optionView.delegate = self
+            cell.optionView.onUpdateValue = { (value,selectedOption) in
+                
+                self.viewModel.columnWidth = value
+                self.viewModel.optionSelectedForColumnWidth = selectedOption
+            }
             cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
-            cell.delegate = self
+            cell.pushToMoreVc = {
+                self.pushToRespectiveVC()
+            }
             return cell
         }
         
@@ -125,40 +139,39 @@ class PrintOptionsViewController: CardLayoutTableViewController {
     
 }
 
-extension PrintOptionsViewController: PageCustomizationCellDelegate {
-    func updateposition(size: String, orientation: String) {
-        
-        self.viewModel.pageSize = size
-        self.viewModel.pageOrientation = orientation
-    }
-    
-    
-}
+//extension PrintOptionsViewController: PageCustomizationCellDelegate {
+//    func updateposition(size: String, orientation: String) {
+//
+//        self.viewModel.pageSize = size
+//        self.viewModel.pageOrientation = orientation
+//    }
+//
+//
+//}
 
-extension PrintOptionsViewController:PrinterOptionViewTypeCellDelegate{
-    func updatePrinterOptionViewTypeValue(viewType: Int) {
-        self.viewModel.viewType = viewType
-    }
-    
-}
+//extension PrintOptionsViewController:PrinterOptionViewTypeCellDelegate{
+//    func updatePrinterOptionViewTypeValue(viewType: Int) {
+//        self.viewModel.viewType = viewType
+//    }
+//
+//}
 
 
 
-extension PrintOptionsViewController: ExportPassWordAndPageSettingCellDelegate {
-    
-    func pushToRespectiveVC(type: ExportSettingType) {
-        if type == .more{
-            
+extension PrintOptionsViewController {
+
+    func pushToRespectiveVC() {
+       
             let vc = MoreSettingsViewController()
             vc.delegate = self
             vc.valueForMoreSetting = self.viewModel.moreSetting
             let navVC = UINavigationController(rootViewController: vc)
-            
+
             self.navigationController?.present(navVC, animated: true, completion: nil)
-            
-        }
+
+      
     }
-    
+
 }
 
 extension PrintOptionsViewController:MoreSettingsViewControllerDelegate{
@@ -167,12 +180,12 @@ extension PrintOptionsViewController:MoreSettingsViewControllerDelegate{
     }
 }
 
-extension PrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
-    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
-        if configure == .columnWidth{
-            self.viewModel.columnWidth = value
-            viewModel.optionSelectedForColumnWidth = selected
-        }
-    }
-    
-}
+//extension PrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
+//    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
+//        if configure == .columnWidth{
+//            self.viewModel.columnWidth = value
+//            viewModel.optionSelectedForColumnWidth = selected
+//        }
+//    }
+//
+//}

@@ -7,15 +7,17 @@
 
 import UIKit
 
-protocol MarginCellDelegate:class {
-    func updateMargingcell(margin:Margin)
-}
+//protocol MarginCellDelegate:class {
+//    func updateMargingcell(margin:Margin)
+//}
 
 
 
 class MarginCell : UITableViewCell, UITextFieldDelegate {
     
-    weak var delegate:MarginCellDelegate?
+//    weak var delegate:MarginCellDelegate?
+    
+    var onUpdateValue:(Margin) -> Void = {_ in}
     
     private lazy var titleLabel: UILabel = {
         
@@ -257,7 +259,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
             bottom = Int(textField.text ?? "") ?? 10
         }
         
-        delegate?.updateMargingcell(margin: .init(top: top, left: left, right: right, bottom: bottom))
+        onUpdateValue(Margin.init(top: top, left: left, right: right, bottom: bottom))
         
     }
     
