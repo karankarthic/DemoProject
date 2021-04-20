@@ -429,4 +429,76 @@ class SingleLableView : UIView {
 
 
 
+struct ExportAPIModel: Codable {
+    
+    var fileName: String = ""
+    var exportType: String = ""
+    var filterType: Int = 1      // to be modified after new ui
+    var selectedColumns: [String]? = nil
+    var isPasswordProtected: Bool = false
+    var password: String? = nil
+    var confirmPassword: String? = nil
+    var deviceType: Int = 2
+    
+    var pdfDisplayType: Int? = nil
+    var paperSize: String? = nil
+    var orientation: String? = nil
+    var scalingType: Int? = nil // to be modified after new ui
+    var scalingValue: Int? = nil // to be modified after new ui
+    var headerContent: [PositionAPIModel]? = nil // to be modified after new ui
+    var footerContent: [PositionAPIModel]? = nil // to be modified after new ui
+    var margin: Margin? = nil
+    
+    init(model: ExportViewModel) {
+        
+        switch model.fileType {
+       
+        case .PDF:
+            self.exportType = "pdf"
+            self.pdfDisplayType = model.viewType
+            self.paperSize = model.pageSettings.pageSize
+            self.orientation = model.pageSettings.pageOrientation
+            self.margin = model.pageSettings.margin
+            
+            
+        case .Xls:
+            self.exportType = "xls"
+        case .Csv:
+            self.exportType = "csv"
+        case .Json:
+            self.exportType = "json"
+        case .Tsv:
+            self.exportType = "tsv"
+        }
+        
+        self.fileName = model.fileName
+        
+        if model.selecteColumns.isEmpty{
+            self.filterType = model.viewType
+            
+        }else{
+            self.filterType = 4
+            self.selectedColumns = model.selecteColumns
+        }
+        
+        if model.passwordSetting.password != nil{
+            isPasswordProtected = true
+            password = model.passwordSetting.password
+            confirmPassword = model.passwordSetting.conforimPassword
+        }
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            self.deviceType = 2
+        }else{
+            self.deviceType = 3
+        }
+        
+    }
+    
+    
+  
+}
 
+struct PositionAPIModel: Codable {
+    let position, type, value: String
+}

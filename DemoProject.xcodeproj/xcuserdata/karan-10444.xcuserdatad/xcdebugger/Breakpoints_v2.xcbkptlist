@@ -218,10 +218,10 @@
             filePath = "DemoProject/ViewControllers/ExportSettingViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
-            landmarkName = "ExportSettingViewController"
-            landmarkType = "21">
+            startingLineNumber = "261"
+            endingLineNumber = "261"
+            landmarkName = "updatePageSettings(pageSettings:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

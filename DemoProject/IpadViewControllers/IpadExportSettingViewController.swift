@@ -58,12 +58,12 @@ class IpadExportSettingViewController: UITableViewController {
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
-            let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: ["PDF"], fileNameViewvalue: viewModel.fileType)
+            let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: ["PDF"], fileNameViewvalue: viewModel.fileType.rawValue)
             cell.configure(model:model)
 //            cell.delegate = self
             cell.onUpdateValue = { text in
                 
-                self.viewModel.fileType = text
+                self.viewModel.fileType = FileType(rawValue: text) ?? .Json
                 
             }
             return cell

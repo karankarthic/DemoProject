@@ -78,15 +78,12 @@ class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
         
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-//        delegate?.updateValue(fileName: textField.text ?? "")
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         
         onUpdateValue(textField.text ?? "")
         
-        return true
-        
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

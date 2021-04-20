@@ -105,11 +105,12 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         fatalError("init(coder:) has not been implemented")
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
         
         delegate?.updatePasswordValue(type: self.type, value: passwordView.valueTextField.text)
-        return true
+        
     }
+    
     
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {

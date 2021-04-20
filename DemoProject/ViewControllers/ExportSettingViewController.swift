@@ -7,9 +7,39 @@
 
 import UIKit
 
+enum FileType:String,CaseIterable{
+    case PDF = "pdf"
+    case Xls = "xls"
+    case Csv = "csv"
+    case Json = "json"
+    case Tsv = "tsv"
+    
+    static func returnValueArray() -> [String]{
+        var array:[String]  = []
+        for value in FileType.allCases{
+            array.append(value.rawValue)
+        }
+        
+        return array
+    }
+    
+    static func returnValueForType(_ rawValue:String) -> FileType{
+        var  returnValue:FileType = .Json
+        
+        for value in FileType.allCases{
+            if value.rawValue == rawValue{
+                returnValue = value
+                break
+            }
+        }
+        
+        return returnValue
+    }
+}
+
 struct ExportViewModel {
     var fileName:String = ""
-    var fileType:String = "PDF"
+    var fileType:FileType = .Json
     var viewType:Int = 1
     var selecteColumns:[String] = []
     var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
@@ -57,12 +87,12 @@ class ExportSettingViewController: CardLayoutTableViewController {
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SinglePickerViewCell
-            let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: ["PDF"], fileNameViewvalue: viewModel.fileType)
+            let model = SinglePickerViewCellModel(fileNameViewtitle: "File Type", items: FileType.returnValueArray(), fileNameViewvalue: viewModel.fileType.rawValue)
             cell.configure(model:model)
 //            cell.delegate = self
             cell.onUpdateValue = { text in
                 
-                self.viewModel.fileType = text
+                self.viewModel.fileType = FileType.returnValueForType(text)
                 
             }
             return cell

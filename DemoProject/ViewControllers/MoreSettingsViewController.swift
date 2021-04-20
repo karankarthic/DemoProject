@@ -12,7 +12,7 @@ enum Position{
     case footer
 }
 
-struct Margin {
+struct Margin:Codable {
     var top :Int
     var left :Int
     var right :Int
