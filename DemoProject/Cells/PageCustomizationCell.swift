@@ -22,8 +22,8 @@ enum Size:String,CaseIterable{
 enum PositionItems:String,CaseIterable {
     case left = "Left"
     case right = "Right"
-    case top = "Top"
-    case bottom = "Bottom"
+//    case top = "Top"
+    case bottom = "Center"
 }
 enum OrientationItems:String,CaseIterable {
     case portait = "Portait"

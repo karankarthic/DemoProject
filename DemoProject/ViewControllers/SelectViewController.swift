@@ -13,23 +13,23 @@ enum SelectionType{
 }
 
 protocol SelectViewControllerDelegate : class{
-    func valueForSingleSelect(value:String)
+    func valueForSingleSelect(value:SingleSelectValue?)
     
-    func valueForMulitiSelect(valueForMulitiSelect:[String])
+//    func valueForMulitiSelect(valueForMulitiSelect:[String])
 }
 
 class SelectViewController: UITableViewController {
     
     
-    var items:[SelectCellModel] = []
+    var items:[SingleSelectModel] = [SingleSelectModel(title: "Date", cellType: .normal, valueType: .date),SingleSelectModel(title: "Page Number", cellType: .normal, valueType: .pageNumber),SingleSelectModel(title: "Title", cellType: .title, valueType: .title(titleValue: nil))]
     
-    var selectionType:SelectionType = .single
+//    var selectionType:SelectionType = .single
     
     weak var delegate:SelectViewControllerDelegate?
     
-    var valueForSingleSelect:String = ""
+    var valueForSingleSelect:SingleSelectValue? = nil
     
-    var valueForMulitiSelect:[String] = []
+    
     
     
     init(){
@@ -47,7 +47,7 @@ class SelectViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.registerReusableCell(SelectCell.self)
+        tableView.registerReusableCell(SingleSelectCell.self)
 
 //        tableView.separatorStyle = .none
         
@@ -59,10 +59,6 @@ class SelectViewController: UITableViewController {
         
         tableView.tableFooterView = UIView()
         
-        if selectionType == .multi{
-            mulitSelectReview()
-        }
-        
         
     }
     
@@ -73,9 +69,9 @@ class SelectViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if selectionType == .single{
-            
-            var modifiedItems:[SelectCellModel] = []
+//        if selectionType == .single{
+//
+            var modifiedItems:[SingleSelectModel] = []
             
             for (index,item) in items.enumerated(){
                 var modifyingItem = item
@@ -83,7 +79,7 @@ class SelectViewController: UITableViewController {
                 if index == indexPath.row{
                     if modifyingItem.isSelected{
                         modifyingItem.isSelected = false
-                        
+                        valueForSingleSelect = nil
                     }else{
                         modifyingItem.isSelected = true
                     }
@@ -107,29 +103,21 @@ class SelectViewController: UITableViewController {
             }
             
             items = modifiedItems
-            
-        }else{
-            
-            if items[indexPath.row].isSelected {
-                items[indexPath.row].isSelected = false
-                let indexOfItem = valueForMulitiSelect.lastIndex(of:items[indexPath.row].title) ?? 0
-                valueForMulitiSelect.remove(at: indexOfItem)
-            }else{
-                items[indexPath.row].isSelected = true
-                valueForMulitiSelect.append(items[indexPath.row].title)
-            }
-            
-        }
         
         self.tableView.reloadData()
         
     }
     
-    func singleSelecteReview(value:String){
+    func singleSelecteReview(value:SingleSelectValue?){
+        guard let selectedValue = value else {
+            return
+        }
         for (index,item) in items.enumerated(){
-            if value == item.title {
+            
+            if selectedValue == item.valueType {
                 items[index].isSelected = true
-                valueForSingleSelect = items[index].title
+                items[index].valueType = selectedValue
+                valueForSingleSelect = value
                 break
             }
         }
@@ -141,9 +129,15 @@ class SelectViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SelectCell
+        let cell = tableView.dequeueReusableCell(indexPath: indexPath) as SingleSelectCell
         cell.setupView(cellModel:items[indexPath.row])
-        cell.delegate = self
+        
+        cell.valueUpdate = { value in
+            
+            self.valueForSingleSelect = value
+            
+        }
+
         return cell
     }
     
@@ -155,27 +149,13 @@ class SelectViewController: UITableViewController {
         return 78
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-        if self.selectionType == .multi && UIDevice.current.userInterfaceIdiom == .pad{
-            return "List Of Fields"
-        }else{
-            return ""
-        }
-        
-    }
-    
     
     @objc private func done(){
         
-        if self.selectionType == .single{
             
             delegate?.valueForSingleSelect(value:valueForSingleSelect)
             
-        }else{
-            delegate?.valueForMulitiSelect(valueForMulitiSelect: self.valueForMulitiSelect)
-        }
-        
+
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -184,30 +164,5 @@ class SelectViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
         
     }
-    
-    private func mulitSelectReview(){
-     
-        for value in valueForMulitiSelect{
-            for (index,item) in items.enumerated(){
-                if value == item.title {
-                    items[index].isSelected = true
-                    break
-                }
-            }
-        }
-    }
-    
 
-}
-
-
-extension SelectViewController: SelectCellDelegate {
-    
-    func valueUpdate(value: String) {
-        
-        valueForSingleSelect = value
-        
-    }
-    
-    
 }

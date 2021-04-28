@@ -99,7 +99,7 @@ class OptionView: UIView {
         case check
         case radio
     }
-    var buttonType : ButtonType = .radio
+   
     
     lazy var horizontalStackView:UIStackView = {
         let vStack = UIStackView()

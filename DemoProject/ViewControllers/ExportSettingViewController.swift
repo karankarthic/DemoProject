@@ -42,7 +42,7 @@ struct ExportViewModel {
     var fileType:FileType = .Json
     var viewType:Int = 1
     var selecteColumns:[String] = []
-    var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var pageSettings:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")], footer: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")])
     var passwordSetting:Passwords = Passwords()
 }
 
@@ -190,17 +190,17 @@ extension ExportSettingViewController{
     
     func pushSelectVC() {
         
-        let selectModel = SelectCellModel(title: "colum1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel1 = SelectCellModel(title: "colum2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel2 = SelectCellModel(title: "colum3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel3 = SelectCellModel(title: "colum4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
-        
-        
+//        let selectModel = SelectCellModel(title: "colum1", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+//        let selectModel1 = SelectCellModel(title: "colum2", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+//        let selectModel2 = SelectCellModel(title: "colum3", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+//        let selectModel3 = SelectCellModel(title: "colum4", cellType: .normal, buttonType: .check, choiceTitleEnabled: .off, isSelected: false)
+//
+//
         let vc = SelectViewController()
-        vc.selectionType = .multi
-        vc.delegate = self
-        vc.valueForMulitiSelect = viewModel.selecteColumns
-        vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
+//        vc.selectionType = .multi
+//        vc.delegate = self
+//        vc.valueForMulitiSelect = viewModel.selecteColumns
+//        vc.items = [selectModel,selectModel1,selectModel2,selectModel3]
     
         let navVC = UINavigationController(rootViewController: vc)
         self.navigationController?.present(navVC, animated: true, completion: nil)
@@ -231,17 +231,17 @@ extension ExportSettingViewController{
   
 }
 
-extension ExportSettingViewController : SelectViewControllerDelegate {
-    
-    func valueForMulitiSelect(valueForMulitiSelect: [String]) {
-        viewModel.selecteColumns = valueForMulitiSelect
-    }
-    
-    func valueForSingleSelect(value: String) {
-        
-    }
-
-}
+//extension ExportSettingViewController : SelectViewControllerDelegate {
+//
+//    func valueForMulitiSelect(valueForMulitiSelect: [String]) {
+//        viewModel.selecteColumns = valueForMulitiSelect
+//    }
+//
+//    func valueForSingleSelect(value: String) {
+//
+//    }
+//
+//}
 
 
 //extension ExportSettingViewController :ExportSettingsFileNameCellDelegate{

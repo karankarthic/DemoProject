@@ -18,22 +18,172 @@ enum SelectCellType {
     case title
 }
 
-struct SelectCellModel{
-    
+//struct SelectCellModel{
+//    
+//    let title:String
+//    let cellType:SelectCellType
+//    let buttonType:OptionView.ButtonType
+//    var choiceTitleEnabled : TitleValueState = .off
+//    var isSelected:Bool = false
+//}
+//
+//protocol SelectCellDelegate:class{
+//    func valueUpdate(value:String)
+//}
+//
+//
+//
+//class SelectCell : UITableViewCell, UITextFieldDelegate {
+//    
+//    private lazy var choiceView = OptionView()
+//    
+//    private lazy var valueTextField: UITextField = {
+//        
+//        let titleLabel = UITextField()
+//        titleLabel.text = ""
+//        titleLabel.textAlignment = .left
+//        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+//        titleLabel.font = .systemFont(ofSize: 16, weight: .regular)
+//        titleLabel.delegate = self
+//        titleLabel.backgroundColor = .clear
+//        return titleLabel
+//    }()
+//    
+//    private lazy var verticalStackView:UIStackView = {
+//        let vStack = UIStackView()
+//        vStack.translatesAutoresizingMaskIntoConstraints = false
+//        vStack.axis = .vertical
+//        vStack.alignment = .fill
+//        vStack.distribution = .equalSpacing
+//        vStack.spacing = 2
+//        return vStack
+//        
+//    }()
+//    
+//    private lazy var separatorLine: UIView = {
+//        let separatorLine = UIView()
+//        separatorLine.backgroundColor = UIColor.separator
+//        separatorLine.translatesAutoresizingMaskIntoConstraints = false
+//        return separatorLine
+//    }()
+//    
+//    private var model: SelectCellModel? = nil
+//    
+//    weak var delegate:SelectCellDelegate?
+//    
+//    private var intialimg = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
+//    private var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// radio
+//    private var check = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// rounded Check
+//    private var ipadCheck = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// plain Check
+//    
+//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//        
+//        self.selectionStyle = .none
+//        
+//        self.separatorInset = .init(top: 0, left: 54, bottom: 0, right: 0)
+//    }
+//    
+//    func setupView(cellModel:SelectCellModel){
+//        
+//        self.model = cellModel
+//        self.contentView.addSubview(verticalStackView)
+//        verticalStackView.addArrangedSubview(choiceView)
+//        
+//        
+//        NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 18),
+//                                     verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: 15),
+//                                     verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -15),
+//                                     verticalStackView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,constant: -15),
+//                                     choiceView.leadingAnchor.constraint(equalTo: verticalStackView.leadingAnchor)
+//        
+//        ])
+//        
+////        choiceView.buttonType = model?.buttonType ?? .radio
+//        
+//        if model?.choiceTitleEnabled == .on{
+//            
+//            self.verticalStackView.addArrangedSubview(self.valueTextField)
+//            
+//            valueTextField.topAnchor.constraint(equalTo: choiceView.bottomAnchor, constant: 0).isActive = true
+//            valueTextField.leadingAnchor.constraint(equalTo: verticalStackView.leadingAnchor, constant: 39).isActive = true
+//            valueTextField.bottomAnchor.constraint(equalTo: verticalStackView.bottomAnchor, constant: -15).isActive = true
+//            DispatchQueue.main.async {
+//                self.valueTextField.becomeFirstResponder()
+//            }
+//            
+//        }else{
+//            self.valueTextField.removeFromSuperview()
+//        }
+//        
+//        choiceView.title.text = model?.title
+//        
+//        buttonTapped()
+//    }
+//    
+//    private func buttonTapped(){
+//        
+//            if choiceView.buttonType == .radio{
+//            
+//                if model?.isSelected == true{
+//                    choiceView.selectButton.image = radio
+//                    choiceView.selectButton.tintColor = .blue
+//                }else{
+//                    choiceView.selectButton.image = intialimg
+//                    choiceView.selectButton.tintColor = .lightGray
+//                }
+//            
+//            }
+//            else{
+//                if model?.isSelected == true{
+////                    if ipad {
+////                      choiceView.selectButton.image = ipadCheck
+////                    }else{
+//                        choiceView.selectButton.image = check
+////                    }
+//                    choiceView.selectButton.tintColor = .blue
+//                    
+//                }else{
+//                    choiceView.selectButton.image = intialimg
+////                    if ipad {
+////                      choiceView.selectButton.tintColor = .white
+////                    }else{
+//                        choiceView.selectButton.tintColor = .lightGray
+////                    }
+//                }
+//            }
+//        
+//        if model?.cellType == .normal && choiceView.buttonType == .radio && model?.isSelected == true {
+//            delegate?.valueUpdate(value:choiceView.title.text ?? "")
+//        }
+//      
+//    }
+//    
+//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//        self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
+//    }
+//    
+//    
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//}
+
+struct SingleSelectModel{
     let title:String
     let cellType:SelectCellType
-    let buttonType:OptionView.ButtonType
+    var valueType:SingleSelectValue
     var choiceTitleEnabled : TitleValueState = .off
     var isSelected:Bool = false
 }
 
-protocol SelectCellDelegate:class{
-    func valueUpdate(value:String)
-}
 
-
-
-class SelectCell : UITableViewCell, UITextFieldDelegate {
+class SingleSelectCell: UITableViewCell, UITextFieldDelegate {
+    
+    private var model: SingleSelectModel? = nil
+    
+    var valueUpdate:(SingleSelectValue?) -> Void = {_ in }
     
     private lazy var choiceView = OptionView()
     
@@ -67,14 +217,8 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
         return separatorLine
     }()
     
-    private var model: SelectCellModel? = nil
-    
-    weak var delegate:SelectCellDelegate?
-    
     private var intialimg = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
-    private var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// radio
-    private var check = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// rounded Check
-    private var ipadCheck = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)// plain Check
+    private var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -84,7 +228,7 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
         self.separatorInset = .init(top: 0, left: 54, bottom: 0, right: 0)
     }
     
-    func setupView(cellModel:SelectCellModel){
+    func setupView(cellModel:SingleSelectModel){
         
         self.model = cellModel
         self.contentView.addSubview(verticalStackView)
@@ -98,9 +242,7 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
                                      choiceView.leadingAnchor.constraint(equalTo: verticalStackView.leadingAnchor)
         
         ])
-        
-        choiceView.buttonType = model?.buttonType ?? .radio
-        
+
         if model?.choiceTitleEnabled == .on{
             
             self.verticalStackView.addArrangedSubview(self.valueTextField)
@@ -123,49 +265,32 @@ class SelectCell : UITableViewCell, UITextFieldDelegate {
     
     private func buttonTapped(){
         
-            if choiceView.buttonType == .radio{
-            
-                if model?.isSelected == true{
-                    choiceView.selectButton.image = radio
-                    choiceView.selectButton.tintColor = .blue
-                }else{
-                    choiceView.selectButton.image = intialimg
-                    choiceView.selectButton.tintColor = .lightGray
-                }
-            
-            }
-            else{
-                if model?.isSelected == true{
-//                    if ipad {
-//                      choiceView.selectButton.image = ipadCheck
-//                    }else{
-                        choiceView.selectButton.image = check
-//                    }
-                    choiceView.selectButton.tintColor = .blue
-                    
-                }else{
-                    choiceView.selectButton.image = intialimg
-//                    if ipad {
-//                      choiceView.selectButton.tintColor = .white
-//                    }else{
-                        choiceView.selectButton.tintColor = .lightGray
-//                    }
-                }
-            }
-        
-        if model?.cellType == .normal && choiceView.buttonType == .radio && model?.isSelected == true {
-            delegate?.valueUpdate(value:choiceView.title.text ?? "")
+        if model?.isSelected == true{
+            choiceView.selectButton.image = radio
+            choiceView.selectButton.tintColor = .blue
+            valueUpdate(model?.valueType)
+        }else{
+            choiceView.selectButton.image = intialimg
+            choiceView.selectButton.tintColor = .lightGray
+//            valueUpdate(nil)
         }
-      
+        
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
+//            self.delegate?.valueUpdate(value:self.valueTextField.text ?? "")
+        valueUpdate(.title(titleValue: self.valueTextField.text))
     }
-    
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+
+
+enum SingleSelectValue:Equatable{
+    case date
+    case pageNumber
+    case title(titleValue:String?)
 }

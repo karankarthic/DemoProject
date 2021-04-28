@@ -7,6 +7,17 @@
 
 import UIKit
 
+enum SingleSelectValues{
+    
+}
+
+struct PositionValues{
+    let position:PositionOpiton
+    let type:String
+    var value:String?
+    var positionValue:SingleSelectValue? = nil
+}
+
 protocol PageSettingViewControllerDelegate:class {
     func updatePageSettings(pageSettings:PageSettingValue)
 }
@@ -17,8 +28,8 @@ struct PageSettingValue {
     var pageOrientation:String
     var columnWidth:String
     var margin : Margin
-    var header :PagePositionValue
-    var footer :PagePositionValue
+    var header :[PositionValues]
+    var footer :[PositionValues]
     
     var optionSelectedForOrientation:ChoiceSelected = .choiceOne
     var optionSelectedForColumnWidth:ChoiceSelected = .choiceOne
@@ -27,18 +38,19 @@ struct PageSettingValue {
 
 class PageSettingViewController: CardLayoutTableViewController {
     
-    var delegateCalledCell:ExportOptionCustomaizingCell? = nil
+    private var delegateCalledCell:ExportPositionOpitonCell? = nil
+    private var position:PositionOpiton? = nil
     
     weak var delegate :PageSettingViewControllerDelegate?
     
-    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header: PagePositionValue(position: "Left", value: "Date"), footer: PagePositionValue(position: "Left", value: "Date"))
+    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header:[ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")], footer: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")])
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerReusableCell(SinglePickerViewCell.self)
         tableView.registerReusableCell(PrintOptionSelectorViewCell.self)
         tableView.registerReusableCell(MarginCell.self)
-        tableView.registerReusableCell(ExportOptionCustomaizingCell.self)
+        tableView.registerReusableCell(ExportPositionOpitonCell.self)
         tableView.allowsSelection = false
         
         self.navigationItem.title = "Page Setting"
@@ -104,31 +116,69 @@ class PageSettingViewController: CardLayoutTableViewController {
             return cell
         }
         else if indexPath.section == 4{
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
-            let model = ExportOptionCustomaizingCellModel(titleLabel: "Header", position: .header, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForPageSetting.header.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForPageSetting.header.value)
-            cell.configure(model:model)
-            cell.onUpdateValue = { text in
-                self.valueForPageSetting.header.position = text
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportPositionOpitonCell
+            var left:String = "Select"
+            var center:String = "Select"
+            var right:String = "Select"
+            
+            for value in valueForPageSetting.header{
+                if value.positionValue != nil {
+                    if value.position == .left{
+                        left = value.value ?? ""
+                        
+                    }
+                    if value.position == .center
+                    {
+                        center = value.value ?? ""
+                        
+                    }
+                    if value.position == .right{
+                        right = value.value ?? ""
+                        
+                    }
+                }
             }
             
-            cell.toPushSelectVC = { cell in
-                self.pushSelectVC(cell: cell)
+            let model = ExportPositionOpitonCellModel(position: .header, titleLabel: "Header", left: left, right: right, center: center)
+            
+
+            cell.configue(model:model)
+
+            cell.toPushSelectVC = { cell,position in
+                self.pushSelectVC(cell: cell, position: position)
             }
             
             return cell
         }else{
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportOptionCustomaizingCell
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportPositionOpitonCell
+            var left:String = "Select"
+            var center:String = "Select"
+            var right:String = "Select"
             
-            let model = ExportOptionCustomaizingCellModel(titleLabel: "Footer", position: .footer, subValuePickerOneViewtitle: "Position", subValuePickerOneViewvalue: valueForPageSetting.footer.position, subValuePickerTwoViewtitle: "Value", subValuePickerTwoViewvalue: valueForPageSetting.footer.value)
-            
-            cell.configure(model:model)
-            
-            cell.onUpdateValue = { text in
-                self.valueForPageSetting.footer.position = text
+            for value in valueForPageSetting.footer{
+                if value.positionValue != nil {
+                    if value.position == .left{
+                        left = value.value ?? ""
+                        
+                    }
+                    if value.position == .center
+                    {
+                        center = value.value ?? ""
+                        
+                    }
+                    if value.position == .right{
+                        right = value.value ?? ""
+                        
+                    }
+                }
             }
             
-            cell.toPushSelectVC = { cell in
-                self.pushSelectVC(cell: cell)
+            let model = ExportPositionOpitonCellModel(position: .footer, titleLabel: "Footer", left: left, right: right, center: center)
+            
+            cell.configue(model:model)
+            
+            cell.toPushSelectVC = { cell,position in
+                self.pushSelectVC(cell: cell, position: position)
             }
             return cell
         }
@@ -203,35 +253,30 @@ class PageSettingViewController: CardLayoutTableViewController {
 
 
 extension PageSettingViewController {
-//
-//    func updateposition(position: String, inPosition: Position) {
-//
-//        if inPosition == .header{
-//
-//            valueForPageSetting.header.position = position
-//        }else{
-//
-//            valueForPageSetting.footer.position = position
-//        }
-//    }
-//
-   private func pushSelectVC(cell: UITableViewCell?) {
-        let selectModel = SelectCellModel(title: "Date", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel1 = SelectCellModel(title: "Page Number", cellType: .normal, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
-        let selectModel2 = SelectCellModel(title: "Title", cellType: .title, buttonType: .radio, choiceTitleEnabled: .off, isSelected: false)
 
-        self.delegateCalledCell = cell as? ExportOptionCustomaizingCell
+    private func pushSelectVC(cell: UITableViewCell?,position:PositionOpiton) {
 
+        self.delegateCalledCell = cell as? ExportPositionOpitonCell
+        self.position = position
 
         let vc = SelectViewController()
-        vc.selectionType = .single
         vc.delegate = self
-        vc.items = [selectModel,selectModel1,selectModel2]
-        let valueForselectCell:String
+        var valueForselectCell:SingleSelectValue?
+        
+        
         if delegateCalledCell?.position == .header{
-            valueForselectCell = valueForPageSetting.header.value
+            for value in valueForPageSetting.header{
+                if value.position == position{
+                    valueForselectCell = value.positionValue
+                }
+            }
         }else{
-            valueForselectCell = valueForPageSetting.footer.value
+            for value in valueForPageSetting.footer{
+                if value.position == position{
+                    valueForselectCell = value.positionValue
+                }
+            }
+            
         }
         vc.singleSelecteReview(value:valueForselectCell)
         let navVC = UINavigationController(rootViewController: vc)
@@ -246,6 +291,47 @@ extension PageSettingViewController {
 
 extension PageSettingViewController: SelectViewControllerDelegate {
     
+    func valueForSingleSelect(value: SingleSelectValue?) {
+        
+
+        let positionValue:String?
+
+        switch value {
+    
+        case .date:
+            positionValue = "System Date"
+        case .pageNumber:
+            positionValue = "page Number"
+        case .title(titleValue: let titleValue):
+            positionValue = titleValue ?? ""
+        case .none:
+            positionValue = nil
+        }
+        
+        if delegateCalledCell?.position == .header{
+            
+            for (index,valueOfHeader) in valueForPageSetting.header.enumerated(){
+                if valueOfHeader.position == position{
+                    valueForPageSetting.header[index].value = positionValue
+                    valueForPageSetting.header[index].positionValue = value
+                }
+            }
+        }else{
+            for (index,valueOfFooter) in valueForPageSetting.footer.enumerated(){
+                if valueOfFooter.position == position{
+                    valueForPageSetting.footer[index].value = positionValue
+                    valueForPageSetting.footer[index].positionValue = value
+                }
+            }
+            
+        }
+        
+        
+        
+        self.tableView.reloadData()
+    }
+    
+    
     func valueForMulitiSelect(valueForMulitiSelect: [String]) {
         
     }
@@ -253,14 +339,7 @@ extension PageSettingViewController: SelectViewControllerDelegate {
     
     func valueForSingleSelect(value: String) {
         
-        if delegateCalledCell?.position == .header{
-            
-            valueForPageSetting.header.value = value
-        }else{
-            
-            valueForPageSetting.footer.value = value
-        }
-        self.tableView.reloadData()
+        
         
     }
     
