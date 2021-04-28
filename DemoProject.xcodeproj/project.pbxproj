@@ -41,6 +41,7 @@
 		13FA8EE8261F146B00BCCD47 /* SingleNonPickerViewValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8EE7261F146B00BCCD47 /* SingleNonPickerViewValueCell.swift */; };
 		13FA8EEB261F14A800BCCD47 /* ExportPassWordAndPageSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8EEA261F14A800BCCD47 /* ExportPassWordAndPageSettingCell.swift */; };
 		13FA8EEE261F14E800BCCD47 /* MoreSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8EED261F14E800BCCD47 /* MoreSettingCell.swift */; };
+		13FA8EF42639506900BCCD47 /* ColumnWidthSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FA8EF32639506800BCCD47 /* ColumnWidthSelectorCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		13FA8EE7261F146B00BCCD47 /* SingleNonPickerViewValueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleNonPickerViewValueCell.swift; sourceTree = "<group>"; };
 		13FA8EEA261F14A800BCCD47 /* ExportPassWordAndPageSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPassWordAndPageSettingCell.swift; sourceTree = "<group>"; };
 		13FA8EED261F14E800BCCD47 /* MoreSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreSettingCell.swift; sourceTree = "<group>"; };
+		13FA8EF32639506800BCCD47 /* ColumnWidthSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnWidthSelectorCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 				13FA8EDE261F0DC200BCCD47 /* SinglePickerViewCell.swift */,
 				13FA8EE1261F0DF600BCCD47 /* SelectCell.swift */,
 				13FA8EE4261F140500BCCD47 /* PasswordSettingCell.swift */,
+				13FA8EF32639506800BCCD47 /* ColumnWidthSelectorCell.swift */,
 				13FA8EE7261F146B00BCCD47 /* SingleNonPickerViewValueCell.swift */,
 				13FA8EEA261F14A800BCCD47 /* ExportPassWordAndPageSettingCell.swift */,
 				13FA8EED261F14E800BCCD47 /* MoreSettingCell.swift */,
@@ -252,6 +255,7 @@
 				13FA8DFF260B052200BCCD47 /* SelectViewController.swift in Sources */,
 				13D6FD0826020D6F00F4BF75 /* ViewController.swift in Sources */,
 				13FA8E19260C659F00BCCD47 /* IpadPrintOptionsViewController.swift in Sources */,
+				13FA8EF42639506900BCCD47 /* ColumnWidthSelectorCell.swift in Sources */,
 				13FA8E13260C30D100BCCD47 /* IpadPrintBatchViewController.swift in Sources */,
 				13FA8E1F260C711F00BCCD47 /* IpadExportSettingViewController.swift in Sources */,
 				13D6FD222609E97800F4BF75 /* PassWordSettingViewController.swift in Sources */,

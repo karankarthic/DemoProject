@@ -12,7 +12,7 @@ struct PrintOptionModel{
     var viewType:Int = 1
     var pageSize:String = "A4"
     var pageOrientation:String = "Portrait"
-    var columnWidth:String = "Actual"
+    var columnWidth:ColumnWidthValue = .actual
     var moreSetting:MoreSettingsValueModel = MoreSettingsValueModel(margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header:[ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")], footer: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")])
     var optionSelectedForColumnWidth:ChoiceSelected = .choiceOne
     
@@ -27,7 +27,7 @@ class PrintOptionsViewController: CardLayoutTableViewController {
         
         tableView.registerReusableCell(PrinterOptionViewTypeCell.self)
         tableView.registerReusableCell(PageCustomizationCell.self)
-        tableView.registerReusableCell(PrintOptionSelectorViewCell.self)
+        tableView.registerReusableCell(ColumnWidthSelectorCell.self)
         tableView.registerReusableCell(MoreSettingCell.self)
         
         tableView.allowsSelection = false
@@ -71,17 +71,27 @@ class PrintOptionsViewController: CardLayoutTableViewController {
             
             return cell
         }else if indexPath.section == 2{
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
-            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Column Width", optionViewConfigure: .columnWidth, optionViewSelectedChoice: viewModel.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
-        
-            cell.configure(model: model)
-            cell.optionView.onUpdateValue = { (value,selectedOption) in
+            
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ColumnWidthSelectorCell
+            
+            let model = ColumnWidthSelectorCellModel(title: "Column Width", selectedValue: viewModel.columnWidth)
+            cell.configue(model: model)
+            
+            cell.reloadUiForScaling = {
+                
+                self.tableView.reloadData()
+                
+            }
+            
+            cell.updateValue = { value in
                 
                 self.viewModel.columnWidth = value
-                self.viewModel.optionSelectedForColumnWidth = selectedOption
             }
-            cell.optionView.changeSelectionAsPerChoice()
+            
+            
+
             return cell
+
         }else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MoreSettingCell
             cell.pushToMoreVc = {

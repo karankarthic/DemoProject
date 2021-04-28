@@ -26,7 +26,7 @@ struct PageSettingValue {
     
     var pageSize:String
     var pageOrientation:String
-    var columnWidth:String
+    var columnWidth:ColumnWidthValue
     var margin : Margin
     var header :[PositionValues]
     var footer :[PositionValues]
@@ -43,12 +43,13 @@ class PageSettingViewController: CardLayoutTableViewController {
     
     weak var delegate :PageSettingViewControllerDelegate?
     
-    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: "Actual", margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header:[ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")], footer: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")])
+    var valueForPageSetting:PageSettingValue = PageSettingValue(pageSize: "A4", pageOrientation: "Portrait", columnWidth: .actual, margin: Margin(top: 10, left: 10, right: 10, bottom: 10), header:[ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")], footer: [ PositionValues(position: .left, type: "Date", value: "System Date"),PositionValues(position: .center, type: "Date", value: "System Date"),PositionValues(position: .right, type: "Date", value: "System Date")])
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerReusableCell(SinglePickerViewCell.self)
         tableView.registerReusableCell(PrintOptionSelectorViewCell.self)
+        tableView.registerReusableCell(ColumnWidthSelectorCell.self)
         tableView.registerReusableCell(MarginCell.self)
         tableView.registerReusableCell(ExportPositionOpitonCell.self)
         tableView.allowsSelection = false
@@ -82,7 +83,7 @@ class PageSettingViewController: CardLayoutTableViewController {
             return cell
         }else if indexPath.section == 1{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
-            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Page Orientation", optionViewConfigure: .orientation, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
+            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Page Orientation", optionViewConfigure: .orientation, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Portrait", optionViewChoiceTwoViewTitle: "LandScape")
         
             cell.configure(model: model)
             cell.optionView.onUpdateValue = { (value,selectedOption) in
@@ -93,18 +94,24 @@ class PageSettingViewController: CardLayoutTableViewController {
             cell.optionView.changeSelectionAsPerChoice()
             return cell
         }else if indexPath.section == 2{
-            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PrintOptionSelectorViewCell
+            let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ColumnWidthSelectorCell
             
-            let model = PrintOptionSelectorViewCellModel(optionViewTitle: "Column Width", optionViewConfigure: .columnWidth, optionViewSelectedChoice: valueForPageSetting.optionSelectedForColumnWidth, optionViewChoiceOneViewTitle: "Actual", optionViewChoiceTwoViewTitle: "Content based")
-        
-            cell.configure(model: model)
-            cell.optionView.changeSelectionAsPerChoice()
-            cell.optionView.onUpdateValue = { (value,selectedOption) in
+            let model = ColumnWidthSelectorCellModel(title: "Column Width", selectedValue: valueForPageSetting.columnWidth)
+            cell.configue(model: model)
+            
+            cell.reloadUiForScaling = {
                 
-                self.valueForPageSetting.columnWidth = value
-                self.valueForPageSetting.optionSelectedForColumnWidth = selectedOption
+                self.tableView.reloadData()
+                
             }
             
+            cell.updateValue = { value in
+                
+                self.valueForPageSetting.columnWidth = value
+            }
+            
+            
+
             return cell
         }else if indexPath.section == 3{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as MarginCell
@@ -331,46 +338,6 @@ extension PageSettingViewController: SelectViewControllerDelegate {
         self.tableView.reloadData()
     }
     
-    
-    func valueForMulitiSelect(valueForMulitiSelect: [String]) {
-        
-    }
-    
-    
-    func valueForSingleSelect(value: String) {
-        
-        
-        
-    }
-    
 }
 
-//extension PageSettingViewController: SinglePickerViewCellDelegate {
-//    func updateSinglePickerValue(value: String) {
-//        self.valueForPageSetting.pageSize = value
-//
-//    }
-//
-//}
 
-//extension PageSettingViewController: PrintOptionSelectorViewCellDelegate {
-//    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
-//        if configure == .orientation{
-//            valueForPageSetting.pageOrientation = value
-//            valueForPageSetting.optionSelectedForOrientation = selected
-//        }else{
-//            valueForPageSetting.columnWidth = value
-//            valueForPageSetting.optionSelectedForColumnWidth = selected
-//        }
-//    }
-//
-//}
-
-//extension PageSettingViewController: MarginCellDelegate {
-//
-//    func updateMargingcell(margin: Margin) {
-//        self.valueForPageSetting.margin = margin
-//    }
-//
-//
-//}
