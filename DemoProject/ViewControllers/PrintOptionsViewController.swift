@@ -149,23 +149,6 @@ class PrintOptionsViewController: CardLayoutTableViewController {
     
 }
 
-//extension PrintOptionsViewController: PageCustomizationCellDelegate {
-//    func updateposition(size: String, orientation: String) {
-//
-//        self.viewModel.pageSize = size
-//        self.viewModel.pageOrientation = orientation
-//    }
-//
-//
-//}
-
-//extension PrintOptionsViewController:PrinterOptionViewTypeCellDelegate{
-//    func updatePrinterOptionViewTypeValue(viewType: Int) {
-//        self.viewModel.viewType = viewType
-//    }
-//
-//}
-
 
 
 extension PrintOptionsViewController {
@@ -190,12 +173,3 @@ extension PrintOptionsViewController:MoreSettingsViewControllerDelegate{
     }
 }
 
-//extension PrintOptionsViewController: PrintOptionSelectorViewCellDelegate {
-//    func updateOptionSelectorViewValue(configure: Configure, value: String, selected: ChoiceSelected) {
-//        if configure == .columnWidth{
-//            self.viewModel.columnWidth = value
-//            viewModel.optionSelectedForColumnWidth = selected
-//        }
-//    }
-//
-//}

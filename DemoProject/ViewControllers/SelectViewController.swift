@@ -33,11 +33,11 @@ class SelectViewController: UITableViewController {
     
     
     init(){
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            super.init(style: .grouped)
-        }else{
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            super.init(style: .grouped)
+//        }else{
             super.init(style: .plain )
-        }
+//        }
     }
     
     required init?(coder: NSCoder) {

@@ -111,10 +111,10 @@ class ColumnWidthSelectorCell: UITableViewCell,UITextFieldDelegate {
         choiceTwoView.title.text = "Content Based"
         choiceThreeView.title.text = "Scaling"
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-    
-            title.heightAnchor.constraint(equalToConstant: 0).isActive = true
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//    
+//            title.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//        }
     
         NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 19),
                                      verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: 19),

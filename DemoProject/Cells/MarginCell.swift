@@ -191,11 +191,11 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
         
 
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            innerVerticalStackView.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            separatorLine.topAnchor.constraint(equalTo: self.innerVerticalStackView.bottomAnchor,constant: 10).isActive = true
-        }else{
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            innerVerticalStackView.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//            separatorLine.topAnchor.constraint(equalTo: self.innerVerticalStackView.bottomAnchor,constant: 10).isActive = true
+//        }else{
             NSLayoutConstraint.activate([
             
                 titleLabel.leadingAnchor.constraint(equalTo: self.innerVerticalStackView.leadingAnchor,constant: 19),
@@ -208,7 +208,7 @@ class MarginCell : UITableViewCell, UITextFieldDelegate {
                 separatorLine.heightAnchor.constraint(equalToConstant: 0.5),
             
             ])
-        }
+//        }
         
         
         NSLayoutConstraint.activate([

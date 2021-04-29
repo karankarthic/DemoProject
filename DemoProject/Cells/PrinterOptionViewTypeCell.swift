@@ -66,9 +66,8 @@ class PrinterOptionViewTypeCell:UITableViewCell{
         
         self.contentView.addSubview(verticalStackView)
     
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            verticalStackView.addArrangedSubview(titleLabel)
-        }
+        
+        verticalStackView.addArrangedSubview(titleLabel)
         
         verticalStackView.addArrangedSubview(segmentView)
         

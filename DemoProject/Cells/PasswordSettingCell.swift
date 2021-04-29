@@ -52,11 +52,9 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
     }()
     
     private var verticalStackViewEdges:UIEdgeInsets {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            
+       
             return UIEdgeInsets(top: 19, left: 19, bottom: -19, right: -19)
-        }
-        return UIEdgeInsets(top: 15, left: 20, bottom: -15, right: -15)
+    
     }
     
     private var type : PasswardViewType = .password
@@ -82,13 +80,13 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         verticalStackView.addArrangedSubview(passwordView)
         
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            
-            passwordView.title.removeFromSuperview()
-        }else{
-            
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//
+//            passwordView.title.removeFromSuperview()
+//        }else{
+//
             passwordView.addBorder(edge: .bottom)
-        }
+//        }
         
         NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: verticalStackViewEdges.top),
                                      verticalStackView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor,constant: verticalStackViewEdges.left),

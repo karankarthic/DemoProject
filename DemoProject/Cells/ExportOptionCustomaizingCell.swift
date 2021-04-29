@@ -332,14 +332,14 @@ class ExportOptionCustomaizingCell : UITableViewCell {
         
         horizontalStackView.addArrangedSubview(subValuePickerTwoView)
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            subValuePickerOneView.title.font = .systemFont(ofSize: 16, weight: .bold)
-            subValuePickerTwoView.title.font = .systemFont(ofSize: 16, weight: .bold)
-            titleLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
-            separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 10).isActive = true
-            verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -10).isActive = true
-        }else{
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            subValuePickerOneView.title.font = .systemFont(ofSize: 16, weight: .bold)
+//            subValuePickerTwoView.title.font = .systemFont(ofSize: 16, weight: .bold)
+//            titleLabel.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//            separatorLine.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//            separatorLine.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor,constant: 10).isActive = true
+//            verticalStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -10).isActive = true
+//        }else{
             
             subValuePickerOneView.title.font = .systemFont(ofSize: 17, weight: .bold)
             subValuePickerTwoView.title.font = .systemFont(ofSize: 17, weight: .bold)
@@ -359,7 +359,7 @@ class ExportOptionCustomaizingCell : UITableViewCell {
             
             subValuePickerOneView.addBorder(edge:.bottom)
             subValuePickerTwoView.addBorder(edge: .bottom)
-        }
+//        }
         
         NSLayoutConstraint.activate([
         

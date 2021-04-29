@@ -74,9 +74,9 @@ class PickerOptionView: UIView {
         
         ])
         
-        if UIDevice.current.userInterfaceIdiom == .phone {
+//        if UIDevice.current.userInterfaceIdiom == .phone {
             valueTextField.bottomAnchor.constraint(equalTo:self.bottomAnchor,constant: -10 ).isActive = true
-        }
+//        }
         
         
         
@@ -227,10 +227,10 @@ class OptionSelectorRadioButtonView : UIView {
         verticalStackView.addArrangedSubview(choiceTwoView)
         
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            
-            title.heightAnchor.constraint(equalToConstant: 0).isActive = true
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//
+//            title.heightAnchor.constraint(equalToConstant: 0).isActive = true
+//        }
         
         NSLayoutConstraint.activate([verticalStackView.topAnchor.constraint(equalTo: self.topAnchor,constant: 0),
                                      verticalStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 0),

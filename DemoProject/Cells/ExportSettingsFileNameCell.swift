@@ -36,11 +36,9 @@ class ExportSettingsFileNameCell:UITableViewCell, UITextFieldDelegate {
     }()
     
     private var pickerviewEdges:UIEdgeInsets {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            
+        
             return UIEdgeInsets(top: 19, left: 19, bottom: -20, right: -19)
-        }
-        return UIEdgeInsets(top: 15, left: 15, bottom: -15, right: -15)
+       
     }
     
     private var shouldShowBottomBorder:Bool{
