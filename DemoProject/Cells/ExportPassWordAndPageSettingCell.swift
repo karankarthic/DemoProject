@@ -25,8 +25,8 @@ class ExportPassWordAndPageSettingCell :UITableViewCell {
     
 //    weak var delegate:ExportPassWordAndPageSettingCellDelegate?
     
-    var pushToPageVc:() -> Void = {}
-    var pushToPasswordVc:() -> Void = {}
+    var pushToPageVc:(SingleLableView) -> Void = {_ in}
+    var pushToPasswordVc:(SingleLableView) -> Void = {_ in}
     
     private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -86,12 +86,12 @@ class ExportPassWordAndPageSettingCell :UITableViewCell {
         if pageSetting.gestureRecognizers?[0] == sender{
             
 //            delegate?.pushToRespectiveVC(type: .page)
-            pushToPageVc()
+            pushToPageVc(pageSetting)
             
         }else{
             
 //            delegate?.pushToRespectiveVC(type: .password)
-            pushToPasswordVc()
+            pushToPasswordVc(passwordSetting)
         }
         
         

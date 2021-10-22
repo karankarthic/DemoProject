@@ -22,6 +22,7 @@ class PassWordSettingViewController: CardLayoutTableViewController {
     
     var value:Passwords = Passwords()
     weak var delegate:PassWordSettingViewControllerDelegate?
+    private var isNotMatched: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,9 +48,9 @@ class PassWordSettingViewController: CardLayoutTableViewController {
         let cell = tableView.dequeueReusableCell(indexPath: indexPath) as PasswordSettingCell
         let model:PasswordSettingCellModel
         if indexPath.section == 0{
-            model = PasswordSettingCellModel(title:"Password" ,value:self.value.password ,type: .password)
+            model = PasswordSettingCellModel(title:"Password" ,value:self.value.password ,type: .password,isNotMacthed:isNotMatched)
         }else{
-            model = PasswordSettingCellModel(title:"Confirm Password" ,value: self.value.conforimPassword, type: .confirmPassword)
+            model = PasswordSettingCellModel(title:"Confirm Password" ,value: self.value.conforimPassword, type: .confirmPassword,isNotMacthed:isNotMatched)
         }
         cell.configure(model:model)
         cell.delegate = self
@@ -100,6 +101,9 @@ class PassWordSettingViewController: CardLayoutTableViewController {
             
             delegate?.updatePasswordValue(passwordValue:value)
             self.dismiss(animated: true, completion: nil)
+        }else{
+            isNotMatched = true
+            tableView.reloadData()
         }
         
         

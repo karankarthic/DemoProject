@@ -21,6 +21,7 @@ struct PasswordSettingCellModel{
     var title:String? = nil
     let value:String?
     let type:PasswardViewType
+    var isNotMacthed = false
 }
 
 class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
@@ -39,6 +40,17 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         
     }()
     
+    lazy var title: UILabel = {
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Passsword and confirm password must be match"
+        titleLabel.textAlignment = .left
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        titleLabel.textColor = .red
+        titleLabel.backgroundColor = .clear
+        return titleLabel
+    }()
 
     private lazy var verticalStackView:UIStackView = {
         let vStack = UIStackView()
@@ -72,6 +84,26 @@ class PasswordSettingCell:UITableViewCell, UITextFieldDelegate{
         
         passwordView.valueTextField.text = model.value
         type = model.type
+        
+        if model.isNotMacthed{
+            if model.type == .confirmPassword{
+                verticalStackView.addArrangedSubview(title)
+                passwordView.addBorder(edge: .bottom,color: .red)
+//                
+//                NSLayoutConstraint.activate([title.topAnchor.constraint(equalTo: self.passwordView.topAnchor,constant: verticalStackViewEdges.top),
+//                                             title.leadingAnchor.constraint(equalTo: self.passwordView.leadingAnchor,constant: verticalStackViewEdges.left),
+//                                             title.trailingAnchor.constraint(equalTo: self.passwordView.trailingAnchor,constant: verticalStackViewEdges.right),
+//                                             
+//                
+//                ])
+                
+            }else{
+                passwordView.addBorder(edge: .bottom,color: .red)
+            }
+        }else{
+            passwordView.addBorder(edge: .bottom)
+        }
+        
     }
     
     private func setupView(){

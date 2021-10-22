@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		132DE7132721348C002327BD /* AutoFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE7122721348C002327BD /* AutoFilterViewController.swift */; };
+		132DE716272134AE002327BD /* AutoFilterPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE715272134AE002327BD /* AutoFilterPresenter.swift */; };
+		132DE719272134CD002327BD /* AutoFilterIntractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE718272134CD002327BD /* AutoFilterIntractor.swift */; };
+		132DE71C27213689002327BD /* AutoFilterRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE71B27213689002327BD /* AutoFilterRouter.swift */; };
+		132DE71F272136B2002327BD /* AutoFilterProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE71E272136B2002327BD /* AutoFilterProtocal.swift */; };
+		133032822664F508000B8741 /* ColumnSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133032812664F508000B8741 /* ColumnSelectionViewController.swift */; };
 		13D6FD0426020D6F00F4BF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD0326020D6F00F4BF75 /* AppDelegate.swift */; };
 		13D6FD0626020D6F00F4BF75 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD0526020D6F00F4BF75 /* SceneDelegate.swift */; };
 		13D6FD0826020D6F00F4BF75 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD0726020D6F00F4BF75 /* ViewController.swift */; };
@@ -45,6 +51,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		132DE7122721348C002327BD /* AutoFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterViewController.swift; sourceTree = "<group>"; };
+		132DE715272134AE002327BD /* AutoFilterPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterPresenter.swift; sourceTree = "<group>"; };
+		132DE718272134CD002327BD /* AutoFilterIntractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterIntractor.swift; sourceTree = "<group>"; };
+		132DE71B27213689002327BD /* AutoFilterRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterRouter.swift; sourceTree = "<group>"; };
+		132DE71E272136B2002327BD /* AutoFilterProtocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterProtocal.swift; sourceTree = "<group>"; };
+		133032812664F508000B8741 /* ColumnSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnSelectionViewController.swift; sourceTree = "<group>"; };
 		13D6FD0026020D6F00F4BF75 /* DemoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13D6FD0326020D6F00F4BF75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		13D6FD0526020D6F00F4BF75 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +107,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		132DE71127213227002327BD /* autoFilter */ = {
+			isa = PBXGroup;
+			children = (
+				132DE7122721348C002327BD /* AutoFilterViewController.swift */,
+				132DE715272134AE002327BD /* AutoFilterPresenter.swift */,
+				132DE718272134CD002327BD /* AutoFilterIntractor.swift */,
+				132DE71B27213689002327BD /* AutoFilterRouter.swift */,
+				132DE71E272136B2002327BD /* AutoFilterProtocal.swift */,
+			);
+			path = autoFilter;
+			sourceTree = "<group>";
+		};
 		13D6FCF726020D6F00F4BF75 = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +141,7 @@
 				13D6FD0326020D6F00F4BF75 /* AppDelegate.swift */,
 				13D6FD0526020D6F00F4BF75 /* SceneDelegate.swift */,
 				13D6FD0726020D6F00F4BF75 /* ViewController.swift */,
+				132DE71127213227002327BD /* autoFilter */,
 				13FA8EC7261F0A6200BCCD47 /* Cells */,
 				13FA8E0A260B93EA00BCCD47 /* IpadViewControllers */,
 				13FA8E08260B939E00BCCD47 /* ViewControllers */,
@@ -136,6 +161,7 @@
 				13D6FD252609ECED00F4BF75 /* PageSettingViewController.swift */,
 				13FA8E0F260C1F5A00BCCD47 /* PrintBatchViewController.swift */,
 				13D6FD212609E97700F4BF75 /* PassWordSettingViewController.swift */,
+				133032812664F508000B8741 /* ColumnSelectionViewController.swift */,
 				13FA8E01260B404000BCCD47 /* PrintOptionsViewController.swift */,
 				13FA8E04260B481200BCCD47 /* MoreSettingsViewController.swift */,
 				13FA8DFE260B052100BCCD47 /* SelectViewController.swift */,
@@ -249,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13FA8EC9261F0A9700BCCD47 /* PrinterOptionViewTypeCell.swift in Sources */,
+				133032822664F508000B8741 /* ColumnSelectionViewController.swift in Sources */,
 				13FA8EEE261F14E800BCCD47 /* MoreSettingCell.swift in Sources */,
 				13FA8ED6261F0CD500BCCD47 /* MarginCell.swift in Sources */,
 				13FA8EEB261F14A800BCCD47 /* ExportPassWordAndPageSettingCell.swift in Sources */,
@@ -256,18 +283,22 @@
 				13D6FD0826020D6F00F4BF75 /* ViewController.swift in Sources */,
 				13FA8E19260C659F00BCCD47 /* IpadPrintOptionsViewController.swift in Sources */,
 				13FA8EF42639506900BCCD47 /* ColumnWidthSelectorCell.swift in Sources */,
+				132DE7132721348C002327BD /* AutoFilterViewController.swift in Sources */,
 				13FA8E13260C30D100BCCD47 /* IpadPrintBatchViewController.swift in Sources */,
 				13FA8E1F260C711F00BCCD47 /* IpadExportSettingViewController.swift in Sources */,
 				13D6FD222609E97800F4BF75 /* PassWordSettingViewController.swift in Sources */,
 				13FA8ED0261F0B8E00BCCD47 /* ExportOptionCustomaizingCell.swift in Sources */,
 				13FA8E10260C1F5A00BCCD47 /* PrintBatchViewController.swift in Sources */,
+				132DE716272134AE002327BD /* AutoFilterPresenter.swift in Sources */,
 				13FA8E05260B481200BCCD47 /* MoreSettingsViewController.swift in Sources */,
+				132DE719272134CD002327BD /* AutoFilterIntractor.swift in Sources */,
 				13FA8ECD261F0AF900BCCD47 /* PageCustomizationCell.swift in Sources */,
 				13FA8EDF261F0DC200BCCD47 /* SinglePickerViewCell.swift in Sources */,
 				13FA8ED9261F0D0B00BCCD47 /* PrintBatchCell.swift in Sources */,
 				13FA8E16260C329C00BCCD47 /* IpadPasswordViewController.swift in Sources */,
 				13D6FD29260A0E9100F4BF75 /* ExportSettingViewController.swift in Sources */,
 				13D6FD0426020D6F00F4BF75 /* AppDelegate.swift in Sources */,
+				132DE71F272136B2002327BD /* AutoFilterProtocal.swift in Sources */,
 				13D6FD0626020D6F00F4BF75 /* SceneDelegate.swift in Sources */,
 				13D6FD262609ECED00F4BF75 /* PageSettingViewController.swift in Sources */,
 				13FA8EDC261F0D6900BCCD47 /* ExportSettingsFileNameCell.swift in Sources */,
@@ -279,6 +310,7 @@
 				13FA8ED3261F0CA400BCCD47 /* PrintOptionSelectorViewCell.swift in Sources */,
 				13FA8E0C260B944100BCCD47 /* IpadPageSettingViewController.swift in Sources */,
 				13FA8EE8261F146B00BCCD47 /* SingleNonPickerViewValueCell.swift in Sources */,
+				132DE71C27213689002327BD /* AutoFilterRouter.swift in Sources */,
 				13FA8E02260B404000BCCD47 /* PrintOptionsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

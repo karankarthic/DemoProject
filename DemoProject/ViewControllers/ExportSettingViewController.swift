@@ -50,6 +50,8 @@ struct ExportViewModel {
 class ExportSettingViewController: CardLayoutTableViewController {
     
     var viewModel:ExportViewModel = ExportViewModel()
+    
+    private var columnSelectionValue:ColumnSelectionValue? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,11 +116,11 @@ class ExportSettingViewController: CardLayoutTableViewController {
         }
         else{
             let cell = tableView.dequeueReusableCell(indexPath: indexPath) as ExportPassWordAndPageSettingCell
-            cell.pushToPageVc = {
-                self.pushToPageVc()
+            cell.pushToPageVc = { pageView in
+                self.pushToPageVc(sourceView: pageView)
             }
             
-            cell.pushToPasswordVc = {
+            cell.pushToPasswordVc = { passwordView in
                 self.pushToPassword()
             }
             return cell
@@ -184,12 +186,26 @@ class ExportSettingViewController: CardLayoutTableViewController {
 extension ExportSettingViewController{
     
     func pushSelectVC() {
+        let columns:[Column] = [Column(name: "Karan", inQuickView: true, inDetailView: false),Column(name: "karthic", inQuickView: true, inDetailView: true)]
         
+        let vc = ColumnSelectionViewController(columns: columns, columnSelectionValue: columnSelectionValue)
+        vc.delegate = self
+    
+        let navVC = UINavigationController(rootViewController: vc)
+        self.navigationController?.present(navVC, animated: true, completion: nil)
+    }
+    
+    
+}
 
-//        let vc = SelectViewController()
-//
-//        let navVC = UINavigationController(rootViewController: vc)
-//        self.navigationController?.present(navVC, animated: true, completion: nil)
+extension ExportSettingViewController:ColumnSelectionViewControllerDelegate{
+    func updateColumnSelectionValues(columnSelectionValue: ColumnSelectionValue) {
+        self.columnSelectionValue = columnSelectionValue
+        var selectedColumns:[String] = []
+        for column in columnSelectionValue.selectedColumn{
+            selectedColumns.append(column.name)
+        }
+        
     }
     
     
@@ -197,11 +213,21 @@ extension ExportSettingViewController{
 
 extension ExportSettingViewController{
     
-    func pushToPageVc(){
+    func pushToPageVc(sourceView:UIView){
         let vc = PageSettingViewController()
         vc.delegate = self
         vc.valueForPageSetting = viewModel.pageSettings
+        
         let navVC = UINavigationController(rootViewController: vc)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            navVC.modalPresentationStyle = .popover
+            navVC.popoverPresentationController?.sourceView = sourceView
+            navVC.popoverPresentationController?.sourceRect = sourceView.bounds
+            navVC.popoverPresentationController?.permittedArrowDirections = [.up, .down]
+        }
+        
+        
         self.navigationController?.present(navVC, animated: true, completion: nil)
         
     }

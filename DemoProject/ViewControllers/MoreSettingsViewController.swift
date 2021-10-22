@@ -245,6 +245,8 @@ extension MoreSettingsViewController: SelectViewControllerDelegate {
             positionValue = titleValue ?? ""
         case .none:
             positionValue = nil
+        case .some(.default):
+            positionValue = nil
         }
         
         if delegateCalledCell?.position == .header{

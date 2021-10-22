@@ -227,10 +227,15 @@ class CardLayoutTableViewController: UIViewController
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: tableViewEdgeInset.left),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: tableViewEdgeInset.right),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: tableViewEdgeInset.top),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: tableViewEdgeInset.bottom),
             ])
     }
+    
+    var tableViewEdgeInset : UIEdgeInsets {
+        return .init(top: 0, left: 11, bottom: 0, right: -11)
+    }
+    
 }
 
 extension CardLayoutTableViewController : UITableViewDelegate
@@ -265,9 +270,7 @@ extension CardLayoutTableViewController : UITableViewDataSource
 
 extension CardLayoutTableViewController
 {
-    var tableViewEdgeInset : UIEdgeInsets {
-        return .init(top: 0, left: 11, bottom: 0, right: -11)
-    }
+    
 }
 
 protocol Reusable

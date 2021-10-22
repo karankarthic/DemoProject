@@ -218,7 +218,7 @@ class SingleSelectCell: UITableViewCell, UITextFieldDelegate {
     }()
     
     private var intialimg = UIImage.init(named: "radio")?.withRenderingMode(.alwaysTemplate)
-    private var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)
+    var radio = UIImage.init(named: "Image-1")?.withRenderingMode(.alwaysTemplate)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -293,4 +293,5 @@ enum SingleSelectValue:Equatable{
     case date
     case pageNumber
     case title(titleValue:String?)
+    case `default`
 }
