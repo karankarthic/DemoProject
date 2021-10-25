@@ -55,7 +55,7 @@ class AutoFilterDataSource{
         if isItInCollapsedState(forSection:index){
             return 0
         }else{
-            return dataSourceModel[index].filterValues.count
+            return 1
         }
     }
     

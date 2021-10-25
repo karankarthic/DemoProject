@@ -28,12 +28,21 @@ class AutoFilterViewController:CardLayoutTableViewController{
         tableView.showsVerticalScrollIndicator = false
         tableView.showsHorizontalScrollIndicator = false
         tableView.allowsSelection = false
-        tableView.separatorStyle = .singleLine
+        tableView.separatorStyle = .none
+        tableView.register(AutoFilterTableViewContainerCell.self, forCellReuseIdentifier: "AutoFilterTableViewContainerCell")
     }
     
 }
 
 extension AutoFilterViewController{
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 270
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource?.numberOfSections ?? 0
@@ -46,10 +55,11 @@ extension AutoFilterViewController{
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let dataSource = self.dataSource else{ return UITableViewCell() }
         
-        let cell = UITableViewCell()
-        
-        cell.textLabel?.text = dataSource.cellModel(forIndexpath: indexPath)
-        
+//        let cell = UITableViewCell()
+//
+//        cell.textLabel?.text = dataSource.cellModel(forIndexpath: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AutoFilterTableViewContainerCell") as? AutoFilterTableViewContainerCell  else{ return UITableViewCell() }
+        cell.configureView(withModel: dataSource.dataSourceModel[indexPath.section])
         return cell
     }
     
@@ -70,11 +80,7 @@ extension AutoFilterViewController{
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         let viewConstructor = CornerViewConstructor.init(contentView: cell.contentView)
-        if indexPath.row == 0 && indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1{
-            viewConstructor.constructLayout(for: .allCorner)
-        } else if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
             viewConstructor.constructLayout(for: .bottomCorner)
-        }
     }
     
     

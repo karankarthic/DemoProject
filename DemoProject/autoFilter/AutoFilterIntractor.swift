@@ -12,7 +12,7 @@ class AutoFilterIntractor:AutoFilterPresenterToInteractorProtocol{
     
     func getFilterValues() -> [String] {
         
-        return ["MonkeysRule", "RemoveMe", "SwiftRules"]
+        return ["MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules"]
     }
     
     
