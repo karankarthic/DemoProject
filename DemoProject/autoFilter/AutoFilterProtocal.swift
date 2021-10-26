@@ -29,7 +29,7 @@ protocol AutoFilterPresenterToRouterProtocol: class
 
 protocol AutoFilterPresenterToInteractorProtocol: class {
     
-    func getFilterValues() ->[String]
+    func getFilterValues() ->[FilterModel]
     
 }
 
@@ -63,8 +63,20 @@ class AutoFilterDataSource{
         dataSourceModel[index].isInCollapsedState = !dataSourceModel[index].isInCollapsedState
     }
     
-    func cellModel(forIndexpath indexPath:IndexPath) -> String{
-        return  dataSourceModel[indexPath.section].filterValues[indexPath.row]
+//    func cellModel(forIndexpath indexPath:IndexPath) -> String{
+//        return  dataSourceModel[indexPath.section].filterValues[indexPath.row].displaytext
+//    }
+    
+    func getCountOfSelectedItems(forSection section:Int) -> Int{
+        var count = 0
+        
+        for item in dataSourceModel[section].filterValues{
+            if item.isSelected {
+                count = count + 1
+            }
+        }
+        
+        return count
     }
     
     func returnSectionTitle(forSection index:Int) -> String{
@@ -80,6 +92,11 @@ class AutoFilterDataSource{
 
 struct AutoFilterModel{
     let title:String
-    var filterValues:[String]
+    var filterValues:[FilterModel]
     var isInCollapsedState:Bool
+}
+
+struct FilterModel{
+    let displaytext:String
+    var isSelected:Bool = false
 }

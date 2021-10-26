@@ -53,13 +53,17 @@ extension AutoFilterViewController{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let dataSource = self.dataSource else{ return UITableViewCell() }
+        guard var dataSource = self.dataSource else{ return UITableViewCell() }
         
 //        let cell = UITableViewCell()
 //
 //        cell.textLabel?.text = dataSource.cellModel(forIndexpath: indexPath)
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "AutoFilterTableViewContainerCell") as? AutoFilterTableViewContainerCell  else{ return UITableViewCell() }
         cell.configureView(withModel: dataSource.dataSourceModel[indexPath.section])
+        cell.updataModelToMainModel = { sectionModel in
+            dataSource.dataSourceModel[indexPath.section] = sectionModel
+            self.tableView.reloadData()
+        }
         return cell
     }
     
@@ -129,7 +133,6 @@ extension AutoFilterViewController{
             let selectCountLable = UILabel()
             selectCountLable.text = "0"
             selectCountLable.textAlignment = .center
-            selectCountLable.isHidden = true
             selectCountLable.translatesAutoresizingMaskIntoConstraints = false
             selectCountLable.widthAnchor.constraint(equalToConstant: 22).isActive = true
             selectCountLable.heightAnchor.constraint(equalToConstant: 22).isActive = true
@@ -168,6 +171,17 @@ extension AutoFilterViewController{
             viewConstructor.constructLayout(for: .topCorner)
             iconView.image = UIImage.init(named: "Image")?.withRenderingMode(.alwaysTemplate)
         }
+        
+        let countOfSelectedItems = dataSource?.getCountOfSelectedItems(forSection: section) ?? 0
+        if countOfSelectedItems > 0 {
+            iconView.isHidden = true
+            selectCountLable.isHidden = false
+            selectCountLable.text = "\(countOfSelectedItems)"
+        }else{
+            iconView.isHidden = false
+            selectCountLable.isHidden = true
+        }
+        
         uiView.tag = section
         
         uiView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(getFilterValues(gesture:))))

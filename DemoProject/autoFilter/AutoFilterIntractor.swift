@@ -10,9 +10,10 @@ import UIKit
 
 class AutoFilterIntractor:AutoFilterPresenterToInteractorProtocol{
     
-    func getFilterValues() -> [String] {
+    func getFilterValues() -> [FilterModel] {
         
-        return ["MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules"]
+        return [.init(displaytext: "MonkeysRule", isSelected: false),.init(displaytext: "MonkeysRule", isSelected: false),.init(displaytext: "MonkeysRule", isSelected: false),.init(displaytext: "MonkeysRule", isSelected: false),.init(displaytext: "MonkeysRule", isSelected: false),.init(displaytext: "MonkeysRule", isSelected: false)]
+//        return ["MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules"]
     }
     
     

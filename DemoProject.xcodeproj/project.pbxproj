@@ -13,6 +13,7 @@
 		132DE71C27213689002327BD /* AutoFilterRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE71B27213689002327BD /* AutoFilterRouter.swift */; };
 		132DE71F272136B2002327BD /* AutoFilterProtocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE71E272136B2002327BD /* AutoFilterProtocal.swift */; };
 		132DE72227264661002327BD /* AutoFilterTableViewContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE72127264660002327BD /* AutoFilterTableViewContainerCell.swift */; };
+		132DE72527268660002327BD /* ColumnSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 132DE72427268660002327BD /* ColumnSelectionCell.swift */; };
 		133032822664F508000B8741 /* ColumnSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133032812664F508000B8741 /* ColumnSelectionViewController.swift */; };
 		13D6FD0426020D6F00F4BF75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD0326020D6F00F4BF75 /* AppDelegate.swift */; };
 		13D6FD0626020D6F00F4BF75 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D6FD0526020D6F00F4BF75 /* SceneDelegate.swift */; };
@@ -58,6 +59,7 @@
 		132DE71B27213689002327BD /* AutoFilterRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterRouter.swift; sourceTree = "<group>"; };
 		132DE71E272136B2002327BD /* AutoFilterProtocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterProtocal.swift; sourceTree = "<group>"; };
 		132DE72127264660002327BD /* AutoFilterTableViewContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoFilterTableViewContainerCell.swift; sourceTree = "<group>"; };
+		132DE72427268660002327BD /* ColumnSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnSelectionCell.swift; sourceTree = "<group>"; };
 		133032812664F508000B8741 /* ColumnSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnSelectionViewController.swift; sourceTree = "<group>"; };
 		13D6FD0026020D6F00F4BF75 /* DemoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13D6FD0326020D6F00F4BF75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				132DE71B27213689002327BD /* AutoFilterRouter.swift */,
 				132DE71E272136B2002327BD /* AutoFilterProtocal.swift */,
 				132DE72127264660002327BD /* AutoFilterTableViewContainerCell.swift */,
+				132DE72427268660002327BD /* ColumnSelectionCell.swift */,
 			);
 			path = autoFilter;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				13FA8ED9261F0D0B00BCCD47 /* PrintBatchCell.swift in Sources */,
 				13FA8E16260C329C00BCCD47 /* IpadPasswordViewController.swift in Sources */,
 				13D6FD29260A0E9100F4BF75 /* ExportSettingViewController.swift in Sources */,
+				132DE72527268660002327BD /* ColumnSelectionCell.swift in Sources */,
 				13D6FD0426020D6F00F4BF75 /* AppDelegate.swift in Sources */,
 				132DE71F272136B2002327BD /* AutoFilterProtocal.swift in Sources */,
 				13D6FD0626020D6F00F4BF75 /* SceneDelegate.swift in Sources */,
