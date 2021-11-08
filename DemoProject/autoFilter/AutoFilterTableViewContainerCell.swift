@@ -13,6 +13,8 @@ class AutoFilterTableViewContainerCell:UITableViewCell {
     
     var updataModelToMainModel:(AutoFilterModel) -> Void = {_ in}
     
+    var fetchLoadMoreCase:(String) -> Void = {_ in}
+    
     private lazy var tableViewHeightConstraint:NSLayoutConstraint = NSLayoutConstraint()
     
     lazy var tableView: UITableView = {
@@ -84,16 +86,17 @@ extension AutoFilterTableViewContainerCell: UITableViewDelegate,UITableViewDataS
         updataModelToMainModel(dataSource)
     }
     
-    
-    private func returnCellModel(dataSource:AutoFilterModel,forRow index:Int) -> ColumnSelectionCellModel{
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        var sholudHideSeperator:Bool = false
-        if index == (dataSource.filterValues.count - 1){
-            sholudHideSeperator = true
+        if let dataSource = self.cellModel, (indexPath.row == dataSource.filterValues.count - 1){
+            loadMorecase()
+            fetchLoadMoreCase(dataSource.title)
         }
         
-        return ColumnSelectionCellModel.init(displayText: dataSource.filterValues[index].displaytext, isSelected: dataSource.filterValues[index].isSelected, sholudHideSeperator: sholudHideSeperator)
+        
     }
+    
+    
     
     
 }
@@ -131,6 +134,26 @@ extension AutoFilterTableViewContainerCell{
         
         tableViewHeightConstraint.constant = CGFloat(height)
 
+    }
+    
+    private func returnCellModel(dataSource:AutoFilterModel,forRow index:Int) -> ColumnSelectionCellModel{
+        
+        var sholudHideSeperator:Bool = false
+        if index == (dataSource.filterValues.count - 1){
+            sholudHideSeperator = true
+        }
+        
+        return ColumnSelectionCellModel.init(displayText: dataSource.filterValues[index].displaytext, isSelected: dataSource.filterValues[index].isSelected, sholudHideSeperator: sholudHideSeperator)
+    }
+    
+    private func loadMorecase(){
+        
+        let activityIndicatorView = UIActivityIndicatorView(style: .gray)
+        activityIndicatorView.color = UIColor.black.withAlphaComponent(0.5)
+        activityIndicatorView.frame = CGRect.init(x: 0, y: 0, width: self.bounds.width, height: 50)
+        activityIndicatorView.startAnimating()
+        tableView.tableFooterView = activityIndicatorView
+        
     }
     
 }

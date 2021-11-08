@@ -15,6 +15,7 @@ protocol AutoFilterViewToPresenterProtocol: class{
    
     func viewDidLoad()
     func fetchFilterValuesForOption(section:Int)
+    func fetchAndUpdateFliterValues(title:String)
 }
 
 protocol AutoFilterPresenterToViewProtocol: class
@@ -30,6 +31,7 @@ protocol AutoFilterPresenterToRouterProtocol: class
 protocol AutoFilterPresenterToInteractorProtocol: class {
     
     func getFilterValues() ->[FilterModel]
+    func fetchAndUpdateFliterValues(title:String) -> [FilterModel]
     
 }
 
@@ -67,6 +69,14 @@ class AutoFilterDataSource{
 //        return  dataSourceModel[indexPath.section].filterValues[indexPath.row].displaytext
 //    }
     
+    func updateFilterValues(for value:String,filtervalues:[FilterModel]){
+        
+        guard let indexOfValue = getIndexOfValue(value:value) else{ return }
+        
+        dataSourceModel[indexOfValue].filterValues.append(contentsOf: filtervalues)
+        
+    }
+    
     func getCountOfSelectedItems(forSection section:Int) -> Int{
         var count = 0
         
@@ -85,6 +95,17 @@ class AutoFilterDataSource{
     
     func isItInCollapsedState(forSection section:Int) -> Bool{
         return dataSourceModel[section].isInCollapsedState
+    }
+    
+    private func getIndexOfValue(value:String) -> Int?{
+    
+        for (index,item) in dataSourceModel.enumerated(){
+            if item.title == value{
+                return index
+            }
+        }
+        
+        return nil
     }
     
 }

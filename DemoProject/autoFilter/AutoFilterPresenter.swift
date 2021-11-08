@@ -34,10 +34,27 @@ extension AutoFilterPresenter:AutoFilterInteractorToPresenterProtocol{
             let values = interactor?.getFilterValues() ?? []
             
             dataSource.dataSourceModel[section].filterValues = values
+            
         }
        
         view?.reloadUi(dataSource:self.dataSource)
         
     }
+    
+    func fetchAndUpdateFliterValues(title: String) {
+        
+        let values = interactor?.fetchAndUpdateFliterValues(title: title) ?? []
+        
+        dataSource.updateFilterValues(for: title, filtervalues: values)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+            
+            self.view?.reloadUi(dataSource:self.dataSource)
+        }
+        
+        
+    }
+    
+    
 }
 

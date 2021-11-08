@@ -16,5 +16,9 @@ class AutoFilterIntractor:AutoFilterPresenterToInteractorProtocol{
 //        return ["MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules","MonkeysRule", "RemoveMe", "SwiftRules"]
     }
     
+    func fetchAndUpdateFliterValues(title: String) -> [FilterModel] {
+        return [.init(displaytext: "new", isSelected: false),.init(displaytext: "new", isSelected: false),.init(displaytext: "new", isSelected: false),.init(displaytext: "new", isSelected: false),.init(displaytext: "new", isSelected: false),.init(displaytext: "newLast", isSelected: false)]
+    }
+    
     
 }

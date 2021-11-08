@@ -64,6 +64,11 @@ extension AutoFilterViewController{
             dataSource.dataSourceModel[indexPath.section] = sectionModel
             self.tableView.reloadData()
         }
+        
+        cell.fetchLoadMoreCase = { title in
+            self.presenter?.fetchAndUpdateFliterValues(title: title)
+        }
+        
         return cell
     }
     
